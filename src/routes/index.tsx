@@ -1,316 +1,390 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroRobot from "@/assets/hero-robot.jpg";
-import cap1 from "@/assets/capability-1.jpg";
-import cap2 from "@/assets/capability-2.jpg";
-import cap3 from "@/assets/capability-3.jpg";
+import heroImage from "@/assets/vertifex-hero.png";
+import automationImage from "@/assets/vertifex-automation.png";
+import substationImage from "@/assets/vertifex-substation.png";
+import fieldImage from "@/assets/vertifex-field.png";
+import robotUnitImage from "@/assets/vertifex-robot-unit.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vertifex Technology — System Integrators for Automation" },
+      { title: "Vertifex Technology — System Integration & Robotics" },
       {
         name: "description",
         content:
-          "Vertifex Technology is a system integrator specialized in system integration, engineering and robotics for industrial automation.",
+          "Vertifex Technology is a system integrator delivering engineering, robotics, and field-ready automation solutions across industrial and infrastructure environments.",
       },
       { property: "og:title", content: "Vertifex Technology — System Integration & Robotics" },
       {
         property: "og:description",
         content:
-          "System integrators delivering engineering and robotics solutions that unify mechanical, electrical, software and control systems for automation.",
+          "System integrators specializing in engineering, robotics, controls, installation, testing, and maintenance for automation projects.",
       },
-      { property: "og:image", content: heroRobot },
-      { name: "twitter:image", content: heroRobot },
+      { property: "og:image", content: heroImage },
+      { name: "twitter:image", content: heroImage },
     ],
   }),
   component: Index,
 });
 
+const serviceTags = [
+  "System Integration",
+  "Robotics Engineering",
+  "Electrical Systems",
+  "Mechanical Systems",
+  "Control Panels",
+  "Installation",
+  "Testing & Commissioning",
+  "Maintenance",
+  "Asset Inspection",
+  "Automation Support",
+];
+
 const capabilities = [
   {
-    n: "01",
-    title: "Kinetic Integration",
-    desc: "Multi-axis robotic systems engineered for sub-millimeter precision in high-velocity production environments.",
-    meta: ["LATENCY: < 2MS", "OP_STABLE"],
-    img: cap1,
+    index: "01",
+    title: "Robotics Deployment",
+    description:
+      "We integrate mobile and autonomous robotic systems into real operating environments with the mechanical, electrical, and software stack aligned from day one.",
+    note: "SITE_READY // INTEGRATED",
+    image: automationImage,
+    alt: "Autonomous mobile robot operating inside an industrial facility",
   },
   {
-    n: "02",
-    title: "Control Logic",
-    desc: "PLC and software architectures that synchronize electrical, mechanical, and digital subsystems into one fail-safe grid.",
-    meta: ["KERNEL: VX_CORE", "ENCRYPTED"],
-    img: cap2,
+    index: "02",
+    title: "Infrastructure Engineering",
+    description:
+      "From substations and utility assets to inspection routes and field equipment, we engineer practical automation systems that improve visibility, safety, and uptime.",
+    note: "GRID / FIELD / PLANT",
+    image: substationImage,
+    alt: "Electrical substation infrastructure representing engineered industrial systems",
   },
   {
-    n: "03",
-    title: "Field Maintenance",
-    desc: "Installation, testing, and predictive diagnostic support for large-scale infrastructure and energy systems.",
-    meta: ["UPTIME: 99.998%", "GLOBAL_REP"],
-    img: cap3,
+    index: "03",
+    title: "Operational Support",
+    description:
+      "Our scope extends through installation, testing, commissioning, maintenance, and technical support so every deployment performs reliably in live conditions.",
+    note: "DEPLOY // TEST // MAINTAIN",
+    image: fieldImage,
+    alt: "Field technician inside an industrial tunnel environment",
   },
 ];
 
-const stats = [
-  ["SYSTEMS_DESIGN", "104"],
-  ["DEPLOYMENTS", "812"],
-  ["ACTIVE_UNITS", "14k"],
-  ["FAILURE_RATE", "0.01"],
-  ["MTBF_HOURS", "48k"],
-  ["TECH_TIER", "S++"],
+const metrics = [
+  ["DISCIPLINES", "05"],
+  ["DELIVERY", "END-TO-END"],
+  ["FOCUS", "AUTOMATION"],
+  ["SYSTEMS", "ROBOTIC + CONTROL"],
 ];
 
-const services = [
-  "System Design",
-  "Integration",
-  "Installation",
-  "Testing",
-  "Maintenance",
-  "Project Support",
-  "Robotics",
-  "Electrical",
-  "Mechanical",
-  "Software",
-  "Control Systems",
-  "Diagnostics",
+const sectors = [
+  "Industrial Plants",
+  "Utilities & Substations",
+  "Infrastructure Assets",
+  "Energy Operations",
+  "Inspection & Maintenance Programs",
+  "Automation Retrofits",
 ];
 
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="max-w-[1440px] mx-auto flex justify-between items-center px-6 h-14">
+      <nav className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/88 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <span className="font-display font-black text-lg tracking-tighter">
-              VERTIFEX_
-            </span>
-            <span className="hidden md:inline-block text-[10px] text-muted-foreground border border-border px-2 py-0.5">
-              SYSTEM_READY // VER 4.0.2
+            <span className="font-display text-lg font-black tracking-tight">VERTIFEX_</span>
+            <span className="hidden border border-border px-2 py-0.5 text-[10px] text-muted-foreground md:inline-block">
+              SYSTEMS INTEGRATOR // ONLINE
             </span>
           </div>
-          <div className="flex gap-4 md:gap-8 text-[11px] font-bold">
-            <a href="#capabilities" className="hidden md:inline hover:text-primary transition-colors">
+          <div className="flex items-center gap-4 text-[11px] font-bold md:gap-8">
+            <a href="#capabilities" className="hidden transition-colors hover:text-primary md:inline">
               01_CAPABILITIES
             </a>
-            <a href="#systems" className="hidden md:inline hover:text-primary transition-colors">
-              02_SYSTEMS
+            <a href="#sectors" className="hidden transition-colors hover:text-primary md:inline">
+              02_SECTORS
             </a>
             <a href="#contact" className="text-primary">
-              [ INITIALIZE_PROJECT ]
+              [ START_PROJECT ]
             </a>
           </div>
         </div>
       </nav>
 
       <main className="pt-14">
-        {/* Hero */}
-        <section className="relative border-b border-border overflow-hidden">
-          <div className="grid lg:grid-cols-12 min-h-[80vh]">
-            <div className="lg:col-span-7 p-8 lg:p-16 flex flex-col justify-end border-b lg:border-b-0 lg:border-r border-border">
+        <section className="border-b border-border">
+          <div className="grid min-h-[86vh] lg:grid-cols-12">
+            <div className="flex flex-col justify-end border-b border-border p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
               <div className="vx-reveal">
-                <div className="mb-6 inline-flex items-center gap-2 text-primary text-sm">
-                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <span>AUTONOMOUS_INFRASTRUCTURE</span>
+                <div className="mb-6 inline-flex items-center gap-2 text-sm text-primary">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  <span>INTEGRATED_AUTOMATION_SYSTEMS</span>
                 </div>
-                <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] uppercase mb-8">
-                  Engineered <br /> Precision.
+                <h1 className="mb-8 font-display text-5xl font-black uppercase leading-[0.84] tracking-tight md:text-7xl lg:text-8xl">
+                  Systems built for
+                  <br />
+                  real operations.
                 </h1>
-                <p className="max-w-md text-muted-foreground text-sm leading-relaxed mb-12">
-                  Vertifex Technology is a system integrator specialized in system
-                  integration, engineering and robotics for automation — unifying
-                  mechanical, electrical, software and control systems into one
-                  reliable production environment.
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-[15px]">
+                  Vertifex Technology is a system integrator specialized in system integration,
+                  engineering, and robotics for automation. We connect mechanical, electrical,
+                  software, and control systems into dependable solutions for industrial and
+                  infrastructure environments.
                 </p>
-                <div className="flex gap-1 items-center">
-                  <div className="h-px w-12 bg-primary" />
-                  <span className="text-[10px] tracking-widest">SCROLL_FOR_SPECS</span>
+                <div className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2">
+                  {metrics.map(([label, value]) => (
+                    <div key={label} className="bg-background px-4 py-5">
+                      <div className="text-[10px] text-muted-foreground">{label}</div>
+                      <div className="mt-3 font-display text-2xl font-bold text-primary">{value}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-5 relative bg-card group min-h-[400px]">
+
+            <div className="relative min-h-[440px] lg:col-span-7">
               <img
-                src={heroRobot}
-                alt="Vertifex robotic arm operating in a precision manufacturing cell"
-                width={1024}
-                height={1280}
-                className="absolute inset-0 w-full h-full object-cover grayscale contrast-125 opacity-70 group-hover:opacity-90 transition-opacity duration-700"
+                src={heroImage}
+                alt="Engineer inspecting industrial piping and systems from above"
+                width={1688}
+                height={950}
+                className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 pointer-events-none lg:border-l border-border">
-                <div className="absolute top-4 right-4 text-right">
-                  <div className="text-[10px] text-muted-foreground mb-1">MODULE_ID</div>
-                  <div className="text-xs">VX-990-ARM</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/18 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 grid gap-px border-t border-border bg-border md:grid-cols-3">
+                <div className="bg-background/92 px-5 py-4 backdrop-blur-sm">
+                  <div className="text-[10px] text-muted-foreground">CORE_SCOPE</div>
+                  <div className="mt-2 text-xs font-bold uppercase">Design / Integrate / Support</div>
                 </div>
-                <div className="absolute bottom-4 left-4">
-                  <div className="text-[10px] text-muted-foreground mb-1">STATUS</div>
-                  <div className="text-xs text-primary">● ONLINE</div>
+                <div className="bg-background/92 px-5 py-4 backdrop-blur-sm">
+                  <div className="text-[10px] text-muted-foreground">PROJECT_MODEL</div>
+                  <div className="mt-2 text-xs font-bold uppercase">Engineering to Commissioning</div>
+                </div>
+                <div className="bg-background/92 px-5 py-4 backdrop-blur-sm">
+                  <div className="text-[10px] text-muted-foreground">APPLICATION</div>
+                  <div className="mt-2 text-xs font-bold uppercase">Automation & Reliability</div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Marquee strip */}
-        <section className="border-b border-border overflow-hidden">
-          <div className="flex gap-8 py-4 px-6 text-[11px] text-muted-foreground whitespace-nowrap overflow-x-auto">
-            {services.map((s) => (
-              <span key={s} className="inline-flex items-center gap-2">
+        <section className="overflow-hidden border-b border-border">
+          <div className="flex gap-8 overflow-x-auto px-6 py-4 whitespace-nowrap text-[11px] text-muted-foreground">
+            {serviceTags.map((item) => (
+              <span key={item} className="inline-flex items-center gap-2">
                 <span className="text-primary">+</span>
-                {s.toUpperCase()}
+                {item.toUpperCase()}
               </span>
             ))}
           </div>
         </section>
 
-        {/* Capabilities */}
-        <section id="capabilities" className="max-w-[1440px] mx-auto">
-          <div className="grid md:grid-cols-3 border-b border-border">
-            {capabilities.map((c) => (
+        <section id="capabilities" className="mx-auto max-w-[1440px]">
+          <div className="border-b border-border px-6 py-16 md:py-20">
+            <div className="max-w-3xl">
+              <div className="mb-4 text-[10px] font-bold text-primary">// CAPABILITY_STACK</div>
+              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+                System integration with engineering discipline.
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                Our background is system integration. That means every project is treated as one
+                connected operating system — hardware, controls, software, field execution, and
+                long-term support working together instead of in isolation.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3">
+            {capabilities.map((item, index) => (
               <article
-                key={c.n}
-                className="p-8 md:p-10 border-b md:border-b-0 md:border-r last:border-r-0 border-border group"
+                key={item.index}
+                className="group border-b border-border p-6 md:border-r md:p-8 last:md:border-r-0"
               >
-                <span className="text-primary text-xs mb-4 block font-bold">[ {c.n} ]</span>
-                <h3 className="font-display text-2xl font-bold mb-4 uppercase tracking-tight">
-                  {c.title}
-                </h3>
-                <div className="aspect-[4/3] mb-6 overflow-hidden bg-card">
+                <div className="mb-4 text-xs font-bold text-primary">[ {item.index} ]</div>
+                <div className="mb-6 aspect-[4/3] overflow-hidden border border-border bg-card">
                   <img
-                    src={c.img}
-                    alt={c.title}
-                    width={800}
-                    height={600}
-                    loading="lazy"
-                    className="w-full h-full object-cover grayscale contrast-125 opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    src={item.image}
+                    alt={item.alt}
+                    width={1280}
+                    height={720}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                 </div>
-                <p className="text-muted-foreground text-xs leading-relaxed mb-8">
-                  {c.desc}
+                <h3 className="font-display text-2xl font-bold uppercase tracking-tight">
+                  {item.title}
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  {item.description}
                 </p>
-                <div className="pt-4 border-t border-border flex justify-between items-center text-[10px] text-muted-foreground">
-                  <span>{c.meta[0]}</span>
-                  <span>{c.meta[1]}</span>
+                <div className="mt-8 border-t border-border pt-4 text-[10px] text-muted-foreground">
+                  {item.note}
                 </div>
               </article>
             ))}
           </div>
         </section>
 
-        {/* Standardized Reliability */}
-        <section id="systems" className="py-24 px-6">
-          <div className="max-w-[1440px] mx-auto">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-8">
-              <div className="max-w-2xl">
-                <h2 className="font-display text-4xl md:text-5xl font-black uppercase tracking-tighter mb-6">
-                  Standardized <span className="text-primary">Reliability</span>
-                </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  As system integrators, we engineer certainty across every layer of
-                  your operation — from PLCs and robotics cells to the software that
-                  orchestrates them — tested, validated, and ready for production.
-                </p>
-              </div>
-              <div className="text-left lg:text-right text-[10px] text-muted-foreground leading-loose">
-                // REF_DOC: VX_ISO_9001_COMPLIANT
-                <br />
-                // UPDATED: 2026.05.05
-              </div>
+        <section id="sectors" className="border-b border-t border-border">
+          <div className="mx-auto grid max-w-[1440px] lg:grid-cols-12">
+            <div className="border-b border-border p-6 lg:col-span-4 lg:border-r lg:border-b-0 lg:p-10">
+              <div className="text-[10px] font-bold text-primary">// APPLICATION_ENVIRONMENTS</div>
+              <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight md:text-4xl">
+                Built for harsh, technical, and live environments.
+              </h2>
+              <ul className="mt-8 space-y-3 text-sm text-muted-foreground">
+                {sectors.map((sector) => (
+                  <li key={sector} className="flex items-start gap-3 border-b border-border/70 pb-3">
+                    <span className="mt-1 text-primary">+</span>
+                    <span>{sector}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-border border border-border">
-              {stats.map(([label, value], i) => (
-                <div
-                  key={label}
-                  className="bg-background p-6 aspect-square flex flex-col justify-between"
-                >
-                  <span className="text-[10px] text-muted-foreground">{label}</span>
-                  <div
-                    className={`text-4xl font-display font-bold italic ${
-                      i === stats.length - 1 ? "text-primary" : ""
-                    }`}
-                  >
-                    {value}
-                  </div>
+            <div className="grid lg:col-span-8 md:grid-cols-2">
+              <div className="border-b border-border md:border-r md:border-b-0">
+                <img
+                  src={robotUnitImage}
+                  alt="Quadruped robotic inspection unit on a neutral background"
+                  width={569}
+                  height={569}
+                  loading="lazy"
+                  className="aspect-square h-full w-full object-cover bg-card"
+                />
+              </div>
+              <div className="grid gap-px bg-border">
+                <div className="bg-background p-6">
+                  <div className="mb-4 text-[10px] text-muted-foreground">DISCIPLINE_MATRIX</div>
+                  <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+                    We bridge robotics, controls, software, electrical integration, and field
+                    execution to deliver automation systems that can be deployed, supported, and
+                    scaled in operational settings.
+                  </p>
                 </div>
-              ))}
+                <div className="bg-background p-6">
+                  <div className="mb-4 text-[10px] text-muted-foreground">INTEGRATION_PRIORITY</div>
+                  <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+                    Reliability matters as much as innovation. We focus on maintainable system
+                    architecture, clear testing workflows, and practical support after handover.
+                  </p>
+                </div>
+                <div className="bg-background p-0">
+                  <img
+                    src={substationImage}
+                    alt="High-voltage infrastructure representing automation-ready utility assets"
+                    width={1280}
+                    height={720}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section id="contact" className="border-t border-border">
-          <div className="max-w-[1440px] mx-auto px-6 py-24 grid lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7">
-              <div className="text-[10px] text-primary font-bold mb-4">
-                // INITIALIZE_PROJECT
-              </div>
-              <h2 className="font-display text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
-                Build the next <br />
-                operating standard.
+        <section className="border-b border-border px-6 py-20 md:py-24">
+          <div className="mx-auto grid max-w-[1440px] gap-8 lg:grid-cols-2">
+            <div>
+              <div className="mb-4 text-[10px] font-bold text-primary">// WHY_VERTIFEX</div>
+              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+                Integration first. Execution always.
               </h2>
-              <p className="text-muted-foreground text-sm max-w-md mb-10">
-                Tell us about your environment. Our engineers respond within 48 hours
-                with a feasibility brief and a deployment timeline.
+            </div>
+            <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+              <div className="bg-background p-6">
+                <div className="text-[10px] text-muted-foreground">ENGINEERING</div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  System architecture, controls thinking, and practical engineering coordination.
+                </p>
+              </div>
+              <div className="bg-background p-6">
+                <div className="text-[10px] text-muted-foreground">INSTALLATION</div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  On-site deployment, setup, and integration of the full automation stack.
+                </p>
+              </div>
+              <div className="bg-background p-6">
+                <div className="text-[10px] text-muted-foreground">VALIDATION</div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Structured testing, commissioning, and readiness checks before handover.
+                </p>
+              </div>
+              <div className="bg-background p-6">
+                <div className="text-[10px] text-muted-foreground">SUPPORT</div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Maintenance and project support to keep systems stable after deployment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="px-6 py-20 md:py-24">
+          <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <div className="mb-4 text-[10px] font-bold text-primary">// START_PROJECT</div>
+              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-6xl">
+                Let’s engineer the automation layer properly.
+              </h2>
+              <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                If you need a system integrator for robotics, engineering, automation, testing, or
+                field deployment support, Vertifex can help structure the solution from concept to
+                operational delivery.
               </p>
               <a
                 href="mailto:enquiries@vertifex.tech"
-                className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-6 py-4 text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors"
+                className="mt-10 inline-flex items-center gap-3 bg-primary px-6 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Request Engagement →
               </a>
             </div>
-            <div className="lg:col-span-5 border border-border p-8 space-y-4 text-xs">
-              <div className="flex justify-between border-b border-border pb-3">
-                <span className="text-muted-foreground">RESPONSE_SLA</span>
-                <span>≤ 48 HOURS</span>
+
+            <div className="grid gap-px border border-border bg-border lg:col-span-5">
+              <div className="bg-background p-5 text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <span className="text-muted-foreground">SCOPE</span>
+                  <span>INTEGRATE → DEPLOY</span>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                  <span className="text-muted-foreground">SPECIALTY</span>
+                  <span>ENGINEERING / ROBOTICS</span>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                  <span className="text-muted-foreground">FOCUS</span>
+                  <span>AUTOMATION SYSTEMS</span>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-muted-foreground">CONTACT</span>
+                  <span className="text-primary">enquiries@vertifex.tech</span>
+                </div>
               </div>
-              <div className="flex justify-between border-b border-border pb-3">
-                <span className="text-muted-foreground">SCOPE</span>
-                <span>DESIGN → MAINTAIN</span>
-              </div>
-              <div className="flex justify-between border-b border-border pb-3">
-                <span className="text-muted-foreground">SECTORS</span>
-                <span>INDUSTRIAL / ENERGY</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">CONTACT</span>
-                <span className="text-primary">enquiries@vertifex.tech</span>
-              </div>
+              <img
+                src={fieldImage}
+                alt="Field technician working inside an industrial operations tunnel"
+                width={1200}
+                height={800}
+                loading="lazy"
+                className="h-full max-h-[280px] w-full object-cover"
+              />
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border py-12 px-6">
-        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div className="space-y-2">
-            <div className="font-display font-black text-2xl tracking-tighter">
-              VERTIFEX_TECHNOLOGY
-            </div>
-            <div className="text-[10px] text-muted-foreground uppercase">
-              Advancing Automation via Physical Logic
+      <footer className="border-t border-border px-6 py-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="font-display text-2xl font-black tracking-tight">VERTIFEX_TECHNOLOGY</div>
+            <div className="mt-2 text-[10px] uppercase text-muted-foreground">
+              System Integration / Engineering / Robotics for Automation
             </div>
           </div>
-          <div className="flex flex-wrap gap-x-12 gap-y-4">
-            <div>
-              <div className="text-[10px] text-muted-foreground mb-2">_CAPABILITIES</div>
-              <ul className="text-xs font-bold space-y-1">
-                <li>ROBOTICS</li>
-                <li>CONTROL SYSTEMS</li>
-                <li>INTEGRATION</li>
-              </ul>
-            </div>
-            <div>
-              <div className="text-[10px] text-muted-foreground mb-2">_COMMS</div>
-              <ul className="text-xs font-bold space-y-1">
-                <li className="underline decoration-primary">enquiries@vertifex.tech</li>
-                <li>+1 (000) 000 0000</li>
-              </ul>
-            </div>
+          <div className="text-[10px] uppercase text-muted-foreground">
+            © 2026 Vertifex Technology. All rights reserved.
           </div>
-        </div>
-        <div className="max-w-[1440px] mx-auto mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between gap-2 text-[9px] text-muted-foreground">
-          <span>© 2026 VERTIFEX TECHNOLOGY. ALL RIGHTS RESERVED.</span>
-          <span>INFRASTRUCTURE AUTOMATION GROUP</span>
         </div>
       </footer>
     </div>
