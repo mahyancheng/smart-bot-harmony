@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroImage from "@/assets/vertifex-hero.png";
-import automationImage from "@/assets/vertifex-automation.png";
-import substationImage from "@/assets/vertifex-substation.png";
-import fieldImage from "@/assets/vertifex-field.png";
-import robotUnitImage from "@/assets/vertifex-robot-unit.png";
+import heroImage from "@/assets/vx-hero.jpg";
+import automationImage from "@/assets/vx-robotics.jpg";
+import substationImage from "@/assets/vx-infrastructure.jpg";
+import fieldImage from "@/assets/vx-field.jpg";
+import robotUnitImage from "@/assets/vx-controls.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
