@@ -7,17 +7,17 @@ import cap3 from "@/assets/capability-3.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vertifex Technology — Robotics & Engineering Automation" },
+      { title: "Vertifex Technology — System Integrators for Automation" },
       {
         name: "description",
         content:
-          "Vertifex Technology delivers robotics, control systems, and engineering integration for smarter, safer, more efficient operating environments.",
+          "Vertifex Technology is a system integrator specialized in system integration, engineering and robotics for industrial automation.",
       },
-      { property: "og:title", content: "Vertifex Technology — Engineered Precision" },
+      { property: "og:title", content: "Vertifex Technology — System Integration & Robotics" },
       {
         property: "og:description",
         content:
-          "Robotics, electrical, mechanical, software & control system integration for mission-critical infrastructure.",
+          "System integrators delivering engineering and robotics solutions that unify mechanical, electrical, software and control systems for automation.",
       },
       { property: "og:image", content: heroRobot },
       { name: "twitter:image", content: heroRobot },
@@ -116,9 +116,10 @@ function Index() {
                   Engineered <br /> Precision.
                 </h1>
                 <p className="max-w-md text-muted-foreground text-sm leading-relaxed mb-12">
-                  High-reliability robotics and control systems for mission-critical
-                  infrastructure. Vertifex bridges the gap between physical mechanics and
-                  digital intelligence.
+                  Vertifex Technology is a system integrator specialized in system
+                  integration, engineering and robotics for automation — unifying
+                  mechanical, electrical, software and control systems into one
+                  reliable production environment.
                 </p>
                 <div className="flex gap-1 items-center">
                   <div className="h-px w-12 bg-primary" />
@@ -203,9 +204,9 @@ function Index() {
                   Standardized <span className="text-primary">Reliability</span>
                 </h2>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Every installation follows the Vertifex Protocol. We don't just build
-                  systems — we engineer certainty through rigorous testing and
-                  stress-simulation of every mechanical joint and software line.
+                  As system integrators, we engineer certainty across every layer of
+                  your operation — from PLCs and robotics cells to the software that
+                  orchestrates them — tested, validated, and ready for production.
                 </p>
               </div>
               <div className="text-left lg:text-right text-[10px] text-muted-foreground leading-loose">

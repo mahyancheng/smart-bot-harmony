@@ -30,7 +30,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Vertifex Technology" },
-      { name: "description", content: "Robotics & engineering solutions for smarter, safer, more efficient operations." },
+      { name: "description", content: "Vertifex Technology — system integrators specialized in system integration, engineering and robotics for automation." },
       { name: "author", content: "Vertifex Technology" },
     ],
     links: [
