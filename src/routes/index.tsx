@@ -335,7 +335,7 @@ function Index() {
                 ))}
               </ul>
             </div>
-            <div className="relative min-h-[320px] lg:col-span-8">
+            <div className="relative min-h-[240px] sm:min-h-[320px] lg:col-span-8">
               <img
                 src={substationImage}
                 alt="High-voltage substation infrastructure under operation"
@@ -363,7 +363,7 @@ function Index() {
           </div>
 
           <div className="mx-auto grid max-w-[1440px] border-t border-border lg:grid-cols-12">
-            <div className="relative min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
+            <div className="relative min-h-[300px] sm:min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
               <img
                 src={stairsImage}
                 alt="Quadruped inspection robot navigating outdoor stairs"
@@ -469,7 +469,7 @@ function Index() {
           </div>
 
           <div className="mx-auto grid max-w-[1440px] border-t border-border lg:grid-cols-12">
-            <div className="relative min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
+            <div className="relative min-h-[300px] sm:min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
               <img
                 src={bessImage}
                 alt="Outdoor industrial battery energy storage system cabinets"
