@@ -175,7 +175,7 @@ function Index() {
               </div>
             </div>
 
-            <div className="relative min-h-[440px] lg:col-span-7">
+            <div className="relative min-h-[320px] sm:min-h-[440px] lg:col-span-7">
               <img
                 src={heroImage}
                 alt="Engineers inspecting industrial piping and infrastructure from above"
