@@ -1,5 +1,13 @@
 import { Link } from "@tanstack/react-router";
 
+const navLinks = [
+  { href: "#profile", label: "01_PROFILE" },
+  { href: "#capabilities", label: "02_CAPABILITIES" },
+  { href: "#platform", label: "03_PLATFORM" },
+  { href: "#portfolio", label: "04_PORTFOLIO" },
+  { href: "#contact", label: "05_CONTACT" },
+];
+
 export function SiteNav() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/88 backdrop-blur-md">
@@ -10,27 +18,17 @@ export function SiteNav() {
             SYSTEMS INTEGRATOR // ONLINE
           </span>
         </Link>
-        <div className="flex items-center gap-4 text-[11px] font-bold md:gap-6">
-          <Link
-            to="/"
-            activeOptions={{ exact: true }}
-            className="hidden transition-colors hover:text-primary md:inline [&.active]:text-primary"
-          >
-            01_INDEX
-          </Link>
-          <Link
-            to="/about"
-            className="hidden transition-colors hover:text-primary md:inline [&.active]:text-primary"
-          >
-            02_PROFILE
-          </Link>
-          <Link
-            to="/portfolio"
-            className="hidden transition-colors hover:text-primary md:inline [&.active]:text-primary"
-          >
-            03_PORTFOLIO
-          </Link>
-          <a href="mailto:enquiries@vertifex.tech" className="text-primary">
+        <div className="flex items-center gap-3 text-[11px] font-bold md:gap-5">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="hidden transition-colors hover:text-primary lg:inline"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a href="#contact" className="text-primary">
             [ START_PROJECT ]
           </a>
         </div>
