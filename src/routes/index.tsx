@@ -141,17 +141,17 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
       <SiteNav />
 
-      <main className="pt-14">
+      <main className="overflow-x-hidden pt-14">
         {/* HERO */}
         <section className="border-b border-border">
-          <div className="grid min-h-[88vh] lg:grid-cols-12">
-            <div className="flex flex-col justify-end border-b border-border p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
+          <div className="grid lg:min-h-[88vh] lg:grid-cols-12">
+            <div className="flex flex-col justify-end border-b border-border p-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
               <div className="vx-reveal">
-                <div className="mb-6 inline-flex items-center gap-2 text-sm text-primary">
+                <div className="mb-5 inline-flex items-center gap-2 text-xs text-primary sm:text-sm">
                   <span className="h-2 w-2 rounded-full bg-primary" />
                   <span>COMPANY_PROFILE / 2026</span>
                 </div>
-                <h1 className="mb-8 font-display text-5xl font-black uppercase leading-[0.84] tracking-tight md:text-7xl lg:text-8xl">
+                <h1 className="mb-6 font-display text-[2.5rem] font-black uppercase leading-[0.88] tracking-tight sm:text-5xl md:mb-8 md:text-7xl lg:text-8xl">
                   Systems built
                   <br />
                   for real
@@ -175,7 +175,7 @@ function Index() {
               </div>
             </div>
 
-            <div className="relative min-h-[440px] lg:col-span-7">
+            <div className="relative min-h-[320px] sm:min-h-[440px] lg:col-span-7">
               <img
                 src={heroImage}
                 alt="Engineers inspecting industrial piping and infrastructure from above"
@@ -216,11 +216,11 @@ function Index() {
 
         {/* PROFILE */}
         <section id="profile" className="border-b border-border">
-          <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-20">
+          <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <div className="text-[10px] font-bold text-primary">// 01_PROFILE</div>
-                <h2 className="mt-4 font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+                <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                   About Vertifex.
                 </h2>
               </div>
@@ -276,10 +276,10 @@ function Index() {
 
         {/* CAPABILITIES */}
         <section id="capabilities" className="mx-auto max-w-[1440px] border-b border-border">
-          <div className="border-b border-border px-6 py-16 md:py-20">
+          <div className="border-b border-border px-4 py-12 sm:px-6 md:py-20">
             <div className="max-w-3xl">
               <div className="mb-4 text-[10px] font-bold text-primary">// 02_CAPABILITIES</div>
-              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+              <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                 One integrator. Three connected layers.
               </h2>
               <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -335,7 +335,7 @@ function Index() {
                 ))}
               </ul>
             </div>
-            <div className="relative min-h-[320px] lg:col-span-8">
+            <div className="relative min-h-[240px] sm:min-h-[320px] lg:col-span-8">
               <img
                 src={substationImage}
                 alt="High-voltage substation infrastructure under operation"
@@ -351,9 +351,9 @@ function Index() {
 
         {/* PLATFORM — robotics flagship */}
         <section id="platform" className="border-b border-border">
-          <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-20">
+          <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="text-[10px] font-bold text-primary">// 03_PLATFORM</div>
-            <h2 className="mt-4 font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+            <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
               Legged robot for automated inspection.
             </h2>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -363,7 +363,7 @@ function Index() {
           </div>
 
           <div className="mx-auto grid max-w-[1440px] border-t border-border lg:grid-cols-12">
-            <div className="relative min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
+            <div className="relative min-h-[300px] sm:min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
               <img
                 src={stairsImage}
                 alt="Quadruped inspection robot navigating outdoor stairs"
@@ -445,9 +445,9 @@ function Index() {
 
         {/* PORTFOLIO */}
         <section id="portfolio" className="border-b border-border">
-          <div className="mx-auto max-w-[1440px] px-6 py-16 md:py-20">
+          <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="text-[10px] font-bold text-primary">// 04_PORTFOLIO</div>
-            <h2 className="mt-4 font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
+            <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
               Selected project.
             </h2>
             <div className="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-bold">
@@ -455,7 +455,7 @@ function Index() {
               <span className="text-muted-foreground">CASE_001 // ENERGY_STORAGE</span>
               <span className="text-muted-foreground">// 2026</span>
             </div>
-            <h3 className="mt-6 font-display text-3xl font-black uppercase leading-[0.95] tracking-tight md:text-5xl">
+            <h3 className="mt-6 font-display text-[1.65rem] font-black uppercase leading-[0.95] tracking-tight sm:text-3xl md:text-5xl">
               250 kW / 514.4576 kWh
               <br />
               Energy Storage System.
@@ -469,7 +469,7 @@ function Index() {
           </div>
 
           <div className="mx-auto grid max-w-[1440px] border-t border-border lg:grid-cols-12">
-            <div className="relative min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
+            <div className="relative min-h-[300px] sm:min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
               <img
                 src={bessImage}
                 alt="Outdoor industrial battery energy storage system cabinets"
@@ -544,11 +544,11 @@ function Index() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" className="px-6 py-20 md:py-24">
+        <section id="contact" className="px-4 py-14 sm:px-6 md:py-24">
           <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <div className="mb-4 text-[10px] font-bold text-primary">// 05_CONTACT</div>
-              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-6xl">
+              <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-6xl">
                 Let's engineer the automation layer properly.
               </h2>
               <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
