@@ -141,17 +141,17 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
       <SiteNav />
 
-      <main className="pt-14">
+      <main className="overflow-x-hidden pt-14">
         {/* HERO */}
         <section className="border-b border-border">
-          <div className="grid min-h-[88vh] lg:grid-cols-12">
-            <div className="flex flex-col justify-end border-b border-border p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
+          <div className="grid lg:min-h-[88vh] lg:grid-cols-12">
+            <div className="flex flex-col justify-end border-b border-border p-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
               <div className="vx-reveal">
-                <div className="mb-6 inline-flex items-center gap-2 text-sm text-primary">
+                <div className="mb-5 inline-flex items-center gap-2 text-xs text-primary sm:text-sm">
                   <span className="h-2 w-2 rounded-full bg-primary" />
                   <span>COMPANY_PROFILE / 2026</span>
                 </div>
-                <h1 className="mb-8 font-display text-5xl font-black uppercase leading-[0.84] tracking-tight md:text-7xl lg:text-8xl">
+                <h1 className="mb-6 font-display text-[2.5rem] font-black uppercase leading-[0.88] tracking-tight sm:text-5xl md:mb-8 md:text-7xl lg:text-8xl">
                   Systems built
                   <br />
                   for real
