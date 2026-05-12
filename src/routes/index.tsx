@@ -1,24 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImage from "@/assets/vx-hero.jpg";
-import automationImage from "@/assets/vx-robotics.jpg";
-import substationImage from "@/assets/vx-infrastructure.jpg";
-import fieldImage from "@/assets/vx-field.jpg";
-import robotUnitImage from "@/assets/vx-controls.jpg";
+import roboticsImage from "@/assets/vx-robot-substation.jpg";
+import smartImage from "@/assets/vx-controls.jpg";
+import ictImage from "@/assets/vx-infrastructure.jpg";
+import robotProduct from "@/assets/vx-robot-product.jpg";
+import substationImage from "@/assets/vx-substation-real.jpg";
+import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vertifex Technology — System Integration & Robotics" },
+      { title: "Vertifex Technology — System Integration, Robotics & Smart Solutions" },
       {
         name: "description",
         content:
-          "Vertifex Technology is a system integrator delivering engineering, robotics, and field-ready automation solutions across industrial and infrastructure environments.",
+          "Vertifex Technology is a system integrator delivering engineering, robotics, smart solutions (ELV, security, energy, surveillance), ICT and IoT for industrial and infrastructure automation.",
       },
-      { property: "og:title", content: "Vertifex Technology — System Integration & Robotics" },
+      { property: "og:title", content: "Vertifex Technology — System Integration, Robotics & Smart Solutions" },
       {
         property: "og:description",
         content:
-          "System integrators specializing in engineering, robotics, controls, installation, testing, and maintenance for automation projects.",
+          "System integrators specializing in engineering, robotics, smart solutions, ICT and IoT for automation projects.",
       },
       { property: "og:image", content: heroImage },
       { name: "twitter:image", content: heroImage },
@@ -30,86 +32,68 @@ export const Route = createFileRoute("/")({
 const serviceTags = [
   "System Integration",
   "Robotics Engineering",
-  "Electrical Systems",
-  "Mechanical Systems",
+  "Smart Solutions",
+  "ELV Systems",
+  "Security & Surveillance",
+  "Energy Systems",
+  "ICT Infrastructure",
+  "IoT Platforms",
   "Control Panels",
   "Installation",
   "Testing & Commissioning",
   "Maintenance",
-  "Asset Inspection",
-  "Automation Support",
 ];
 
 const capabilities = [
   {
     index: "01",
-    title: "Robotics Deployment",
+    title: "Robotics & Automation",
     description:
-      "We integrate mobile and autonomous robotic systems into real operating environments with the mechanical, electrical, and software stack aligned from day one.",
-    note: "SITE_READY // INTEGRATED",
-    image: automationImage,
-    alt: "Autonomous mobile robot operating inside an industrial facility",
+      "We deploy autonomous and legged robotic platforms for inspection, monitoring, and intervention — integrated with the mechanical, electrical, and software stack from day one.",
+    note: "AUTONOMOUS // INSPECTION",
+    image: roboticsImage,
+    alt: "Quadruped inspection robot navigating an industrial facility",
   },
   {
     index: "02",
-    title: "Infrastructure Engineering",
+    title: "Smart Solutions",
     description:
-      "From substations and utility assets to inspection routes and field equipment, we engineer practical automation systems that improve visibility, safety, and uptime.",
-    note: "GRID / FIELD / PLANT",
-    image: substationImage,
-    alt: "Electrical substation infrastructure representing engineered industrial systems",
+      "ELV, security, surveillance, energy, and building intelligence delivered as one integrated layer — designed to interoperate, not to live as silos.",
+    note: "ELV / SECURITY / ENERGY / SURVEILLANCE",
+    image: smartImage,
+    alt: "Control room operator monitoring smart building and security systems",
   },
   {
     index: "03",
-    title: "Operational Support",
+    title: "ICT & IoT",
     description:
-      "Our scope extends through installation, testing, commissioning, maintenance, and technical support so every deployment performs reliably in live conditions.",
-    note: "DEPLOY // TEST // MAINTAIN",
-    image: fieldImage,
-    alt: "Field technician inside an industrial tunnel environment",
+      "Networking, edge compute, sensor fabrics, SCADA integration, and cloud-connected IoT platforms that turn field data into operational decisions.",
+    note: "NETWORK / EDGE / CLOUD / SCADA",
+    image: ictImage,
+    alt: "Industrial network and IoT control infrastructure",
   },
 ];
 
 const metrics = [
-  ["DISCIPLINES", "05"],
+  ["DISCIPLINES", "06"],
   ["DELIVERY", "END-TO-END"],
   ["FOCUS", "AUTOMATION"],
-  ["SYSTEMS", "ROBOTIC + CONTROL"],
+  ["LAYERS", "ROBOT / SMART / IOT"],
 ];
 
 const sectors = [
   "Industrial Plants",
   "Utilities & Substations",
-  "Infrastructure Assets",
-  "Energy Operations",
+  "Energy Storage & Microgrids",
+  "Buildings & Facilities",
   "Inspection & Maintenance Programs",
-  "Automation Retrofits",
+  "Smart Surveillance Deployments",
 ];
 
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/88 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <span className="font-display text-lg font-black tracking-tight">VERTIFEX_</span>
-            <span className="hidden border border-border px-2 py-0.5 text-[10px] text-muted-foreground md:inline-block">
-              SYSTEMS INTEGRATOR // ONLINE
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-[11px] font-bold md:gap-8">
-            <a href="#capabilities" className="hidden transition-colors hover:text-primary md:inline">
-              01_CAPABILITIES
-            </a>
-            <a href="#sectors" className="hidden transition-colors hover:text-primary md:inline">
-              02_SECTORS
-            </a>
-            <a href="#contact" className="text-primary">
-              [ START_PROJECT ]
-            </a>
-          </div>
-        </div>
-      </nav>
+      <SiteNav />
 
       <main className="pt-14">
         <section className="border-b border-border">
@@ -127,9 +111,9 @@ function Index() {
                 </h1>
                 <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-[15px]">
                   Vertifex Technology is a system integrator specialized in system integration,
-                  engineering, and robotics for automation. We connect mechanical, electrical,
-                  software, and control systems into dependable solutions for industrial and
-                  infrastructure environments.
+                  engineering, and robotics for automation — extending into smart solutions (ELV,
+                  security, energy, surveillance), ICT, and IoT for industrial and infrastructure
+                  environments.
                 </p>
                 <div className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2">
                   {metrics.map(([label, value]) => (
@@ -138,6 +122,20 @@ function Index() {
                       <div className="mt-3 font-display text-2xl font-bold text-primary">{value}</div>
                     </div>
                   ))}
+                </div>
+                <div className="mt-8 flex flex-wrap gap-3 text-[11px] font-bold">
+                  <Link
+                    to="/about"
+                    className="border border-border px-4 py-3 transition-colors hover:border-primary hover:text-primary"
+                  >
+                    → COMPANY PROFILE
+                  </Link>
+                  <Link
+                    to="/portfolio"
+                    className="border border-border px-4 py-3 transition-colors hover:border-primary hover:text-primary"
+                  >
+                    → SELECTED PORTFOLIO
+                  </Link>
                 </div>
               </div>
             </div>
@@ -185,12 +183,11 @@ function Index() {
             <div className="max-w-3xl">
               <div className="mb-4 text-[10px] font-bold text-primary">// CAPABILITY_STACK</div>
               <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
-                System integration with engineering discipline.
+                One integrator. Three connected layers.
               </h2>
               <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                Our background is system integration. That means every project is treated as one
-                connected operating system — hardware, controls, software, field execution, and
-                long-term support working together instead of in isolation.
+                Robotics on the edge of operations. Smart solutions across the building and asset
+                layer. ICT and IoT tying them into a single, observable system.
               </p>
             </div>
           </div>
@@ -246,10 +243,10 @@ function Index() {
             <div className="grid lg:col-span-8 md:grid-cols-2">
               <div className="border-b border-border md:border-r md:border-b-0">
                 <img
-                  src={robotUnitImage}
+                  src={robotProduct}
                   alt="Quadruped robotic inspection unit on a neutral background"
-                  width={569}
-                  height={569}
+                  width={1280}
+                  height={720}
                   loading="lazy"
                   className="aspect-square h-full w-full object-cover bg-card"
                 />
@@ -258,16 +255,15 @@ function Index() {
                 <div className="bg-background p-6">
                   <div className="mb-4 text-[10px] text-muted-foreground">DISCIPLINE_MATRIX</div>
                   <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-                    We bridge robotics, controls, software, electrical integration, and field
-                    execution to deliver automation systems that can be deployed, supported, and
-                    scaled in operational settings.
+                    Mechanical, electrical, controls, software, networking and field execution —
+                    coordinated under a single integrator so deployments stay coherent end-to-end.
                   </p>
                 </div>
                 <div className="bg-background p-6">
                   <div className="mb-4 text-[10px] text-muted-foreground">INTEGRATION_PRIORITY</div>
                   <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-                    Reliability matters as much as innovation. We focus on maintainable system
-                    architecture, clear testing workflows, and practical support after handover.
+                    Reliability matters as much as innovation. Maintainable architectures, clear
+                    testing workflows, and practical support after handover.
                   </p>
                 </div>
                 <div className="bg-background p-0">
@@ -285,54 +281,17 @@ function Index() {
           </div>
         </section>
 
-        <section className="border-b border-border px-6 py-20 md:py-24">
-          <div className="mx-auto grid max-w-[1440px] gap-8 lg:grid-cols-2">
-            <div>
-              <div className="mb-4 text-[10px] font-bold text-primary">// WHY_VERTIFEX</div>
-              <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-5xl">
-                Integration first. Execution always.
-              </h2>
-            </div>
-            <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
-              <div className="bg-background p-6">
-                <div className="text-[10px] text-muted-foreground">ENGINEERING</div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  System architecture, controls thinking, and practical engineering coordination.
-                </p>
-              </div>
-              <div className="bg-background p-6">
-                <div className="text-[10px] text-muted-foreground">INSTALLATION</div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  On-site deployment, setup, and integration of the full automation stack.
-                </p>
-              </div>
-              <div className="bg-background p-6">
-                <div className="text-[10px] text-muted-foreground">VALIDATION</div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Structured testing, commissioning, and readiness checks before handover.
-                </p>
-              </div>
-              <div className="bg-background p-6">
-                <div className="text-[10px] text-muted-foreground">SUPPORT</div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Maintenance and project support to keep systems stable after deployment.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section id="contact" className="px-6 py-20 md:py-24">
           <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <div className="mb-4 text-[10px] font-bold text-primary">// START_PROJECT</div>
               <h2 className="font-display text-4xl font-black uppercase tracking-tight md:text-6xl">
-                Let’s engineer the automation layer properly.
+                Let's engineer the automation layer properly.
               </h2>
               <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                If you need a system integrator for robotics, engineering, automation, testing, or
-                field deployment support, Vertifex can help structure the solution from concept to
-                operational delivery.
+                Whether the scope is robotics deployment, an ELV / security / surveillance package,
+                an energy system, or an ICT and IoT backbone — Vertifex can structure the solution
+                from concept to operational delivery.
               </p>
               <a
                 href="mailto:enquiries@vertifex.tech"
@@ -350,7 +309,7 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
                   <span className="text-muted-foreground">SPECIALTY</span>
-                  <span>ENGINEERING / ROBOTICS</span>
+                  <span>ROBOTICS / SMART / IOT</span>
                 </div>
                 <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
                   <span className="text-muted-foreground">FOCUS</span>
@@ -361,32 +320,12 @@ function Index() {
                   <span className="text-primary">enquiries@vertifex.tech</span>
                 </div>
               </div>
-              <img
-                src={fieldImage}
-                alt="Field technician working inside an industrial operations tunnel"
-                width={1200}
-                height={800}
-                loading="lazy"
-                className="h-full max-h-[280px] w-full object-cover"
-              />
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border px-6 py-10">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="font-display text-2xl font-black tracking-tight">VERTIFEX_TECHNOLOGY</div>
-            <div className="mt-2 text-[10px] uppercase text-muted-foreground">
-              System Integration / Engineering / Robotics for Automation
-            </div>
-          </div>
-          <div className="text-[10px] uppercase text-muted-foreground">
-            © 2026 Vertifex Technology. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
