@@ -17,13 +17,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Vertifex Technology Sdn. Bhd. — system integrators specialized in system integration, engineering, robotics, smart solutions (ELV, security, energy, surveillance), ICT and IoT for industrial automation.",
+          "Vertifex Technology Sdn. Bhd. — solution developer specialized in system integration, engineering, robotics, smart solutions (ELV, security, energy, surveillance), ICT, IoT, plus consultation, specialist and engineering support services for industrial automation.",
       },
       { property: "og:title", content: "Vertifex Technology — Company Profile" },
       {
         property: "og:description",
         content:
-          "Official company profile of Vertifex Technology — system integrators for robotics, smart solutions, ICT and IoT.",
+          "Official company profile of Vertifex Technology — solution developer for system integration, robotics, smart solutions, ICT, IoT, and engineering support services.",
       },
       { property: "og:image", content: heroImage },
       { name: "twitter:image", content: heroImage },
@@ -33,6 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 const serviceTags = [
+  "Solution Developer",
   "System Integration",
   "Robotics Engineering",
   "Smart Solutions",
@@ -45,6 +46,9 @@ const serviceTags = [
   "Installation",
   "Testing & Commissioning",
   "Maintenance",
+  "Consultation",
+  "Specialist Services",
+  "Engineering Support",
 ];
 
 const services = [
@@ -52,6 +56,8 @@ const services = [
   { code: "S.02", title: "Design & Implementation", desc: "Engineering the technical solution end-to-end — from concept and architecture to physical execution." },
   { code: "S.03", title: "Project Management", desc: "Structured delivery with clear scope, milestones and stakeholder coordination across disciplines." },
   { code: "S.04", title: "Operation & Maintenance", desc: "Long-term operational support, preventive maintenance and remote monitoring after handover." },
+  { code: "S.05", title: "Consultation & Specialist Services", desc: "Advisory, feasibility studies and specialist domain expertise across automation, electrical, controls and smart systems." },
+  { code: "S.06", title: "Engineering Support Services", desc: "On-demand engineering resources, troubleshooting, retrofits and lifecycle support for existing installations." },
 ];
 
 const capabilities = [
@@ -159,10 +165,11 @@ function Index() {
                   operations.
                 </h1>
                 <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-[15px]">
-                  Vertifex Technology Sdn. Bhd. is a system integrator specialized in system
-                  integration, engineering, and robotics for automation — extending into smart
-                  solutions (ELV, security, energy, surveillance), ICT and IoT for industrial and
-                  infrastructure environments.
+                  Vertifex Technology Sdn. Bhd. is a solution developer specialized in system
+                  integration, engineering and robotics for automation — extending into smart
+                  solutions (ELV, security, energy, surveillance), ICT, IoT, and consultation,
+                  specialist and engineering support services for industrial and infrastructure
+                  environments.
                 </p>
                 <div className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2">
                   {metrics.map(([label, value]) => (
