@@ -33,7 +33,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Vertifex Technology — system integrators delivering engineering, robotics, smart solutions (ELV, security, energy, surveillance), ICT and IoT for industrial automation.",
+          "Vertifex Technology — solution developer delivering system integration, engineering, robotics, smart solutions (ELV, security, energy, surveillance), ICT, IoT, and consultation, specialist & engineering support services for industrial automation.",
       },
       { name: "author", content: "Vertifex Technology" },
       { property: "og:title", content: "Vertifex Technology" },

@@ -17,7 +17,7 @@ export function SiteNav() {
         <Link to="/" className="flex items-center gap-3 min-w-0">
           <span className="font-display text-base font-black tracking-tight md:text-lg">VERTIFEX_</span>
           <span className="hidden border border-border px-2 py-0.5 text-[10px] text-muted-foreground md:inline-block">
-            SYSTEMS INTEGRATOR // ONLINE
+            SOLUTION DEVELOPER // ONLINE
           </span>
         </Link>
         <div className="flex items-center gap-3 text-[11px] font-bold md:gap-5">
@@ -82,7 +82,7 @@ export function SiteFooter() {
         <div>
           <div className="font-display text-xl font-black tracking-tight md:text-2xl">VERTIFEX_TECHNOLOGY</div>
           <div className="mt-2 text-[10px] uppercase text-muted-foreground">
-            System Integration / Engineering / Robotics / Smart Solutions / ICT / IoT
+            Solution Developer / System Integration / Engineering / Robotics / Smart Solutions / ICT / IoT / Consultation / Specialist & Engineering Support
           </div>
         </div>
         <div className="flex flex-col gap-1 text-[10px] uppercase text-muted-foreground md:items-end">
