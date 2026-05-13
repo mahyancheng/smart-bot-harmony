@@ -4,7 +4,7 @@ import roboticsImage from "@/assets/vx-robot-substation.jpg";
 import smartImage from "@/assets/vx-controls.jpg";
 import ictImage from "@/assets/vx-infrastructure.jpg";
 import robotProduct from "@/assets/vx-robot-product.jpg";
-import scadaDashboard from "@/assets/vx-scada-dashboard.png";
+import scadaDashboard from "@/assets/vx-scada-dashboard.jpg";
 import substationImage from "@/assets/vx-substation-real.jpg";
 import tunnelImage from "@/assets/vx-mine-tunnel.jpg";
 import stairsImage from "@/assets/vx-robot-stairs.jpg";
