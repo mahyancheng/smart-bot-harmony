@@ -4,6 +4,7 @@ import roboticsImage from "@/assets/vx-robot-substation.jpg";
 import smartImage from "@/assets/vx-controls.jpg";
 import ictImage from "@/assets/vx-infrastructure.jpg";
 import robotProduct from "@/assets/vx-robot-product.jpg";
+import scadaDashboard from "@/assets/vx-scada-dashboard.png";
 import substationImage from "@/assets/vx-substation-real.jpg";
 import tunnelImage from "@/assets/vx-mine-tunnel.jpg";
 import stairsImage from "@/assets/vx-robot-stairs.jpg";
@@ -399,15 +400,21 @@ function Index() {
 
           {/* Robot product + software */}
           <div className="mx-auto grid max-w-[1440px] border-t border-border md:grid-cols-2">
-            <div className="border-b border-border md:border-b-0 md:border-r">
+            <div className="relative border-b border-border md:border-b-0 md:border-r">
               <img
-                src={robotProduct}
-                alt="Studio render of the quadruped inspection robot platform"
-                width={1280}
-                height={1280}
+                src={scadaDashboard}
+                alt="SCADA visualised management dashboard with plant overview, KPIs and live feed"
+                width={1536}
+                height={1024}
                 loading="lazy"
                 className="aspect-square h-full w-full object-cover bg-card"
               />
+              {/* Edge gradient overlay — partially covers side stat panels */}
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_oklch(0.13_0_0)_92%)]" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-[22%] bg-gradient-to-r from-background via-background/70 to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-[22%] bg-gradient-to-l from-background via-background/70 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[12%] bg-gradient-to-b from-background to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[14%] bg-gradient-to-t from-background to-transparent" />
             </div>
             <div className="grid">
               <div className="border-b border-border bg-background p-6 md:p-8">
