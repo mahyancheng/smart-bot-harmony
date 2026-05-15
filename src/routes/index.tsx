@@ -250,22 +250,27 @@ function Index() {
                   About Vertifex.
                 </h2>
               </div>
-              <div className="grid gap-px border border-border bg-border lg:col-span-8 md:grid-cols-3">
+              <div className="grid gap-px border border-border bg-border lg:col-span-8 md:grid-cols-2">
                 {[
                   {
                     k: "// ABOUT",
                     t: "About Us",
-                    d: "Vertifex Technology specialises in industrial transformation through integrated robotics, smart solutions, ICT and IoT — delivered as one engineered system rather than disconnected products.",
+                    d: "Vertifex Technology specialises in industrial transformation through integrated robotics, smart solutions, ICT and IoT — engineered as a unified operational ecosystem.",
                   },
                   {
                     k: "// FOCUS",
                     t: "Focus",
-                    d: "Make advanced technology accessible. Intuitive solutions that surface actionable insights for safer decisions, better productivity and measurable operational outcomes.",
+                    d: "Delivering automation, system integration and engineering solutions that enhance efficiency, connectivity and operational performance across industrial and infrastructure environments.",
+                  },
+                  {
+                    k: "// VISION",
+                    t: "Vision",
+                    d: "To become a trusted regional partner in industrial automation, integrated technology solutions and smart infrastructure transformation.",
                   },
                   {
                     k: "// MISSION",
                     t: "Mission",
-                    d: "Deliver end-to-end smart industrial solutions — from customisation and deployment through long-term support — that improve operational efficiency at scale.",
+                    d: "Deliver integrated automation and engineering solutions, provide practical technologies that improve efficiency and connectivity, support industrial transformation through smart solutions, ICT and IoT, and build long-term partnerships through reliable delivery and technical support.",
                   },
                 ].map((item) => (
                   <div key={item.t} className="bg-background p-6 md:p-8">
@@ -589,7 +594,7 @@ function Index() {
                 solution from concept to operational delivery.
               </p>
               <a
-                href="mailto:enquiries@vertifex.tech"
+                href="mailto:info@vertifextechnology.com"
                 className="mt-10 inline-flex items-center gap-3 bg-primary px-6 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Request Engagement →
@@ -598,25 +603,37 @@ function Index() {
 
             <div className="grid gap-px border border-border bg-border lg:col-span-5 text-xs">
               <div className="bg-background p-5">
-                <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">ENTITY</span>
-                  <span>VERTIFEX TECHNOLOGY SDN. BHD.</span>
+                  <span className="text-right">VERTIFEX TECHNOLOGY SDN. BHD.</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-start justify-between gap-3 border-b border-border pb-3">
+                  <span className="text-muted-foreground">ADDRESS</span>
+                  <span className="text-right leading-relaxed">
+                    16-1, Jalan SS19/6, SS19,
+                    <br />
+                    47500 Subang Jaya, Selangor.
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">SCOPE</span>
                   <span>INTEGRATE → DEPLOY</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">SPECIALTY</span>
                   <span>ROBOTICS / SMART / IOT</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">REGION</span>
                   <span>MALAYSIA</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">EMAIL</span>
-                  <span className="text-primary">enquiries@vertifex.tech</span>
+                  <a href="mailto:info@vertifextechnology.com" className="text-primary">info@vertifextechnology.com</a>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">WEB</span>
+                  <span>www.vertifextechnology.com</span>
                 </div>
               </div>
             </div>
