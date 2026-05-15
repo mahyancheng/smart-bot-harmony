@@ -53,12 +53,30 @@ const serviceTags = [
 ];
 
 const services = [
-  { code: "S.01", title: "System Integration", desc: "Mechanical, electrical, software, controls and networking unified as one operating system." },
-  { code: "S.02", title: "Design & Implementation", desc: "Engineering the technical solution end-to-end — from concept and architecture to physical execution." },
-  { code: "S.03", title: "Project Management", desc: "Structured delivery with clear scope, milestones and stakeholder coordination across disciplines." },
-  { code: "S.04", title: "Operation & Maintenance", desc: "Long-term operational support, preventive maintenance and remote monitoring after handover." },
-  { code: "S.05", title: "Consultation & Specialist Services", desc: "Advisory, feasibility studies and specialist domain expertise across automation, electrical, controls and smart systems." },
-  { code: "S.06", title: "Engineering Support Services", desc: "On-demand engineering resources, troubleshooting, retrofits and lifecycle support for existing installations." },
+  { code: "S.01", title: "System Integration", desc: "Integrating technologies, infrastructure and operational systems into unified, efficient solutions across industrial and infrastructure environments." },
+  { code: "S.02", title: "Design & Implementation", desc: "Engineering design, solution implementation, deployment and commissioning for industrial and infrastructure environments." },
+  { code: "S.03", title: "Project Management", desc: "Managing project execution, coordination, delivery and operational readiness across all project phases." },
+  { code: "S.04", title: "Operations & Maintenance", desc: "Maintenance, monitoring and technical support services that ensure long-term operational reliability." },
+  { code: "S.05", title: "Consultation & Specialist Services", desc: "Technical consultation and specialised expertise to support operational and project requirements." },
+  { code: "S.06", title: "Engineering Support Services", desc: "Engineering and technical support services for operational environments and project activities." },
+];
+
+const industries = [
+  { t: "Industrial & Manufacturing", d: "Automation, robotics integration, industrial monitoring and operational technologies for production environments." },
+  { t: "Infrastructure & Utilities", d: "Smart infrastructure, centralised monitoring platforms, ICT infrastructure and operational support solutions." },
+  { t: "Logistics & Transportation", d: "Operational monitoring, fleet tracking, surveillance and integrated operational platforms." },
+  { t: "Government & Public Sector", d: "Integrated technology systems, operational infrastructure, monitoring platforms and technical support services." },
+  { t: "Commercial & Corporate", d: "ICT systems, smart solutions, security and operational support technologies for commercial environments." },
+  { t: "Smart Buildings & Facilities", d: "ELV, surveillance, access control, smart monitoring and integrated facility technologies." },
+];
+
+const deliverySteps = [
+  ["01", "Consultation & Requirement Study", "Understanding operational requirements, project objectives and site environments."],
+  ["02", "Design & Engineering", "Developing system architecture, engineering design and implementation planning."],
+  ["03", "Integration & Implementation", "System integration, deployment, configuration and infrastructure installation."],
+  ["04", "Testing & Commissioning", "Conducting testing, validation, commissioning and operational verification."],
+  ["05", "Training & Handover", "Operational training, documentation and system handover support."],
+  ["06", "Support & Maintenance", "Technical support, monitoring, maintenance and system enhancement services."],
 ];
 
 const capabilities = [
@@ -99,12 +117,12 @@ const metrics = [
 ];
 
 const sectors = [
-  "Industrial Plants",
-  "Utilities & Substations",
-  "Energy Storage & Microgrids",
-  "Buildings & Facilities",
-  "Inspection & Maintenance Programs",
-  "Smart Surveillance Deployments",
+  "Industrial & Manufacturing",
+  "Infrastructure & Utilities",
+  "Logistics & Transportation",
+  "Government & Public Sector",
+  "Commercial & Corporate",
+  "Smart Buildings & Facilities",
 ];
 
 const challenges = [
