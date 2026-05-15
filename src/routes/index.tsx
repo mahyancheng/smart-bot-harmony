@@ -53,12 +53,30 @@ const serviceTags = [
 ];
 
 const services = [
-  { code: "S.01", title: "System Integration", desc: "Mechanical, electrical, software, controls and networking unified as one operating system." },
-  { code: "S.02", title: "Design & Implementation", desc: "Engineering the technical solution end-to-end — from concept and architecture to physical execution." },
-  { code: "S.03", title: "Project Management", desc: "Structured delivery with clear scope, milestones and stakeholder coordination across disciplines." },
-  { code: "S.04", title: "Operation & Maintenance", desc: "Long-term operational support, preventive maintenance and remote monitoring after handover." },
-  { code: "S.05", title: "Consultation & Specialist Services", desc: "Advisory, feasibility studies and specialist domain expertise across automation, electrical, controls and smart systems." },
-  { code: "S.06", title: "Engineering Support Services", desc: "On-demand engineering resources, troubleshooting, retrofits and lifecycle support for existing installations." },
+  { code: "S.01", title: "System Integration", desc: "Integrating technologies, infrastructure and operational systems into unified, efficient solutions across industrial and infrastructure environments." },
+  { code: "S.02", title: "Design & Implementation", desc: "Engineering design, solution implementation, deployment and commissioning for industrial and infrastructure environments." },
+  { code: "S.03", title: "Project Management", desc: "Managing project execution, coordination, delivery and operational readiness across all project phases." },
+  { code: "S.04", title: "Operations & Maintenance", desc: "Maintenance, monitoring and technical support services that ensure long-term operational reliability." },
+  { code: "S.05", title: "Consultation & Specialist Services", desc: "Technical consultation and specialised expertise to support operational and project requirements." },
+  { code: "S.06", title: "Engineering Support Services", desc: "Engineering and technical support services for operational environments and project activities." },
+];
+
+const industries = [
+  { t: "Industrial & Manufacturing", d: "Automation, robotics integration, industrial monitoring and operational technologies for production environments." },
+  { t: "Infrastructure & Utilities", d: "Smart infrastructure, centralised monitoring platforms, ICT infrastructure and operational support solutions." },
+  { t: "Logistics & Transportation", d: "Operational monitoring, fleet tracking, surveillance and integrated operational platforms." },
+  { t: "Government & Public Sector", d: "Integrated technology systems, operational infrastructure, monitoring platforms and technical support services." },
+  { t: "Commercial & Corporate", d: "ICT systems, smart solutions, security and operational support technologies for commercial environments." },
+  { t: "Smart Buildings & Facilities", d: "ELV, surveillance, access control, smart monitoring and integrated facility technologies." },
+];
+
+const deliverySteps = [
+  ["01", "Consultation & Requirement Study", "Understanding operational requirements, project objectives and site environments."],
+  ["02", "Design & Engineering", "Developing system architecture, engineering design and implementation planning."],
+  ["03", "Integration & Implementation", "System integration, deployment, configuration and infrastructure installation."],
+  ["04", "Testing & Commissioning", "Conducting testing, validation, commissioning and operational verification."],
+  ["05", "Training & Handover", "Operational training, documentation and system handover support."],
+  ["06", "Support & Maintenance", "Technical support, monitoring, maintenance and system enhancement services."],
 ];
 
 const capabilities = [
@@ -99,12 +117,12 @@ const metrics = [
 ];
 
 const sectors = [
-  "Industrial Plants",
-  "Utilities & Substations",
-  "Energy Storage & Microgrids",
-  "Buildings & Facilities",
-  "Inspection & Maintenance Programs",
-  "Smart Surveillance Deployments",
+  "Industrial & Manufacturing",
+  "Infrastructure & Utilities",
+  "Logistics & Transportation",
+  "Government & Public Sector",
+  "Commercial & Corporate",
+  "Smart Buildings & Facilities",
 ];
 
 const challenges = [
@@ -232,22 +250,27 @@ function Index() {
                   About Vertifex.
                 </h2>
               </div>
-              <div className="grid gap-px border border-border bg-border lg:col-span-8 md:grid-cols-3">
+              <div className="grid gap-px border border-border bg-border lg:col-span-8 md:grid-cols-2">
                 {[
                   {
                     k: "// ABOUT",
                     t: "About Us",
-                    d: "Vertifex Technology specialises in industrial transformation through integrated robotics, smart solutions, ICT and IoT — delivered as one engineered system rather than disconnected products.",
+                    d: "Vertifex Technology specialises in industrial transformation through integrated robotics, smart solutions, ICT and IoT — engineered as a unified operational ecosystem.",
                   },
                   {
                     k: "// FOCUS",
                     t: "Focus",
-                    d: "Make advanced technology accessible. Intuitive solutions that surface actionable insights for safer decisions, better productivity and measurable operational outcomes.",
+                    d: "Delivering automation, system integration and engineering solutions that enhance efficiency, connectivity and operational performance across industrial and infrastructure environments.",
+                  },
+                  {
+                    k: "// VISION",
+                    t: "Vision",
+                    d: "To become a trusted regional partner in industrial automation, integrated technology solutions and smart infrastructure transformation.",
                   },
                   {
                     k: "// MISSION",
                     t: "Mission",
-                    d: "Deliver end-to-end smart industrial solutions — from customisation and deployment through long-term support — that improve operational efficiency at scale.",
+                    d: "Deliver integrated automation and engineering solutions, provide practical technologies that improve efficiency and connectivity, support industrial transformation through smart solutions, ICT and IoT, and build long-term partnerships through reliable delivery and technical support.",
                   },
                 ].map((item) => (
                   <div key={item.t} className="bg-background p-6 md:p-8">
@@ -571,7 +594,7 @@ function Index() {
                 solution from concept to operational delivery.
               </p>
               <a
-                href="mailto:enquiries@vertifex.tech"
+                href="mailto:info@vertifextechnology.com"
                 className="mt-10 inline-flex items-center gap-3 bg-primary px-6 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Request Engagement →
@@ -580,25 +603,37 @@ function Index() {
 
             <div className="grid gap-px border border-border bg-border lg:col-span-5 text-xs">
               <div className="bg-background p-5">
-                <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">ENTITY</span>
-                  <span>VERTIFEX TECHNOLOGY SDN. BHD.</span>
+                  <span className="text-right">VERTIFEX TECHNOLOGY SDN. BHD.</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-start justify-between gap-3 border-b border-border pb-3">
+                  <span className="text-muted-foreground">ADDRESS</span>
+                  <span className="text-right leading-relaxed">
+                    16-1, Jalan SS19/6, SS19,
+                    <br />
+                    47500 Subang Jaya, Selangor.
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">SCOPE</span>
                   <span>INTEGRATE → DEPLOY</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">SPECIALTY</span>
                   <span>ROBOTICS / SMART / IOT</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">REGION</span>
                   <span>MALAYSIA</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">EMAIL</span>
-                  <span className="text-primary">enquiries@vertifex.tech</span>
+                  <a href="mailto:info@vertifextechnology.com" className="text-primary">info@vertifextechnology.com</a>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">WEB</span>
+                  <span>www.vertifextechnology.com</span>
                 </div>
               </div>
             </div>
