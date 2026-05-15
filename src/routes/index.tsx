@@ -594,7 +594,7 @@ function Index() {
                 solution from concept to operational delivery.
               </p>
               <a
-                href="mailto:info@vertifextechnology.com"
+                href="mailto:yc@vertifextechnology.com"
                 className="mt-10 inline-flex items-center gap-3 bg-primary px-6 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Request Engagement →
@@ -629,7 +629,7 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">EMAIL</span>
-                  <a href="mailto:info@vertifextechnology.com" className="text-primary">info@vertifextechnology.com</a>
+                  <a href="mailto:yc@vertifextechnology.com" className="text-primary">yc@vertifextechnology.com</a>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <span className="text-muted-foreground">WEB</span>
