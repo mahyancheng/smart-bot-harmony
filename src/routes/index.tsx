@@ -310,26 +310,6 @@ const challenges: [string, string, string][] = [
   ["04", "Reactive Maintenance", "Move from reactive to predictive scheduling with automated condition monitoring."],
 ];
 
-const robotSpecs: [string, string][] = [
-  ["WEIGHT", "59 KG"],
-  ["RATED LOAD", "20 KG"],
-  ["WALKING SPEED", "4 M/S"],
-  ["GRADEABILITY", "45° SLOPE"],
-  ["IP RATING", "IP67"],
-  ["TEMP RANGE", "−20°C / 55°C"],
-];
-
-const bessSpecs: [string, string][] = [
-  ["SYSTEM CAPACITY", "250 kW / 514.4576 kWh"],
-  ["TOPOLOGY", "Modular, 2× 125 kW / 257.2288 kWh"],
-  ["MODE", "Grid-tied · peak shaving · load shifting"],
-  ["PEAK TARGET", "200 kW (Mon–Fri, 14:00–22:00)"],
-  ["DEPTH OF DISCHARGE", "95%"],
-  ["LIFE CYCLES", "6,000"],
-  ["IP RATING", "IP55"],
-  ["EFFICIENCY", "≥ 90%"],
-];
-
 const bessScope = [
   "Modular Battery Energy Storage System (BESS)",
   "Master EMS with microgrid controller",
@@ -639,19 +619,15 @@ function Index() {
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 to-transparent" />
             </div>
             <div className="p-8 lg:col-span-5 lg:p-12">
-              <div className="text-sm font-bold text-primary">// OPERATIONAL_PARAMETERS</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
-                {robotSpecs.map(([k, v]) => (
-                  <div key={k} className="bg-card px-5 py-4">
-                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display text-lg font-bold text-foreground">{v}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-8 border-t border-border pt-4 text-sm uppercase text-muted-foreground">
-                Sensor stack: PTZ camera, infrared thermometry, gas sensor, acoustic imaging, 3D
-                mapping, optional robotic arm.
-              </div>
+              <div className="text-sm font-bold text-primary">// FIELD_PROFILE</div>
+              <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight md:text-3xl">
+                Field-grade autonomy where humans should not go.
+              </h3>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
+                Engineered for live infrastructure environments — high-voltage substations,
+                tunnels, confined plant rooms and outdoor industrial assets — with a sensor
+                payload tuned for inspection, thermography, gas detection and 3D mapping.
+              </p>
             </div>
           </div>
 
@@ -725,21 +701,18 @@ function Index() {
               <span className="text-muted-foreground">CASE_001 // ENERGY_STORAGE</span>
               <span className="text-muted-foreground">// 2026</span>
             </div>
-            <h3 className="mt-6 font-display text-[1.65rem] font-black uppercase leading-[0.95] tracking-tight sm:text-3xl md:text-5xl">
-              250 kW / 514.4576 kWh
-              <br />
-              Energy Storage System.
+            <h3 className="mt-6 font-display text-[1.85rem] font-black uppercase leading-[0.95] tracking-tight sm:text-3xl md:text-5xl">
+              Industrial Battery <span className="vx-gradient-text">Energy Storage</span> System.
             </h3>
             <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
               A grid-tied modular battery energy storage system engineered for an industrial client
-              in Malaysia. Designed for peak shaving against the maximum demand window
-              (Mon–Fri, 14:00–22:00), with self-consumption optimisation and load shifting handled
-              by the master EMS.
+              in Malaysia — built to optimise self-consumption, shave peak demand and shift load
+              automatically under a master EMS.
             </p>
           </div>
 
           <div className="mx-auto grid max-w-[1440px] border-t border-border lg:grid-cols-12">
-            <div className="relative min-h-[300px] sm:min-h-[420px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
+            <div className="relative min-h-[300px] sm:min-h-[480px] border-b border-border lg:col-span-7 lg:border-b-0 lg:border-r">
               <img
                 src={bessImage}
                 alt="Outdoor industrial battery energy storage system cabinets"
@@ -751,21 +724,10 @@ function Index() {
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
             </div>
             <div className="p-8 lg:col-span-5 lg:p-12">
-              <div className="text-sm font-bold text-primary">// SYSTEM_SPECIFICATION</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
-                {bessSpecs.map(([k, v]) => (
-                  <div key={k} className="bg-card px-5 py-4">
-                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display text-base font-bold">{v}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mx-auto grid max-w-[1440px] gap-px border-t border-border bg-border lg:grid-cols-12">
-            <div className="bg-card p-8 lg:col-span-5 lg:p-10">
               <div className="text-sm font-bold text-primary">// INTEGRATED_SCOPE</div>
+              <h3 className="mt-4 font-display text-xl font-black uppercase tracking-tight md:text-2xl">
+                What we delivered.
+              </h3>
               <ul className="mt-6 space-y-3 text-base text-muted-foreground">
                 {bessScope.map((s) => (
                   <li key={s} className="flex items-start gap-3 border-b border-border/70 pb-3">
@@ -774,22 +736,6 @@ function Index() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="bg-card p-8 lg:col-span-7 lg:p-10">
-              <div className="text-sm font-bold text-primary">// WARRANTY_TERMS</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
-                {[
-                  ["BATTERY", "10 yrs / 6,000 cycles"],
-                  ["PCS", "5 years"],
-                  ["WHOLE SYSTEM (incl. EMS)", "2 years"],
-                  ["REMOTE MAINTENANCE", "2× yearly"],
-                ].map(([k, v]) => (
-                  <div key={k} className="bg-card px-5 py-4">
-                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display text-base font-bold">{v}</div>
-                  </div>
-                ))}
-              </div>
               <div className="mt-8 border-t border-border pt-4 text-sm uppercase text-muted-foreground">
                 Working logic delivered: load shifting · self-consumption optimisation · peak shaving.
               </div>
