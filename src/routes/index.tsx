@@ -301,13 +301,6 @@ const deliverySteps: [string, string, string][] = [
   ["06", "Support & Maintenance", "Technical support, monitoring, maintenance and system enhancement services."],
 ];
 
-const metrics: [string, string][] = [
-  ["DISCIPLINES", "06"],
-  ["INDUSTRIES", "08"],
-  ["TECH PILLARS", "04"],
-  ["DELIVERY", "END-TO-END"],
-];
-
 const sectors = industries.map((i) => i.t);
 
 const challenges: [string, string, string][] = [
@@ -358,32 +351,24 @@ function Index() {
           <div className="relative grid lg:min-h-[88vh] lg:grid-cols-12">
             <div className="flex flex-col justify-end border-b border-border p-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
               <div className="vx-reveal">
-                <div className="mb-5 inline-flex items-center gap-2 text-xs font-bold text-primary sm:text-sm">
-                  <span className="vx-gradient-bar h-2 w-2 rounded-full" />
+                <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
+                  <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.01</span>
                 </div>
-                <h1 className="mb-6 font-display text-[2.25rem] font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:mb-8 md:text-6xl lg:text-[4.25rem] xl:text-[5rem]">
+                <h1 className="mb-7 font-display text-[2.5rem] font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:mb-9 md:text-6xl lg:text-[4.25rem] xl:text-[5rem]">
                   Systems built
                   <br />
                   for <span className="vx-gradient-text">real</span>
                   <br />
                   operations.
                 </h1>
-                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-[15px]">
+                <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology Sdn. Bhd. delivers integrated automation,
                   engineering and operational technology solutions — energy systems, IT &amp;
                   IoT, smart infrastructure, automation &amp; robotics, and engineering
                   consultancy — designed for industrial and infrastructure environments.
                 </p>
-                <div className="mt-10 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
-                  {metrics.map(([label, value]) => (
-                    <div key={label} className="bg-card px-4 py-5">
-                      <div className="text-[10px] font-bold text-muted-foreground">{label}</div>
-                      <div className="mt-3 font-display text-2xl font-bold text-primary">{value}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-10 flex flex-wrap gap-3 text-[11px] font-bold uppercase">
+                <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a
                     href="#contact"
                     className="vx-glow inline-flex items-center gap-2 bg-primary px-5 py-3 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
@@ -410,23 +395,10 @@ function Index() {
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/35 via-background/10 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
-              <div className="absolute top-6 right-6 hidden items-center gap-2 rounded-sm border border-primary/40 bg-card/85 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-primary backdrop-blur-md md:inline-flex">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-                Empowering integrated digital &amp; smart systems
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 grid gap-px border-t border-border bg-border md:grid-cols-3">
-                <div className="bg-card/92 px-5 py-4 backdrop-blur-sm">
-                  <div className="text-[10px] font-bold text-muted-foreground">CORE_SCOPE</div>
-                  <div className="mt-2 text-xs font-bold uppercase">Design / Integrate / Support</div>
-                </div>
-                <div className="bg-card/92 px-5 py-4 backdrop-blur-sm">
-                  <div className="text-[10px] font-bold text-muted-foreground">PROJECT_MODEL</div>
-                  <div className="mt-2 text-xs font-bold uppercase">Engineering to Commissioning</div>
-                </div>
-                <div className="bg-card/92 px-5 py-4 backdrop-blur-sm">
-                  <div className="text-[10px] font-bold text-muted-foreground">APPLICATION</div>
-                  <div className="mt-2 text-xs font-bold uppercase">Automation &amp; Reliability</div>
-                </div>
+              <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-widest md:bottom-10 md:left-10 md:right-10">
+                <span className="rounded-sm border border-primary/40 bg-card/85 px-3 py-2 text-primary backdrop-blur-md">
+                  Empowering Integrated Digital &amp; Smart Systems
+                </span>
               </div>
             </div>
           </div>
@@ -435,7 +407,7 @@ function Index() {
         {/* TICKER */}
         <section className="overflow-hidden border-b border-border bg-card/60">
           <div className="relative">
-            <div className="vx-marquee flex w-max gap-10 whitespace-nowrap px-6 py-4 text-[11px] font-bold uppercase text-muted-foreground">
+            <div className="vx-marquee flex w-max gap-10 whitespace-nowrap px-6 py-5 text-sm font-bold uppercase text-muted-foreground">
               {[...serviceTags, ...serviceTags].map((item, idx) => (
                 <span key={`${item}-${idx}`} className="inline-flex items-center gap-2">
                   <span className="text-primary">+</span>
@@ -451,28 +423,28 @@ function Index() {
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-12 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <div className="text-[10px] font-bold text-primary">// 01_PROFILE</div>
+                <div className="text-sm font-bold text-primary">// 01_PROFILE</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                   About <span className="vx-gradient-text">Vertifex</span>.
                 </h2>
-                <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
                   Solution developer for integrated automation, engineering and
                   operational technology — built around real industrial and infrastructure
                   workflows.
                 </p>
-                <div className="mt-8 inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/10 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-primary">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+                <div className="mt-8 inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-bold uppercase tracking-widest text-primary">
+                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
                   Solution Developer · Malaysia
                 </div>
               </div>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:col-span-8 md:grid-cols-2">
                 {aboutCards.map((item) => (
                   <div key={item.t} className="bg-card p-6 md:p-8">
-                    <div className="text-[10px] font-bold text-primary">{item.k}</div>
-                    <h3 className="mt-4 font-display text-xl font-black uppercase tracking-tight">
+                    <div className="text-sm font-bold text-primary">{item.k}</div>
+                    <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight">
                       {item.t}
                     </h3>
-                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{item.d}</p>
+                    <p className="mt-4 text-base leading-relaxed text-muted-foreground">{item.d}</p>
                   </div>
                 ))}
               </div>
@@ -485,14 +457,14 @@ function Index() {
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
-                <div className="text-[10px] font-bold text-primary">// 02_CORE_SERVICES</div>
+                <div className="text-sm font-bold text-primary">// 02_CORE_SERVICES</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                   Six service lines.<br />
                   <span className="vx-gradient-text">One delivery model.</span>
                 </h2>
               </div>
               <div className="lg:col-span-5">
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
                   Engineering, integration, commissioning, and ongoing technical support — packaged so customers buy an outcome, not a stack of disconnected vendors.
                 </p>
               </div>
@@ -500,20 +472,20 @@ function Index() {
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
               {services.map((s) => (
-                <article key={s.code} className="bg-card p-6 md:p-7">
+                <article key={s.code} className="bg-card p-7 md:p-8">
                   <div className="flex items-center justify-between">
-                    <div className="text-[10px] font-bold text-primary">[ {s.code} ]</div>
-                    <div className="vx-gradient-bar h-px w-8" />
+                    <div className="text-sm font-bold text-primary">[ {s.code} ]</div>
+                    <div className="vx-gradient-bar h-px w-10" />
                   </div>
-                  <h3 className="mt-4 font-display text-lg font-black uppercase tracking-tight">
+                  <h3 className="mt-4 font-display text-xl font-black uppercase tracking-tight">
                     {s.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                  <ul className="mt-5 grid gap-2 border-t border-border pt-4 text-[12px]">
+                  <p className="mt-3 text-base leading-relaxed text-muted-foreground">{s.desc}</p>
+                  <ul className="mt-5 grid gap-2.5 border-t border-border pt-5 text-sm">
                     {s.capabilities.map((c) => (
-                      <li key={c} className="flex items-start gap-2">
-                        <span className="mt-[3px] inline-block h-1.5 w-1.5 rounded-full bg-primary/70" />
-                        <span className="text-foreground/80">{c}</span>
+                      <li key={c} className="flex items-start gap-2.5">
+                        <span className="mt-[7px] inline-block h-1.5 w-1.5 rounded-full bg-primary/70" />
+                        <span className="text-foreground/85">{c}</span>
                       </li>
                     ))}
                   </ul>
@@ -527,11 +499,11 @@ function Index() {
         <section id="capabilities" className="mx-auto max-w-[1440px] border-b border-border">
           <div className="border-b border-border px-4 py-12 sm:px-6 md:py-20">
             <div className="max-w-3xl">
-              <div className="mb-4 text-[10px] font-bold text-primary">// 03_CAPABILITIES</div>
+              <div className="mb-4 text-sm font-bold text-primary">// 03_CAPABILITIES</div>
               <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                 One integrator. <span className="vx-gradient-text">Three connected layers.</span>
               </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 Robotics on the edge of operations. Smart solutions across the building and asset
                 layer. ICT and IoT tying them into a single, observable system.
               </p>
@@ -544,7 +516,7 @@ function Index() {
                 key={item.index}
                 className="group border-b border-border bg-card/40 p-6 md:border-r md:p-8 last:md:border-r-0"
               >
-                <div className="mb-4 text-xs font-bold text-primary">[ {item.index} ]</div>
+                <div className="mb-4 text-sm font-bold text-primary">[ {item.index} ]</div>
                 <div className="mb-6 aspect-[4/3] overflow-hidden rounded-sm border border-border bg-card">
                   <img
                     src={item.image}
@@ -555,13 +527,13 @@ function Index() {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                 </div>
-                <h3 className="font-display text-2xl font-black uppercase tracking-tight">
+                <h3 className="font-display text-2xl font-black uppercase tracking-tight md:text-3xl">
                   {item.title}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
-                <div className="mt-8 border-t border-border pt-4 text-[10px] font-bold uppercase tracking-widest text-primary/80">
+                <div className="mt-8 border-t border-border pt-4 text-xs font-bold uppercase tracking-widest text-primary/80 md:text-sm">
                   {item.note}
                 </div>
               </article>
@@ -572,13 +544,13 @@ function Index() {
           <div className="border-t border-border px-4 py-12 sm:px-6 md:py-16">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-6">
-                <div className="text-[10px] font-bold text-primary">// TECHNOLOGY_&_INFRASTRUCTURE</div>
+                <div className="text-sm font-bold text-primary">// TECHNOLOGY_&_INFRASTRUCTURE</div>
                 <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight md:text-4xl">
                   The stack under the surface.
                 </h3>
               </div>
               <div className="lg:col-span-6">
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
                   Supporting integrated operational environments through automation, ICT, IoT, smart
                   infrastructure and operational technology platforms.
                 </p>
@@ -586,14 +558,14 @@ function Index() {
             </div>
             <div className="mt-10 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
               {techPillars.map((p) => (
-                <div key={p.code} className="bg-card p-6 md:p-7">
-                  <div className="text-[10px] font-bold text-primary">[ {p.code} ]</div>
-                  <h4 className="mt-3 font-display text-base font-black uppercase tracking-tight">
+                <div key={p.code} className="bg-card p-7 md:p-8">
+                  <div className="text-sm font-bold text-primary">[ {p.code} ]</div>
+                  <h4 className="mt-3 font-display text-lg font-black uppercase tracking-tight md:text-xl">
                     {p.title}
                   </h4>
-                  <ul className="mt-5 space-y-2 text-[12px] text-muted-foreground">
+                  <ul className="mt-5 space-y-2.5 text-sm text-muted-foreground">
                     {p.items.map((i) => (
-                      <li key={i} className="flex items-start gap-2 border-b border-border/60 pb-2 last:border-b-0">
+                      <li key={i} className="flex items-start gap-2 border-b border-border/60 pb-2.5 last:border-b-0">
                         <span className="text-primary">+</span>
                         <span>{i}</span>
                       </li>
@@ -607,11 +579,11 @@ function Index() {
           {/* Sectors strip */}
           <div id="industries" className="grid border-t border-border lg:grid-cols-12">
             <div className="border-b border-border p-6 lg:col-span-4 lg:border-r lg:border-b-0 lg:p-10">
-              <div className="text-[10px] font-bold text-primary">// 04_INDUSTRIES_WE_SUPPORT</div>
+              <div className="text-sm font-bold text-primary">// 04_INDUSTRIES_WE_SUPPORT</div>
               <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight md:text-3xl">
                 Built for harsh, technical, live environments.
               </h3>
-              <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">
                 Eight sectors. The same engineered, integrated approach to every one.
               </p>
             </div>
@@ -630,12 +602,12 @@ function Index() {
 
           <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 lg:grid-cols-4">
             {industries.map((s, idx) => (
-              <div key={s.t} className="bg-card p-6 md:p-7">
-                <div className="text-[10px] font-bold text-primary">[ I.{String(idx + 1).padStart(2, "0")} ]</div>
-                <h4 className="mt-3 font-display text-base font-black uppercase tracking-tight">
+              <div key={s.t} className="bg-card p-7 md:p-8">
+                <div className="text-sm font-bold text-primary">[ I.{String(idx + 1).padStart(2, "0")} ]</div>
+                <h4 className="mt-3 font-display text-lg font-black uppercase tracking-tight md:text-xl">
                   {s.t}
                 </h4>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{s.d}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{s.d}</p>
               </div>
             ))}
           </div>
@@ -644,11 +616,11 @@ function Index() {
         {/* 05 PLATFORM — robotics flagship */}
         <section id="platform" className="border-b border-border">
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
-            <div className="text-[10px] font-bold text-primary">// 05_PLATFORM</div>
+            <div className="text-sm font-bold text-primary">// 05_PLATFORM</div>
             <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
               Legged robot for <span className="vx-gradient-text">automated inspection</span>.
             </h2>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
               A field-ready quadruped platform engineered for remote and automated inspection in
               hazardous environments — substations, plants, tunnels and confined infrastructure.
             </p>
@@ -667,16 +639,16 @@ function Index() {
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/15 to-transparent" />
             </div>
             <div className="p-8 lg:col-span-5 lg:p-12">
-              <div className="text-[10px] font-bold text-primary">// OPERATIONAL_PARAMETERS</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2 text-xs">
+              <div className="text-sm font-bold text-primary">// OPERATIONAL_PARAMETERS</div>
+              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
                 {robotSpecs.map(([k, v]) => (
-                  <div key={k} className="bg-card px-4 py-3">
-                    <div className="text-[10px] font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display font-bold text-foreground">{v}</div>
+                  <div key={k} className="bg-card px-5 py-4">
+                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
+                    <div className="mt-2 font-display text-lg font-bold text-foreground">{v}</div>
                   </div>
                 ))}
               </div>
-              <div className="mt-8 border-t border-border pt-4 text-[11px] uppercase text-muted-foreground">
+              <div className="mt-8 border-t border-border pt-4 text-sm uppercase text-muted-foreground">
                 Sensor stack: PTZ camera, infrared thermometry, gas sensor, acoustic imaging, 3D
                 mapping, optional robotic arm.
               </div>
@@ -701,17 +673,17 @@ function Index() {
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[12%] bg-gradient-to-t from-background to-transparent" />
             </div>
             <div className="grid">
-              <div className="border-b border-border bg-card p-6 md:p-8">
-                <div className="text-[10px] font-bold text-primary">// SOFTWARE_LAYER</div>
-                <h3 className="mt-4 font-display text-xl font-black uppercase tracking-tight">
+              <div className="border-b border-border bg-card p-7 md:p-9">
+                <div className="text-sm font-bold text-primary">// SOFTWARE_LAYER</div>
+                <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight">
                   SCADA + visualised management.
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                   Real-time inspection monitoring, structured result management, dashboards and
                   SCADA integration so robotic data is usable inside the operational stack you
                   already run.
                 </p>
-                <ul className="mt-6 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <ul className="mt-6 grid grid-cols-2 gap-2.5 text-sm text-muted-foreground">
                   {[
                     "SCADA integration",
                     "Visualised dashboard",
@@ -725,14 +697,14 @@ function Index() {
                   ))}
                 </ul>
               </div>
-              <div className="bg-card p-6 md:p-8">
-                <div className="text-[10px] font-bold text-primary">// CHALLENGES_ADDRESSED</div>
-                <div className="mt-4 grid gap-3">
+              <div className="bg-card p-7 md:p-9">
+                <div className="text-sm font-bold text-primary">// CHALLENGES_ADDRESSED</div>
+                <div className="mt-5 grid gap-4">
                   {challenges.map(([n, t, d]) => (
                     <div key={n} className="border-l-2 border-primary pl-4">
-                      <div className="text-[10px] font-bold text-primary">[ {n} ]</div>
-                      <div className="mt-1 font-display text-sm font-black uppercase">{t}</div>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{d}</p>
+                      <div className="text-sm font-bold text-primary">[ {n} ]</div>
+                      <div className="mt-1 font-display text-base font-black uppercase">{t}</div>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d}</p>
                     </div>
                   ))}
                 </div>
@@ -744,12 +716,12 @@ function Index() {
         {/* 06 PORTFOLIO — BESS case */}
         <section id="portfolio" className="border-b border-border">
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
-            <div className="text-[10px] font-bold text-primary">// 06_PORTFOLIO</div>
+            <div className="text-sm font-bold text-primary">// 06_PORTFOLIO</div>
             <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
               Selected <span className="vx-gradient-text">project</span>.
             </h2>
-            <div className="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-bold">
-              <span className="border border-primary bg-primary/5 px-2 py-1 text-primary">[ FEATURED ]</span>
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm font-bold">
+              <span className="border border-primary bg-primary/5 px-3 py-1.5 text-primary">[ FEATURED ]</span>
               <span className="text-muted-foreground">CASE_001 // ENERGY_STORAGE</span>
               <span className="text-muted-foreground">// 2026</span>
             </div>
@@ -758,7 +730,7 @@ function Index() {
               <br />
               Energy Storage System.
             </h3>
-            <p className="mt-6 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
               A grid-tied modular battery energy storage system engineered for an industrial client
               in Malaysia. Designed for peak shaving against the maximum demand window
               (Mon–Fri, 14:00–22:00), with self-consumption optimisation and load shifting handled
@@ -779,12 +751,12 @@ function Index() {
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
             </div>
             <div className="p-8 lg:col-span-5 lg:p-12">
-              <div className="text-[10px] font-bold text-primary">// SYSTEM_SPECIFICATION</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2 text-xs">
+              <div className="text-sm font-bold text-primary">// SYSTEM_SPECIFICATION</div>
+              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
                 {bessSpecs.map(([k, v]) => (
-                  <div key={k} className="bg-card px-4 py-3">
-                    <div className="text-[10px] font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display font-bold">{v}</div>
+                  <div key={k} className="bg-card px-5 py-4">
+                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
+                    <div className="mt-2 font-display text-base font-bold">{v}</div>
                   </div>
                 ))}
               </div>
@@ -793,8 +765,8 @@ function Index() {
 
           <div className="mx-auto grid max-w-[1440px] gap-px border-t border-border bg-border lg:grid-cols-12">
             <div className="bg-card p-8 lg:col-span-5 lg:p-10">
-              <div className="text-[10px] font-bold text-primary">// INTEGRATED_SCOPE</div>
-              <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+              <div className="text-sm font-bold text-primary">// INTEGRATED_SCOPE</div>
+              <ul className="mt-6 space-y-3 text-base text-muted-foreground">
                 {bessScope.map((s) => (
                   <li key={s} className="flex items-start gap-3 border-b border-border/70 pb-3">
                     <span className="mt-1 text-primary">+</span>
@@ -804,21 +776,21 @@ function Index() {
               </ul>
             </div>
             <div className="bg-card p-8 lg:col-span-7 lg:p-10">
-              <div className="text-[10px] font-bold text-primary">// WARRANTY_TERMS</div>
-              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2 text-xs">
+              <div className="text-sm font-bold text-primary">// WARRANTY_TERMS</div>
+              <div className="mt-6 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
                 {[
                   ["BATTERY", "10 yrs / 6,000 cycles"],
                   ["PCS", "5 years"],
                   ["WHOLE SYSTEM (incl. EMS)", "2 years"],
                   ["REMOTE MAINTENANCE", "2× yearly"],
                 ].map(([k, v]) => (
-                  <div key={k} className="bg-card px-4 py-4">
-                    <div className="text-[10px] font-bold text-muted-foreground">{k}</div>
-                    <div className="mt-2 font-display font-bold">{v}</div>
+                  <div key={k} className="bg-card px-5 py-4">
+                    <div className="text-xs font-bold text-muted-foreground">{k}</div>
+                    <div className="mt-2 font-display text-base font-bold">{v}</div>
                   </div>
                 ))}
               </div>
-              <div className="mt-8 border-t border-border pt-4 text-[11px] uppercase text-muted-foreground">
+              <div className="mt-8 border-t border-border pt-4 text-sm uppercase text-muted-foreground">
                 Working logic delivered: load shifting · self-consumption optimisation · peak shaving.
               </div>
             </div>
@@ -835,7 +807,7 @@ function Index() {
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 mx-auto max-w-[1440px] px-6 py-6 text-[11px] font-bold uppercase text-foreground">
+            <div className="absolute bottom-0 left-0 right-0 mx-auto max-w-[1440px] px-6 py-6 text-sm font-bold uppercase text-foreground md:text-base">
               Field deployment // operational support across live infrastructure environments
             </div>
           </div>
@@ -846,13 +818,13 @@ function Index() {
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-6">
-                <div className="text-[10px] font-bold text-primary">// 07_WHY_CHOOSE_VERTIFEX</div>
+                <div className="text-sm font-bold text-primary">// 07_WHY_CHOOSE_VERTIFEX</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
                   Why teams pick <span className="vx-gradient-text">Vertifex</span>.
                 </h2>
               </div>
               <div className="lg:col-span-6">
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
                   An engineered, integrated and operationally-grounded approach — purpose-built for
                   the realities of industrial and infrastructure delivery.
                 </p>
@@ -861,38 +833,38 @@ function Index() {
 
             <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
               {whyChoose.map((w) => (
-                <article key={w.n} className="vx-glow group bg-card p-6 md:p-7 transition-colors">
+                <article key={w.n} className="vx-glow group bg-card p-7 md:p-8 transition-colors">
                   <div className="flex items-center justify-between">
-                    <div className="font-display text-3xl font-black text-primary">{w.n}</div>
-                    <div className="vx-gradient-bar h-px w-10" />
+                    <div className="font-display text-4xl font-black text-primary">{w.n}</div>
+                    <div className="vx-gradient-bar h-px w-12" />
                   </div>
-                  <h3 className="mt-4 font-display text-lg font-black uppercase tracking-tight">
+                  <h3 className="mt-4 font-display text-xl font-black uppercase tracking-tight">
                     {w.t}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.d}</p>
+                  <p className="mt-3 text-base leading-relaxed text-muted-foreground">{w.d}</p>
                 </article>
               ))}
             </div>
 
             <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:items-start">
               <div className="lg:col-span-4">
-                <div className="text-[10px] font-bold text-primary">// PROJECT_DELIVERY_APPROACH</div>
+                <div className="text-sm font-bold text-primary">// PROJECT_DELIVERY_APPROACH</div>
                 <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight md:text-3xl">
                   From requirement to operational handover.
                 </h3>
-                <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">
                   Six structured phases — designed for predictable, traceable engineering delivery.
                 </p>
               </div>
               <ol className="lg:col-span-8 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
                 {deliverySteps.map(([n, t, d]) => (
-                  <li key={n} className="bg-card p-6">
+                  <li key={n} className="bg-card p-7">
                     <div className="flex items-center gap-3">
-                      <span className="font-display text-2xl font-black text-primary">{n}</span>
+                      <span className="font-display text-3xl font-black text-primary">{n}</span>
                       <span className="vx-gradient-bar h-px flex-1" />
                     </div>
-                    <h4 className="mt-3 font-display text-sm font-black uppercase tracking-tight">{t}</h4>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{d}</p>
+                    <h4 className="mt-3 font-display text-base font-black uppercase tracking-tight md:text-lg">{t}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">{d}</p>
                   </li>
                 ))}
               </ol>
@@ -906,11 +878,11 @@ function Index() {
           <div className="relative mx-auto max-w-[1440px] px-4 py-14 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-7">
-                <div className="text-[10px] font-bold text-primary">// 08_OUR_COMMITMENT</div>
+                <div className="text-sm font-bold text-primary">// 08_OUR_COMMITMENT</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase leading-[1.05] tracking-tight sm:text-4xl md:text-[3.2rem]">
                   Practical. Reliable. <span className="vx-gradient-text">Integrated</span>.
                 </h2>
-                <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
                   Vertifex Technology is committed to delivering practical, reliable and integrated
                   technology solutions that support operational efficiency, system reliability and
                   long-term customer success.
@@ -938,21 +910,21 @@ function Index() {
           <div className="vx-grid pointer-events-none absolute inset-0 opacity-30" />
           <div className="relative mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
-              <div className="mb-4 text-[10px] font-bold text-primary">// 09_CONTACT</div>
+              <div className="mb-4 text-sm font-bold text-primary">// 09_CONTACT</div>
               <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-6xl">
                 Let's engineer the
                 <br />
                 <span className="vx-gradient-text">automation layer</span> properly.
               </h2>
-              <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 Robotics deployment, ELV / security / surveillance package, energy storage system,
                 or an ICT and IoT backbone — Vertifex can structure the solution from concept to
                 operational delivery.
               </p>
-              <div className="mt-10 flex flex-wrap gap-3 text-[11px] font-bold uppercase">
+              <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                 <a
                   href="mailto:info@vertifextechnology.com"
-                  className="vx-glow inline-flex items-center gap-3 bg-primary px-6 py-4 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+                  className="vx-glow inline-flex items-center gap-3 bg-primary px-7 py-4 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   Request Engagement →
                 </a>
@@ -960,15 +932,15 @@ function Index() {
                   href="https://www.linkedin.com/company/vertifex-technology/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 border border-border px-6 py-4 tracking-widest transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex items-center gap-3 border border-border px-7 py-4 tracking-widest transition-colors hover:border-primary hover:text-primary"
                 >
                   LinkedIn ↗
                 </a>
               </div>
             </div>
 
-            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:col-span-5 text-xs">
-              <div className="bg-card p-5">
+            <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:col-span-5 text-sm">
+              <div className="bg-card p-6">
                 <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">ENTITY</span>
                   <span className="text-right font-bold">VERTIFEX TECHNOLOGY SDN. BHD.</span>
