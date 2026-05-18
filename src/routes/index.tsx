@@ -682,7 +682,7 @@ function Index() {
               </p>
               <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                 <a
-                  href="mailto:info@vertifextechnology.com"
+                  href="mailto:yc@vertifextechnology.com"
                   className="vx-glow inline-flex items-center gap-3 bg-primary px-7 py-4 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   Request Engagement →
@@ -726,8 +726,8 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">EMAIL</span>
-                  <a href="mailto:info@vertifextechnology.com" className="text-primary">
-                    info@vertifextechnology.com
+                  <a href="mailto:yc@vertifextechnology.com" className="text-primary">
+                    yc@vertifextechnology.com
                   </a>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">

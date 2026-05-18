@@ -104,8 +104,8 @@ export function SiteFooter() {
         <div className="flex flex-col gap-2 text-sm font-bold uppercase text-muted-foreground md:items-end">
           <span>16-1, Jalan SS19/6, SS19, 47500 Subang Jaya, Selangor.</span>
           <span>
-            <a href="mailto:info@vertifextechnology.com" className="text-primary normal-case">
-              info@vertifextechnology.com
+            <a href="mailto:yc@vertifextechnology.com" className="text-primary normal-case">
+              yc@vertifextechnology.com
             </a>
             <span className="mx-2">·</span>
             www.vertifextechnology.com
