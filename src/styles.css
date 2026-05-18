@@ -10,17 +10,9 @@
 }
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Design system — Bright Corporate × Techy.
+ * Light background, deep navy text, electric corporate blue primary,
+ * bright cyan accent. Engineered-feel mono labels survive the light palette.
  */
 
 @theme inline {
@@ -68,73 +60,78 @@
 
 :root {
   --radius: 0.25rem;
-  --background: oklch(0.13 0 0);
-  --foreground: oklch(0.97 0 0);
-  --card: oklch(0.16 0 0);
-  --card-foreground: oklch(0.97 0 0);
-  --popover: oklch(0.16 0 0);
-  --popover-foreground: oklch(0.97 0 0);
-  --primary: oklch(0.95 0.22 118);
-  --primary-foreground: oklch(0.13 0 0);
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: oklch(0.97 0 0);
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: oklch(0.95 0.22 118);
-  --accent-foreground: oklch(0.13 0 0);
-  --destructive: oklch(0.6 0.24 27);
-  --destructive-foreground: oklch(0.97 0 0);
-  --border: oklch(0.26 0 0);
-  --input: oklch(0.26 0 0);
-  --ring: oklch(0.95 0.22 118);
-  --chart-1: oklch(0.95 0.22 118);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.55 0 0);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.16 0 0);
-  --sidebar-foreground: oklch(0.97 0 0);
-  --sidebar-primary: oklch(0.95 0.22 118);
-  --sidebar-primary-foreground: oklch(0.13 0 0);
-  --sidebar-accent: oklch(0.22 0 0);
-  --sidebar-accent-foreground: oklch(0.97 0 0);
-  --sidebar-border: oklch(0.26 0 0);
-  --sidebar-ring: oklch(0.95 0.22 118);
+
+  /* Surfaces — bright, cool-white */
+  --background: oklch(0.99 0.003 240);
+  --foreground: oklch(0.18 0.04 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.04 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.04 250);
+
+  /* Brand — corporate blue + electric cyan */
+  --primary: oklch(0.52 0.21 255);
+  --primary-foreground: oklch(0.99 0.003 240);
+  --secondary: oklch(0.95 0.02 245);
+  --secondary-foreground: oklch(0.22 0.05 250);
+  --accent: oklch(0.72 0.17 215);
+  --accent-foreground: oklch(0.18 0.04 250);
+
+  --muted: oklch(0.97 0.006 240);
+  --muted-foreground: oklch(0.45 0.025 245);
+
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  /* Hairline borders — subtle, cool */
+  --border: oklch(0.9 0.012 240);
+  --input: oklch(0.9 0.012 240);
+  --ring: oklch(0.52 0.21 255);
+
+  --chart-1: oklch(0.52 0.21 255);
+  --chart-2: oklch(0.72 0.17 215);
+  --chart-3: oklch(0.65 0.18 175);
+  --chart-4: oklch(0.65 0.2 295);
+  --chart-5: oklch(0.7 0.18 145);
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.18 0.04 250);
+  --sidebar-primary: oklch(0.52 0.21 255);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.95 0.02 245);
+  --sidebar-accent-foreground: oklch(0.22 0.05 250);
+  --sidebar-border: oklch(0.9 0.012 240);
+  --sidebar-ring: oklch(0.52 0.21 255);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --background: oklch(0.13 0.03 255);
+  --foreground: oklch(0.97 0.005 240);
+  --card: oklch(0.17 0.035 255);
+  --card-foreground: oklch(0.97 0.005 240);
+  --popover: oklch(0.17 0.035 255);
+  --popover-foreground: oklch(0.97 0.005 240);
+  --primary: oklch(0.7 0.18 245);
+  --primary-foreground: oklch(0.13 0.03 255);
+  --secondary: oklch(0.22 0.04 255);
+  --secondary-foreground: oklch(0.97 0.005 240);
+  --muted: oklch(0.22 0.04 255);
+  --muted-foreground: oklch(0.62 0.03 245);
+  --accent: oklch(0.72 0.17 215);
+  --accent-foreground: oklch(0.13 0.03 255);
+  --destructive: oklch(0.65 0.22 27);
+  --destructive-foreground: oklch(0.97 0 0);
+  --border: oklch(0.27 0.03 255);
+  --input: oklch(0.27 0.03 255);
+  --ring: oklch(0.7 0.18 245);
+  --sidebar: oklch(0.17 0.035 255);
+  --sidebar-foreground: oklch(0.97 0.005 240);
+  --sidebar-primary: oklch(0.7 0.18 245);
+  --sidebar-primary-foreground: oklch(0.13 0.03 255);
+  --sidebar-accent: oklch(0.22 0.04 255);
+  --sidebar-accent-foreground: oklch(0.97 0.005 240);
+  --sidebar-border: oklch(0.27 0.03 255);
+  --sidebar-ring: oklch(0.7 0.18 245);
 }
 
 @layer base {
@@ -147,6 +144,10 @@
     color: var(--color-foreground);
     font-family: var(--font-mono);
     -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, oklch(0.92 0.06 250 / 0.55), transparent 38%),
+      radial-gradient(circle at 90% 0%, oklch(0.92 0.08 215 / 0.45), transparent 42%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4 {
@@ -161,4 +162,39 @@
 
 .vx-reveal {
   animation: vx-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Techy grid overlay — subtle hairlines for circuit-board feel */
+.vx-grid {
+  background-image:
+    linear-gradient(to right, oklch(0.85 0.02 245 / 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.85 0.02 245 / 0.4) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Brand gradient for headline accents */
+.vx-gradient-text {
+  background: linear-gradient(95deg, oklch(0.52 0.21 255), oklch(0.62 0.2 220) 45%, oklch(0.72 0.17 195));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vx-gradient-bar {
+  background: linear-gradient(90deg, oklch(0.52 0.21 255), oklch(0.72 0.17 215));
+}
+
+/* Glow ring for interactive surfaces */
+.vx-glow:hover {
+  box-shadow: 0 0 0 1px oklch(0.52 0.21 255 / 0.4), 0 12px 32px -16px oklch(0.52 0.21 255 / 0.5);
+}
+
+/* Scrolling ticker animation */
+@keyframes vx-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.vx-marquee {
+  animation: vx-marquee 40s linear infinite;
 }
