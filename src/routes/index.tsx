@@ -303,16 +303,29 @@ function Index() {
 
       <main className="overflow-x-hidden pt-14">
         {/* HERO */}
-        <section className="relative border-b border-border">
-          <div className="vx-grid pointer-events-none absolute inset-0 opacity-40" />
-          <div className="relative grid lg:min-h-[88vh] lg:grid-cols-12">
-            <div className="flex flex-col justify-end border-b border-border p-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-16">
-              <div className="vx-reveal">
+        <section className="relative min-h-[92vh] border-b border-border overflow-hidden">
+          {/* Background image — full bleed */}
+          <img
+            src={heroImage}
+            alt="Futuristic white control room with floating dark surveillance and analytics panels"
+            width={1920}
+            height={1080}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* Gradient scrim — left-heavy so text is readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-background/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+          <div className="vx-grid pointer-events-none absolute inset-0 opacity-25" />
+
+          {/* Text overlay */}
+          <div className="relative flex h-full min-h-[92vh] items-end">
+            <div className="mx-auto w-full max-w-[1440px] px-6 pb-14 sm:px-10 md:pb-20 lg:px-16">
+              <div className="vx-reveal max-w-3xl">
                 <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
-                <h1 className="mb-7 font-display text-[2.5rem] font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:mb-9 md:text-6xl lg:text-[4.25rem] xl:text-[5rem]">
+                <h1 className="mb-7 font-display text-[3rem] font-black uppercase leading-[0.92] tracking-tight sm:text-6xl md:mb-9 md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
@@ -333,26 +346,14 @@ function Index() {
                   </a>
                   <a
                     href="#services"
-                    className="inline-flex items-center gap-2 border border-border px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
+                    className="inline-flex items-center gap-2 border border-border bg-background/40 backdrop-blur-sm px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
                   >
                     Explore Services
                   </a>
                 </div>
               </div>
-            </div>
-
-            <div className="relative min-h-[320px] sm:min-h-[440px] lg:col-span-7">
-              <img
-                src={heroImage}
-                alt="Futuristic white control room with floating dark surveillance and analytics panels"
-                width={1920}
-                height={1080}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-background/5 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-widest md:bottom-10 md:left-10 md:right-10">
-                <span className="rounded-sm border border-primary/40 bg-card/85 px-3 py-2 text-primary backdrop-blur-md">
+              <div className="mt-8">
+                <span className="rounded-sm border border-primary/40 bg-card/70 px-3 py-2 text-sm font-bold uppercase tracking-widest text-primary backdrop-blur-md">
                   Empowering Integrated Digital &amp; Smart Systems
                 </span>
               </div>
