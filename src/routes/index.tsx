@@ -27,44 +27,33 @@ import p18 from "@/assets/v2/panels/18_communications.png";
 import pSurv from "@/assets/v2/panels/city wide surveillance.png";
 import pLPR from "@/assets/v2/panels/license plate recognition.png";
 
-// 20 panels (repeat p01 once) → clean 5 × 4 grid
-const wallPanels = [p01, p02, p04, p05, p06, p07, p08, p09, p10, p11, p12, p13, p14, p15, p16, p17, p18, pSurv, pLPR, p01];
-
-// 5 columns × 4 rows; steep curve so outer cols angle away like a real control-room wall
-const wallColumns = [
-  wallPanels.slice(0, 4),
-  wallPanels.slice(4, 8),
-  wallPanels.slice(8, 12),
-  wallPanels.slice(12, 16),
-  wallPanels.slice(16, 20),
-];
-const wallRotations = [52, 26, 0, -26, -52];
-
-function VideoWall() {
-  return (
-    <div
-      className="absolute inset-0 overflow-hidden bg-[#050810]"
-      // Close perspective (460 px) + eye-level origin = viewer inside the room
-      style={{ perspective: "460px", perspectiveOrigin: "50% 58%" }}
-    >
-      <div className="absolute inset-0 flex gap-[3px] items-stretch">
-        {wallColumns.map((col, ci) => (
-          <div
-            key={ci}
-            className="flex-1 flex flex-col gap-[3px]"
-            style={{ transform: `rotateY(${wallRotations[ci]}deg)` }}
-          >
-            {col.map((src, pi) => (
-              <div key={pi} className="flex-1 overflow-hidden border border-white/[0.06]">
-                <img src={src} alt="" className="h-full w-full object-cover" />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// Floating panel arc — city surveillance + license plate as centrepiece
+// Each entry: { src, top%, left%, w%, z }
+const arcPanels = [
+  // ── TOP ARC (smaller, further back) ────────────────────────────────────
+  { src: p12,  top:  '2%', left:  '1%', w: '13%', z: 2 },  // crowd density
+  { src: p13,  top:  '7%', left: '16%', w: '13%', z: 2 },  // network traffic
+  { src: p04,  top: '-1%', left: '32%', w: '12%', z: 2 },  // alerts
+  { src: p06,  top:  '0%', left: '46%', w:  '8%', z: 1 },  // notifications (small)
+  { src: p07,  top:  '1%', left: '56%', w: '12%', z: 2 },  // system health
+  { src: p17,  top:  '5%', left: '70%', w: '13%', z: 2 },  // recent events
+  { src: p11,  top:  '1%', left: '84%', w: '13%', z: 1 },  // building alerts
+  // ── MIDDLE (flanking the centrepiece) ──────────────────────────────────
+  { src: p14,  top: '24%', left:  '1%', w: '15%', z: 3 },  // shotspotter
+  { src: p16,  top: '34%', left: '14%', w: '14%', z: 3 },  // incident timeline
+  // ── CENTREPIECE (city surveillance — large) ────────────────────────────
+  { src: pSurv, top: '13%', left: '25%', w: '43%', z: 5 }, // ★ city surveillance
+  { src: p05,  top: '28%', left: '71%', w: '14%', z: 3 },  // plate reader (right)
+  { src: p18,  top: '19%', left: '83%', w: '13%', z: 2 },  // communications
+  { src: p15,  top: '34%', left: '82%', w: '14%', z: 3 },  // unit status
+  // ── BOTTOM ROW ─────────────────────────────────────────────────────────
+  { src: p01,  top: '54%', left:  '3%', w: '16%', z: 3 },  // traffic overview
+  { src: p09,  top: '60%', left: '21%', w: '13%', z: 2 },  // air quality
+  { src: p08,  top: '57%', left: '36%', w: '17%', z: 3 },  // transit status
+  { src: pLPR, top: '54%', left: '56%', w: '19%', z: 4 },  // ★ license plate (featured)
+  { src: p02,  top: '61%', left: '76%', w: '11%', z: 2 },  // weather
+  { src: p10,  top: '55%', left: '84%', w: '14%', z: 3 },  // air quality harbor
+] as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -350,31 +339,43 @@ function Index() {
       <SiteNav />
 
       <main className="overflow-x-hidden pt-14">
-        {/* HERO — full-bleed video wall, viewer inside the control room */}
-        <section className="relative border-b border-border overflow-hidden min-h-[95vh]">
-          {/* Video wall fills the full section */}
-          <VideoWall />
+        {/* HERO */}
+        <section className="border-b border-border">
+          {/* ── Floating panel arc ── */}
+          <div className="relative w-full overflow-hidden bg-[#ebebea]" style={{ height: '72vh', minHeight: '480px' }}>
+            {arcPanels.map((p, i) => (
+              <div
+                key={i}
+                className="absolute overflow-hidden rounded-sm"
+                style={{
+                  top: p.top,
+                  left: p.left,
+                  width: p.w,
+                  zIndex: p.z,
+                  boxShadow: '0 6px 28px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.14)',
+                }}
+              >
+                <img src={p.src} alt="" className="h-full w-full object-cover block" />
+              </div>
+            ))}
+          </div>
 
-          {/* Scrim — left-side only so right half of wall stays fully visible */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050810]/92 via-[#050810]/55 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#050810]/75 to-transparent" />
-
-          {/* Text */}
-          <div className="relative flex min-h-[95vh] items-end">
-            <div className="mx-auto w-full max-w-[1440px] px-6 pb-14 sm:px-10 md:pb-20 lg:px-16">
-              <div className="max-w-2xl vx-reveal">
-                <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
+          {/* ── Text below the wall ── */}
+          <div className="bg-background px-6 py-12 sm:px-10 md:py-16 lg:px-16">
+            <div className="mx-auto max-w-[1440px]">
+              <div className="vx-reveal">
+                <div className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-primary">
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
-                <h1 className="mb-7 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight text-white sm:text-5xl md:mb-9 md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
+                <h1 className="mb-6 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
                   <br />
                   infrastructure.
                 </h1>
-                <p className="w-full text-base leading-relaxed text-slate-300 md:text-lg">
+                <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
                   infrastructure and industrial environments. We deliver smart infrastructure
                   solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
@@ -384,23 +385,17 @@ function Index() {
                   digitalization, intelligent connectivity, operational optimization,
                   infrastructure reliability, and sustainable green ecosystems.
                 </p>
-                <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
-                  <a
-                    href="#contact"
-                    className="vx-glow inline-flex items-center gap-2 bg-primary px-5 py-3 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
-                  >
+                <div className="mt-8 flex flex-wrap gap-3 text-sm font-bold uppercase">
+                  <a href="#contact" className="vx-glow inline-flex items-center gap-2 bg-primary px-5 py-3 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90">
                     Start a Project →
                   </a>
-                  <a
-                    href="#services"
-                    className="inline-flex items-center gap-2 border border-white/30 px-5 py-3 tracking-widest text-white transition-colors hover:border-primary hover:text-primary"
-                  >
+                  <a href="#services" className="inline-flex items-center gap-2 border border-border px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary">
                     Explore Services
                   </a>
                 </div>
               </div>
               <div className="mt-8 border-l-2 border-primary pl-4">
-                <p className="text-sm font-bold uppercase tracking-widest text-slate-300">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary">
                   Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
                 </p>
               </div>
