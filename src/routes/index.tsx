@@ -393,40 +393,44 @@ function Index() {
       <SiteNav />
 
       <main className="overflow-x-hidden pt-14">
-        {/* HERO — 3-row video wall: [text + panels] / [city surv] / [LPR] */}
+        {/* HERO */}
         <section className="border-b border-border">
-          <div
-            className="flex flex-col bg-[#060911]"
-            style={{ height: '90vh', minHeight: '580px' }}
-          >
-            {/* ── Row 1: opening text (left) + merged panel strip (right) ── */}
-            <div className="flex overflow-hidden" style={{ flex: 2.5 }}>
-              {/* Opening text */}
-              <div
-                className="flex-shrink-0 flex flex-col justify-center vx-reveal"
-                style={{ width: '42%', padding: '2.5rem 3rem', background: '#060911', borderRight: '1px solid #131b28' }}
-              >
+
+          {/* ── Row 1: merged panel strip — no gaps, on top ── */}
+          <div style={{ height: '20vh', minHeight: '140px', overflow: 'hidden', background: '#060911' }}>
+            <div
+              className="vx-marquee"
+              style={{ display: 'flex', height: '100%', width: 'max-content', animationDuration: '42s' }}
+            >
+              {[p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06,
+                p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06].map((src, i) => (
                 <div
-                  className="mb-5 inline-flex items-center gap-2 font-bold uppercase"
-                  style={{ fontSize: '0.7rem', letterSpacing: '0.15em', color: '#5a8fff' }}
+                  key={i}
+                  className="flex-shrink-0 overflow-hidden bg-[#060911]"
+                  style={{ height: '100%', aspectRatio: '16/9' }}
                 >
-                  <span className="vx-gradient-bar h-2 w-2 rounded-full" />
-                  COMPANY_PROFILE / 2026 / REV.02
+                  <img src={src} alt="" className="h-full w-full object-contain block" />
                 </div>
-                <h1
-                  className="font-display font-black uppercase"
-                  style={{ fontSize: 'clamp(1.75rem,3vw,3.75rem)', lineHeight: 0.9, letterSpacing: '-0.02em', color: '#e6ebf2', marginBottom: '1.25rem' }}
-                >
+              ))}
+            </div>
+          </div>
+
+          {/* ── Opening text ── */}
+          <div className="bg-background px-6 py-12 sm:px-10 md:py-16 lg:px-16">
+            <div className="mx-auto max-w-[1440px]">
+              <div className="vx-reveal">
+                <div className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-primary">
+                  <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
+                  <span>COMPANY_PROFILE / 2026 / REV.02</span>
+                </div>
+                <h1 className="mb-6 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
                   <br />
                   infrastructure.
                 </h1>
-                <p
-                  className="leading-relaxed"
-                  style={{ fontSize: '0.875rem', color: '#8a94a3', maxWidth: '44ch', marginBottom: '1.75rem' }}
-                >
+                <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
                   infrastructure and industrial environments. We deliver smart infrastructure
                   solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
@@ -436,53 +440,29 @@ function Index() {
                   digitalization, intelligent connectivity, operational optimization,
                   infrastructure reliability, and sustainable green ecosystems.
                 </p>
-                <div className="flex flex-wrap gap-3" style={{ marginBottom: '1.5rem' }}>
-                  <a
-                    href="#contact"
-                    className="vx-glow inline-flex items-center gap-2 font-bold uppercase"
-                    style={{ background: '#5a8fff', padding: '0.625rem 1.25rem', fontSize: '0.75rem', letterSpacing: '0.12em', color: '#060911', textDecoration: 'none' }}
-                  >
+                <div className="mt-8 flex flex-wrap gap-3 text-sm font-bold uppercase">
+                  <a href="#contact" className="vx-glow inline-flex items-center gap-2 bg-primary px-5 py-3 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90">
                     Start a Project →
                   </a>
-                  <a
-                    href="#services"
-                    className="inline-flex items-center gap-2 font-bold uppercase"
-                    style={{ border: '1px solid #2a3548', padding: '0.625rem 1.25rem', fontSize: '0.75rem', letterSpacing: '0.12em', color: '#8a94a3', textDecoration: 'none' }}
-                  >
+                  <a href="#services" className="inline-flex items-center gap-2 border border-border px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary">
                     Explore Services
                   </a>
                 </div>
-                <div style={{ borderLeft: '2px solid #5a8fff', paddingLeft: '0.75rem' }}>
-                  <p
-                    className="font-bold uppercase"
-                    style={{ fontSize: '0.7rem', letterSpacing: '0.15em', color: '#5a8fff' }}
-                  >
-                    Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
-                  </p>
-                </div>
               </div>
-
-              {/* Scrolling panels — merged old strips 1 + 3 */}
-              <div className="overflow-hidden" style={{ flex: 1 }}>
-                <div
-                  className="vx-marquee"
-                  style={{ display: 'flex', height: '100%', width: 'max-content', animationDuration: '42s' }}
-                >
-                  {[p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06,
-                    p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06].map((src, i) => (
-                    <div
-                      key={i}
-                      className="flex-shrink-0 overflow-hidden bg-[#060911]"
-                      style={{ height: '100%', aspectRatio: '16/9' }}
-                    >
-                      <img src={src} alt="" className="h-full w-full object-contain block" />
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-8 border-l-2 border-primary pl-4">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary">
+                  Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
+                </p>
               </div>
             </div>
+          </div>
 
-            {/* ── Row 2: city surveillance centrepiece — left to right ── */}
+          {/* ── Rows 2 + 3: tall scrolling strips with live panels ── */}
+          <div
+            className="flex flex-col bg-[#060911]"
+            style={{ height: '52vh', minHeight: '340px' }}
+          >
+            {/* Row 2 — city surveillance centrepiece, left to right */}
             <ScrollStrip
               items={[
                 {type:'iframe', panelId:'panel-ss'},
@@ -494,10 +474,9 @@ function Index() {
               ]}
               direction="right"
               duration="65s"
-              flexGrow={2.5}
+              flexGrow={1.3}
             />
-
-            {/* ── Row 3: LPR centrepiece — right to left ── */}
+            {/* Row 3 — LPR centrepiece, right to left */}
             <ScrollStrip
               items={[
                 {type:'img',    src:pLPR, featured:true},
@@ -509,9 +488,10 @@ function Index() {
               ]}
               direction="left"
               duration="55s"
-              flexGrow={2}
+              flexGrow={1}
             />
           </div>
+
         </section>
 
         {/* TICKER */}
