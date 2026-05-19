@@ -220,24 +220,24 @@ const techPillars = [
 
 const industries = [
   {
-    t: "Smart Transportation",
-    d: "Centralized management, ICT & IoT, intelligent detection, ELV systems, and engineering support for rail and highway transportation environments.",
+    t: "Smart Transportation Solutions",
+    d: "Smart Transportation (Rail & Highway) solutions including centralized management systems, mobile application solutions, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, intelligent detection, sensing & analytics technologies, ELV systems, operational technologies, and engineering support services for transportation environments.",
   },
   {
-    t: "Smart City",
-    d: "Digital twin, centralized management, ICT & IoT, intelligent analytics, and integrated operational technologies for connected and sustainable urban environments.",
+    t: "Smart City Solutions",
+    d: "Smart city solutions including centralized management systems, digital twin technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, intelligent analytics, and integrated operational technologies for connected and sustainable urban environments.",
   },
   {
     t: "Government & Public Sector",
-    d: "Digital platforms, command & control systems, operational monitoring technologies, and integrated solutions supporting smarter public sector environments.",
+    d: "Digital platforms, command & control systems, operational monitoring technologies, and integrated solutions supporting smarter and more efficient public sector environments.",
   },
   {
     t: "Commercial Facilities & Corporate Environments",
-    d: "Integrated building technologies, ICT infrastructure, intelligent security systems, and operational solutions for modern commercial and corporate environments.",
+    d: "Integrated building technologies, Information & Communication Technology (ICT) infrastructure, intelligent security systems, and operational solutions for modern commercial and corporate environments.",
   },
   {
     t: "Energy & Power Infrastructure",
-    d: "Smart energy technologies, energy optimization platforms, automation systems, ICT infrastructure, and engineering solutions supporting sustainable green energy.",
+    d: "Smart energy technologies, energy optimization platforms, automation systems, Information & Communication Technology (ICT) infrastructure, and engineering solutions supporting sustainable green energy and efficient power environments.",
   },
   {
     t: "Industrial & Manufacturing",
@@ -258,7 +258,7 @@ const whyChoose = [
   {
     n: "02",
     t: "Smart Infrastructure & Technology Expertise",
-    d: "Specializing in smart infrastructure, operational technologies, ICT & IoT systems, automation technologies, and intelligent integration solutions for infrastructure and industrial environments.",
+    d: "Specializing in smart infrastructure, operational technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, automation technologies, and intelligent integration solutions for infrastructure and industrial environments.",
   },
   {
     n: "03",
@@ -278,7 +278,7 @@ const whyChoose = [
   {
     n: "06",
     t: "Long-Term Service Commitment",
-    d: "Committed to continuous support, system enhancement, and reliable service delivery that sustain operational performance and customer success.",
+    d: "Committed to continuous support, system enhancement, and reliable service delivery that support sustainable operational performance and customer success.",
   },
 ];
 
@@ -321,10 +321,13 @@ function Index() {
                 </h1>
                 <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
-                  infrastructure and industrial environments — delivering smart transportation,
-                  ICT &amp; IoT, automation &amp; robotics, industrial operational technologies,
-                  and energy solutions that drive digitalization, intelligent connectivity,
-                  operational optimization, and sustainable green ecosystems.
+                  infrastructure and industrial environments. We deliver smart infrastructure
+                  solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
+                  Communication Technology (ICT) and Internet of Things (IoT) systems,
+                  automation &amp; robotics, industrial operational technologies, and energy
+                  solutions, supported by engineering consultancy services that drive
+                  digitalization, intelligent connectivity, operational optimization,
+                  infrastructure reliability, and sustainable green ecosystems.
                 </p>
                 <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a
