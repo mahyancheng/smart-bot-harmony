@@ -556,7 +556,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 lg:grid-cols-3">
             {industries.map((s, idx) => (
               <div key={s.t} className="bg-card p-7 md:p-8">
                 <div className="text-sm font-bold text-primary">[ I.{String(idx + 1).padStart(2, "0")} ]</div>
