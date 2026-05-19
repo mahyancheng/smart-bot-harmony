@@ -299,9 +299,9 @@ function Index() {
             height={1080}
             className="absolute inset-0 h-full w-full object-cover"
           />
-          {/* Gradient scrim — left-heavy so text is readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-background/10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+          {/* Gradient scrim — covers full area for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/85 to-background/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/30 to-transparent" />
           <div className="vx-grid pointer-events-none absolute inset-0 opacity-25" />
 
           {/* Text overlay */}
