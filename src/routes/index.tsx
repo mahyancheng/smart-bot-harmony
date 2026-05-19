@@ -173,7 +173,7 @@ const capabilities = [
     index: "03",
     title: "ICT & IoT Infrastructure",
     description:
-      "Networking, edge compute, sensor fabrics, SCADA integration, and cloud-connected IoT platforms that turn field data into operational decisions — built for mission-critical environments.",
+      "Networking, edge compute, sensor fabrics, SCADA integration, and cloud-connected Internet of Things (IoT) platforms that turn field data into operational decisions — built for mission-critical environments.",
     note: "NETWORK // EDGE // CLOUD // SCADA",
     image: datacenterImage,
     alt: "White data center corridor with floating cyan network topology and IoT sensor feed panels",
