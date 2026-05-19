@@ -51,7 +51,7 @@ const aboutCards = [
   {
     k: "// ABOUT",
     t: "About Us",
-    d: "Vertifex Technology specializes in infrastructure modernization and industrial digitalization through integrated technologies and engineering expertise — delivering connected, intelligent, and efficient solutions.",
+    d: "Vertifex Technology specializes in infrastructure modernization and industrial digitalization through integrated technologies and engineering expertise — delivering connected, intelligent, and efficient solutions for infrastructure and industrial environments.",
   },
   {
     k: "// FOCUS",
@@ -66,7 +66,7 @@ const aboutCards = [
   {
     k: "// MISSION",
     t: "Mission",
-    d: "Empower infrastructure and industrial environments through smart integration, accelerate digital transformation through intelligent connectivity, optimize operational efficiency, and deliver reliable engineering expertise that creates lasting customer value.",
+    d: "Empower infrastructure and industrial environments through smart integration and operational technology solutions. Accelerate digital transformation through intelligent connectivity, automation, and innovative technologies. Optimize operational efficiency, infrastructure reliability, and sustainable green development through integrated solutions. Deliver reliable engineering expertise and long-term technical support that create lasting customer value.",
   },
 ];
 
@@ -232,7 +232,7 @@ const industries = [
     d: "Digital platforms, command & control systems, operational monitoring technologies, and integrated solutions supporting smarter public sector environments.",
   },
   {
-    t: "Commercial & Corporate",
+    t: "Commercial Facilities & Corporate Environments",
     d: "Integrated building technologies, ICT infrastructure, intelligent security systems, and operational solutions for modern commercial and corporate environments.",
   },
   {
@@ -257,8 +257,8 @@ const whyChoose = [
   },
   {
     n: "02",
-    t: "Smart Infrastructure Expertise",
-    d: "Specializing in smart infrastructure, operational technologies, ICT & IoT, automation, and intelligent integration solutions for infrastructure environments.",
+    t: "Smart Infrastructure & Technology Expertise",
+    d: "Specializing in smart infrastructure, operational technologies, ICT & IoT systems, automation technologies, and intelligent integration solutions for infrastructure and industrial environments.",
   },
   {
     n: "03",
@@ -320,9 +320,11 @@ function Index() {
                   infrastructure.
                 </h1>
                 <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Vertifex Technology Sdn. Bhd. delivers integrated smart transportation,
-                  smart city, ICT &amp; IoT, energy solutions and automation — engineered
-                  for digitalization, intelligent connectivity, and operational excellence.
+                  Vertifex Technology specializes in smart integration solutions for
+                  infrastructure and industrial environments — delivering smart transportation,
+                  ICT &amp; IoT, automation &amp; robotics, industrial operational technologies,
+                  and energy solutions that drive digitalization, intelligent connectivity,
+                  operational optimization, and sustainable green ecosystems.
                 </p>
                 <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a
@@ -341,7 +343,7 @@ function Index() {
               </div>
               <div className="mt-8">
                 <span className="rounded-sm border border-primary/40 bg-card/70 px-3 py-2 text-sm font-bold uppercase tracking-widest text-primary backdrop-blur-md">
-                  Empowering Integrated Digital &amp; Smart Systems
+                  Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
                 </span>
               </div>
             </div>
