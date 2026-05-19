@@ -257,33 +257,33 @@ const industries = [
 const whyChoose = [
   {
     n: "01",
-    t: "End-to-End Project Delivery",
-    d: "Managing the complete project lifecycle from consultation and design to implementation, commissioning, and operational support.",
-  },
-  {
-    n: "02",
-    t: "Smart Infrastructure & Technology Expertise",
-    d: "Specializing in smart infrastructure, operational technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, automation technologies, and intelligent integration solutions for infrastructure and industrial environments.",
-  },
-  {
-    n: "03",
     t: "Practical & Scalable Solutions",
     d: "Developing reliable, scalable, and future-ready solutions aligned with operational and infrastructure requirements.",
   },
   {
-    n: "04",
+    n: "02",
     t: "Responsive Customer Support",
     d: "Providing responsive technical support, maintenance services, and operational assistance to ensure system reliability and business continuity.",
   },
   {
-    n: "05",
+    n: "03",
     t: "Customer-Centric Collaboration",
     d: "Working closely with customers to understand operational challenges, deliver tailored solutions, and build long-term trusted partnerships.",
   },
   {
-    n: "06",
+    n: "04",
     t: "Long-Term Service Commitment",
     d: "Committed to continuous support, system enhancement, and reliable service delivery that support sustainable operational performance and customer success.",
+  },
+  {
+    n: "05",
+    t: "Reliable Engineering Expertise",
+    d: "Combining engineering knowledge, operational technologies, and smart integration capabilities to deliver practical and effective solutions.",
+  },
+  {
+    n: "06",
+    t: "Trusted Technology Partnership",
+    d: "Building strong customer relationships through transparency, responsiveness, reliable delivery, and long-term collaboration.",
   },
 ];
 
