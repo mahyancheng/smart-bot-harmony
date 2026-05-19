@@ -307,8 +307,7 @@ function Index() {
           {/* Text overlay */}
           <div className="relative flex h-full min-h-[92vh] items-end">
             <div className="mx-auto w-full max-w-[1440px] px-6 pb-14 sm:px-10 md:pb-20 lg:px-16">
-              {/* Left — headline + first sentence + CTAs */}
-              <div className="vx-reveal max-w-2xl">
+              <div className="vx-reveal">
                 <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
@@ -320,9 +319,15 @@ function Index() {
                   <br />
                   infrastructure.
                 </h1>
-                <p className="max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
+                <p className="w-full text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
-                  infrastructure and industrial environments.
+                  infrastructure and industrial environments. We deliver smart infrastructure
+                  solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
+                  Communication Technology (ICT) and Internet of Things (IoT) systems,
+                  automation &amp; robotics, industrial operational technologies, and energy
+                  solutions, supported by engineering consultancy services that drive
+                  digitalization, intelligent connectivity, operational optimization,
+                  infrastructure reliability, and sustainable green ecosystems.
                 </p>
                 <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a
@@ -345,19 +350,6 @@ function Index() {
                 </span>
               </div>
             </div>
-          </div>
-
-          {/* Right — second sentence pinned to bottom-right of hero */}
-          <div className="absolute bottom-14 right-6 max-w-sm text-right sm:right-10 md:bottom-20 md:max-w-md lg:right-16">
-            <p className="text-sm leading-relaxed text-muted-foreground/90 md:text-base">
-              We deliver smart infrastructure solutions covering Smart Transportation
-              (Rail &amp; Highway), Information &amp; Communication Technology (ICT) and
-              Internet of Things (IoT) systems, automation &amp; robotics, industrial
-              operational technologies, and energy solutions, supported by engineering
-              consultancy services that drive digitalization, intelligent connectivity,
-              operational optimization, infrastructure reliability, and sustainable green
-              ecosystems.
-            </p>
           </div>
         </section>
 
