@@ -321,13 +321,16 @@ function Index() {
                 </h1>
                 <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
-                  infrastructure and industrial environments. We deliver smart infrastructure
-                  solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
-                  Communication Technology (ICT) and Internet of Things (IoT) systems,
-                  automation &amp; robotics, industrial operational technologies, and energy
-                  solutions, supported by engineering consultancy services that drive
-                  digitalization, intelligent connectivity, operational optimization,
-                  infrastructure reliability, and sustainable green ecosystems.
+                  infrastructure and industrial environments.
+                </p>
+                <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground text-right md:text-lg">
+                  We deliver smart infrastructure solutions covering Smart Transportation
+                  (Rail &amp; Highway), Information &amp; Communication Technology (ICT) and
+                  Internet of Things (IoT) systems, automation &amp; robotics, industrial
+                  operational technologies, and energy solutions, supported by engineering
+                  consultancy services that drive digitalization, intelligent connectivity,
+                  operational optimization, infrastructure reliability, and sustainable green
+                  ecosystems.
                 </p>
                 <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a
