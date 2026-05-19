@@ -27,33 +27,18 @@ import p18 from "@/assets/v2/panels/18_communications.png";
 import pSurv from "@/assets/v2/panels/city wide surveillance.png";
 import pLPR from "@/assets/v2/panels/license plate recognition.png";
 
-// Floating panel arc — city surveillance + license plate as centrepiece
-// Each entry: { src, top%, left%, w%, z }
-const arcPanels = [
-  // ── TOP ARC (smaller, further back) ────────────────────────────────────
-  { src: p12,  top:  '2%', left:  '1%', w: '13%', z: 2 },  // crowd density
-  { src: p13,  top:  '7%', left: '16%', w: '13%', z: 2 },  // network traffic
-  { src: p04,  top: '-1%', left: '32%', w: '12%', z: 2 },  // alerts
-  { src: p06,  top:  '0%', left: '46%', w:  '8%', z: 1 },  // notifications (small)
-  { src: p07,  top:  '1%', left: '56%', w: '12%', z: 2 },  // system health
-  { src: p17,  top:  '5%', left: '70%', w: '13%', z: 2 },  // recent events
-  { src: p11,  top:  '1%', left: '84%', w: '13%', z: 1 },  // building alerts
-  // ── MIDDLE (flanking the centrepiece) ──────────────────────────────────
-  { src: p14,  top: '24%', left:  '1%', w: '15%', z: 3 },  // shotspotter
-  { src: p16,  top: '34%', left: '14%', w: '14%', z: 3 },  // incident timeline
-  // ── CENTREPIECE (city surveillance — large) ────────────────────────────
-  { src: pSurv, top: '13%', left: '25%', w: '43%', z: 5 }, // ★ city surveillance
-  { src: p05,  top: '28%', left: '71%', w: '14%', z: 3 },  // plate reader (right)
-  { src: p18,  top: '19%', left: '83%', w: '13%', z: 2 },  // communications
-  { src: p15,  top: '34%', left: '82%', w: '14%', z: 3 },  // unit status
-  // ── BOTTOM ROW ─────────────────────────────────────────────────────────
-  { src: p01,  top: '54%', left:  '3%', w: '16%', z: 3 },  // traffic overview
-  { src: p09,  top: '60%', left: '21%', w: '13%', z: 2 },  // air quality
-  { src: p08,  top: '57%', left: '36%', w: '17%', z: 3 },  // transit status
-  { src: pLPR, top: '54%', left: '56%', w: '19%', z: 4 },  // ★ license plate (featured)
-  { src: p02,  top: '61%', left: '76%', w: '11%', z: 2 },  // weather
-  { src: p10,  top: '55%', left: '84%', w: '14%', z: 3 },  // air quality harbor
-] as const;
+// Tidy video wall — 12-col grid, 4 rows
+// Row 1: 6 equal panels  Row 2: city surveillance (8 wide★)  Row 3: 6 equal  Row 4: license plate (6 wide★)
+function WallPanel({ src, span, featured = false }: { src: string; span: number; featured?: boolean }) {
+  return (
+    <div
+      className={`overflow-hidden${featured ? ' ring-[1.5px] ring-inset ring-primary/40' : ''}`}
+      style={{ gridColumn: `span ${span}` }}
+    >
+      <img src={src} alt="" className="h-full w-full object-cover block" />
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -341,23 +326,34 @@ function Index() {
       <main className="overflow-x-hidden pt-14">
         {/* HERO */}
         <section className="border-b border-border">
-          {/* ── Floating panel arc ── */}
-          <div className="relative w-full overflow-hidden bg-[#ebebea]" style={{ height: '72vh', minHeight: '480px' }}>
-            {arcPanels.map((p, i) => (
-              <div
-                key={i}
-                className="absolute overflow-hidden rounded-sm"
-                style={{
-                  top: p.top,
-                  left: p.left,
-                  width: p.w,
-                  zIndex: p.z,
-                  boxShadow: '0 6px 28px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.14)',
-                }}
-              >
-                <img src={p.src} alt="" className="h-full w-full object-cover block" />
-              </div>
-            ))}
+          {/* ── Video wall — 12-col × 4-row tidy grid ── */}
+          <div
+            className="grid grid-cols-12 bg-[#060911]"
+            style={{ height: '76vh', minHeight: '480px', gap: '3px', gridTemplateRows: 'repeat(4, 1fr)' }}
+          >
+            {/* Row 1 — 6 equal panels × 2 cols each */}
+            <WallPanel src={p12} span={2} />
+            <WallPanel src={p13} span={2} />
+            <WallPanel src={p04} span={2} />
+            <WallPanel src={p07} span={2} />
+            <WallPanel src={p17} span={2} />
+            <WallPanel src={p11} span={2} />
+            {/* Row 2 — city surveillance centrepiece (8 cols) + 2 flanking */}
+            <WallPanel src={p14} span={2} />
+            <WallPanel src={pSurv} span={8} featured />
+            <WallPanel src={p18} span={2} />
+            {/* Row 3 — 6 equal panels × 2 cols each */}
+            <WallPanel src={p16} span={2} />
+            <WallPanel src={p01} span={2} />
+            <WallPanel src={p09} span={2} />
+            <WallPanel src={p05} span={2} />
+            <WallPanel src={p08} span={2} />
+            <WallPanel src={p10} span={2} />
+            {/* Row 4 — license plate centrepiece (6 cols) + 3 flanking × 2 cols */}
+            <WallPanel src={pLPR} span={6} featured />
+            <WallPanel src={p15} span={2} />
+            <WallPanel src={p02} span={2} />
+            <WallPanel src={p06} span={2} />
           </div>
 
           {/* ── Text below the wall ── */}
