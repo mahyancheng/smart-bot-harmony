@@ -155,7 +155,7 @@ const capabilities = [
     index: "01",
     title: "Smart Transportation",
     description:
-      "Rail and highway solutions integrating centralized management systems, ICT & IoT, intelligent detection, sensing & analytics, ELV systems, and engineering support — unified into a single operational layer.",
+      "Rail and highway solutions integrating centralized management systems, Information & Communication Technology (ICT) and Internet of Things (IoT), intelligent detection, sensing & analytics, ELV systems, and engineering support — unified into a single operational layer.",
     note: "RAIL // HIGHWAY // INTELLIGENT DETECTION",
     image: transportImage,
     alt: "Smart city transportation corridor with holographic data overlays, highway, rail, and green energy",
@@ -164,7 +164,7 @@ const capabilities = [
     index: "02",
     title: "Smart City Solutions",
     description:
-      "Centralized management systems, digital twin technologies, ICT & IoT integration, intelligent analytics, and connected operational technologies for sustainable urban environments.",
+      "Centralized management systems, digital twin technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) integration, intelligent analytics, and connected operational technologies for sustainable urban environments.",
     note: "DIGITAL TWIN // ANALYTICS // URBAN IOT",
     image: cityImage,
     alt: "Aerial view of smart city at twilight with floating dark data surveillance panels",
@@ -246,7 +246,7 @@ const industries = [
   },
   {
     t: "Industrial & Manufacturing",
-    d: "Automation systems, robotics integration, industrial monitoring, ICT infrastructure, and IoT technologies for manufacturing and production environments.",
+    d: "Automation systems, robotics integration, industrial monitoring, Information & Communication Technology (ICT) infrastructure, and Internet of Things (IoT) technologies for manufacturing and production environments.",
   },
 ];
 
@@ -461,7 +461,7 @@ function Index() {
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 Smart transportation at the edge of infrastructure. Smart city intelligence across
-                the urban layer. ICT and IoT tying them into a single, observable system.
+                the urban layer. Information & Communication Technology (ICT) and Internet of Things (IoT) tying them into a single, observable system.
               </p>
             </div>
           </div>
@@ -508,7 +508,7 @@ function Index() {
               <div className="lg:col-span-6">
                 <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
                   Supporting integrated operational environments through smart transportation,
-                  smart city, ICT, IoT, energy solutions, and automation platforms.
+                  smart city, Information & Communication Technology (ICT) and Internet of Things (IoT), energy solutions, and automation platforms.
                 </p>
               </div>
             </div>
