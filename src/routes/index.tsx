@@ -410,7 +410,7 @@ function Index() {
         <section className="border-b border-border">
 
           {/* ── Row 1: merged panel strip — no gaps, on top ── */}
-          <div style={{ height: '20vh', minHeight: '140px', overflow: 'hidden', background: '#060911' }}>
+          <div style={{ height: '40vh', minHeight: '240px', overflow: 'hidden', background: '#060911' }}>
             <div
               className="vx-marquee"
               style={{ display: 'flex', height: '100%', width: 'max-content', animationDuration: '42s' }}
@@ -479,7 +479,7 @@ function Index() {
             ]}
             direction="right"
             duration="65s"
-            height="32vh"
+            height="42vh"
           />
 
           {/* ── Ticker between rows 2 and 3 ── */}
@@ -509,23 +509,9 @@ function Index() {
             ]}
             direction="left"
             duration="55s"
-            height="28vh"
+            height="36vh"
           />
 
-        </section>
-
-        {/* TICKER */}
-        <section className="overflow-hidden border-b border-border bg-card/60">
-          <div className="relative">
-            <div className="vx-marquee flex w-max gap-10 whitespace-nowrap px-6 py-5 text-sm font-bold uppercase text-muted-foreground">
-              {[...serviceTags, ...serviceTags].map((item, idx) => (
-                <span key={`${item}-${idx}`} className="inline-flex items-center gap-2">
-                  <span className="text-primary">+</span>
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
         </section>
 
         {/* 01 PROFILE */}

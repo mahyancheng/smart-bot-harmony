@@ -2073,6 +2073,159 @@ setInterval(function () {
   });
 }, 5000);
 
+// ── TRANSIT STATUS CYCLING ────────────────────────────────────────────────
+setInterval(function () {
+  const panel = document.querySelector('.transit');
+  if (!panel) return;
+  const rows = panel.querySelectorAll('.transit-row');
+  const idx = Math.floor(Math.random() * rows.length);
+  const span = rows[idx] && rows[idx].querySelector('span:last-child');
+  if (!span) return;
+  const roll = Math.random();
+  let newState, newCls;
+  if (roll < 0.65)      { newState = 'On Time';      newCls = 'status-normal'; }
+  else if (roll < 0.85) { newState = 'Minor Delay';  newCls = 'status-alert';  }
+  else                  { newState = 'Disrupted';     newCls = 'status-alert';  }
+  span.className = newCls;
+  span.textContent = newState;
+  // Update system-level header badge
+  const allSpans = panel.querySelectorAll('.transit-row span:last-child');
+  const hasIssue = [...allSpans].some(function(s) { return s.textContent !== 'On Time'; });
+  const sysSpan = panel.querySelector('[style*="SYSTEM STATUS"] span:last-child') || panel.querySelector('.panel-head + div span:last-child');
+  if (sysSpan) {
+    sysSpan.className = hasIssue ? 'status-alert' : 'status-normal';
+    sysSpan.textContent = hasIssue ? '● DISRUPTED' : '● NORMAL';
+  }
+}, 4500);
+
+// ── SYSTEM HEALTH FLUCTUATION ─────────────────────────────────────────────
+setInterval(function () {
+  const panel = document.querySelector('.system-health');
+  if (!panel) return;
+  const rows = panel.querySelectorAll('.sys-row');
+  // ALPR reads
+  const alprMeta = rows[0] && rows[0].querySelector('.sys-meta');
+  if (alprMeta) alprMeta.textContent = _rnd(9842, 180).toLocaleString() + ' reads / day';
+  // CCTV online
+  const cctvMeta = rows[1] && rows[1].querySelector('.sys-meta');
+  if (cctvMeta) {
+    const online = _rnd(2451, 12);
+    cctvMeta.textContent = online.toLocaleString() + ' / 2,468 online';
+    const cctvStat = rows[1].querySelector('.sys-status');
+    if (cctvStat) { cctvStat.innerHTML = '<span class="dot"></span>' + (online / 2468 * 100).toFixed(1) + '%'; }
+  }
+  // CAD active calls
+  const cadMeta = rows[2] && rows[2].querySelector('.sys-meta');
+  if (cadMeta) cadMeta.textContent = _rnd(37, 6) + ' active calls';
+  // Storage capacity with status change
+  if (rows[3]) {
+    const pct = _rnd(78, 5);
+    const storageMeta = rows[3].querySelector('.sys-meta');
+    if (storageMeta) storageMeta.textContent = pct + '% capacity';
+    const storageStat = rows[3].querySelector('.sys-status');
+    if (storageStat) {
+      if (pct >= 85)      { storageStat.className = 'sys-status err';  storageStat.innerHTML = '<span class="dot"></span>Critical'; }
+      else if (pct >= 76) { storageStat.className = 'sys-status warn'; storageStat.innerHTML = '<span class="dot"></span>Notice';   }
+      else                { storageStat.className = 'sys-status ok';   storageStat.innerHTML = '<span class="dot"></span>Normal';   }
+    }
+  }
+  // DB latency
+  const footer = panel.querySelectorAll('.sys-foot-val');
+  if (footer[1]) { const lat = _rnd(42, 18); footer[1].style.color = lat > 55 ? 'var(--orange)' : 'var(--green)'; footer[1].textContent = lat + ' ms'; }
+}, 3800);
+
+// ── AIR QUALITY CYCLING (both panels) ────────────────────────────────────
+var _aqiStates = [
+  {aqi: 42, status: 'Good',     color: 'var(--green)'},
+  {aqi: 58, status: 'Moderate', color: 'var(--yellow)'},
+  {aqi: 35, status: 'Good',     color: 'var(--green)'},
+  {aqi: 74, status: 'Moderate', color: 'var(--yellow)'},
+  {aqi: 49, status: 'Good',     color: 'var(--green)'},
+  {aqi: 88, status: 'Unhealthy for Sensitive', color: 'var(--orange)'},
+];
+var _aqiIdx1 = 0, _aqiIdx2 = 2;
+function _updateAqi(panelClass, stateIdx) {
+  var panel = document.querySelector('.' + panelClass);
+  if (!panel) return;
+  var state = _aqiStates[stateIdx % _aqiStates.length];
+  var bigEl = panel.querySelector('.aqi-big');
+  if (bigEl) _smoothTo(bigEl, state.aqi, 900);
+  var statusEl = panel.querySelector('.aqi-status');
+  if (statusEl) { statusEl.textContent = state.status; statusEl.style.color = state.color; }
+  var vals = panel.querySelectorAll('.aqi-metrics .val');
+  if (vals[0]) vals[0].textContent = _rnd(12, 5) + ' µg/m³';
+  if (vals[1]) vals[1].textContent = _rnd(24, 7) + ' µg/m³';
+  if (vals[2]) vals[2].textContent = _rnd(28, 9) + ' ppb';
+  if (vals[3]) vals[3].textContent = _rnd(15, 6) + ' ppb';
+  if (vals[4]) vals[4].textContent = ((_rnd(4, 2)) / 10).toFixed(1) + ' ppm';
+}
+setInterval(function () { _updateAqi('air-quality-1', _aqiIdx1++); }, 5500);
+setInterval(function () { _updateAqi('air-quality-2', _aqiIdx2++); }, 6800);
+
+// ── WEATHER CYCLING ───────────────────────────────────────────────────────
+var _wxStates = [
+  {icon:'☁',  temp:58, cond:'Cloudy',         feels:57, rain:'10%', humid:'87%', wind:'8 mph',  vis:'8 mi'},
+  {icon:'⛅', temp:60, cond:'Partly Cloudy',   feels:59, rain:'5%',  humid:'82%', wind:'10 mph', vis:'10 mi'},
+  {icon:'🌧', temp:55, cond:'Light Rain',      feels:53, rain:'80%', humid:'93%', wind:'12 mph', vis:'5 mi'},
+  {icon:'☀',  temp:63, cond:'Clear',           feels:62, rain:'2%',  humid:'72%', wind:'6 mph',  vis:'12 mi'},
+  {icon:'⛈',  temp:52, cond:'Thunderstorms',   feels:50, rain:'95%', humid:'97%', wind:'18 mph', vis:'3 mi'},
+];
+var _wxIdx = 0;
+setInterval(function () {
+  var panel = document.querySelector('.weather');
+  if (!panel) return;
+  _wxIdx = (_wxIdx + 1) % _wxStates.length;
+  var w = _wxStates[_wxIdx];
+  var iconEl   = panel.querySelector('.weather-icon');
+  var tempEl   = panel.querySelector('.weather-temp');
+  var condEl   = panel.querySelector('.weather-cond');
+  var feelsEl  = panel.querySelector('.weather-feels');
+  if (iconEl)  iconEl.textContent = w.icon;
+  if (tempEl)  tempEl.innerHTML   = w.temp + '°<span style="font-size:14px">F</span>';
+  if (condEl)  condEl.textContent = w.cond;
+  if (feelsEl) feelsEl.textContent = 'Feels like ' + w.feels + '°F';
+  var wvals = panel.querySelectorAll('.wmetric-value');
+  if (wvals[0]) wvals[0].textContent = w.rain;
+  if (wvals[1]) wvals[1].textContent = w.humid;
+  if (wvals[2]) wvals[2].textContent = w.wind;
+  if (wvals[3]) wvals[3].textContent = w.vis;
+}, 9000);
+
+// ── CROWD DENSITY CYCLING ─────────────────────────────────────────────────
+var _crowdStates = [
+  {level:'High Density',  density:'2.7 people/m²', cls:'status-alert',  text:'● High'},
+  {level:'Moderate',      density:'1.8 people/m²', cls:'status-normal', text:'● Moderate'},
+  {level:'Very High',     density:'3.4 people/m²', cls:'status-alert',  text:'● Critical'},
+  {level:'Moderate',      density:'2.2 people/m²', cls:'status-alert',  text:'● High'},
+  {level:'Low',           density:'0.9 people/m²', cls:'status-normal', text:'● Normal'},
+];
+var _crowdIdx = 0;
+setInterval(function () {
+  var panel = document.getElementById('panel-crowd');
+  if (!panel) return;
+  _crowdIdx = (_crowdIdx + 1) % _crowdStates.length;
+  var s = _crowdStates[_crowdIdx];
+  var level  = panel.querySelector('.crowd-level');
+  var num    = panel.querySelector('.crowd-num');
+  var badge  = panel.querySelector('.panel-head span:last-child');
+  if (level)  level.textContent  = s.level;
+  if (num)    num.textContent    = s.density;
+  if (badge)  { badge.className = s.cls; badge.textContent = s.text; }
+}, 4800);
+
+// ── TRAFFIC SUB-LABEL CYCLING ─────────────────────────────────────────────
+setInterval(function () {
+  var congEl = document.querySelector('.traffic-overview .stat-sub.warn, .traffic-overview .stat-sub.alert');
+  if (congEl) {
+    var v = parseInt(document.querySelectorAll('.traffic-overview .stat-value')[1].textContent) || 68;
+    congEl.className = 'stat-sub ' + (v >= 75 ? 'alert' : v >= 60 ? 'warn' : 'up');
+    congEl.textContent = v >= 75 ? 'Critical' : v >= 60 ? 'High' : 'Normal';
+  }
+  // Notify count
+  var notifBig = document.querySelector('.notif-big');
+  if (notifBig) _smoothTo(notifBig, _rnd(7, 3), 600);
+}, 3500);
+
 // ── CROWD HEATMAP SCANNING LINE ───────────────────────────────────────────
 (function () {
   const s = document.createElement('style');
