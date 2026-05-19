@@ -27,33 +27,35 @@ import p18 from "@/assets/v2/panels/18_communications.png";
 import pSurv from "@/assets/v2/panels/city wide surveillance.png";
 import pLPR from "@/assets/v2/panels/license plate recognition.png";
 
-const wallPanels = [p01, p02, p04, p05, p06, p07, p08, p09, p10, p11, p12, p13, p14, p15, p16, p17, p18, pSurv, pLPR];
+// 20 panels (repeat p01 once) → clean 5 × 4 grid
+const wallPanels = [p01, p02, p04, p05, p06, p07, p08, p09, p10, p11, p12, p13, p14, p15, p16, p17, p18, pSurv, pLPR, p01];
 
-// 5 columns: [4, 4, 4, 4, 3] = 19 panels; centre column forward, sides curve back
+// 5 columns × 4 rows; steep curve so outer cols angle away like a real control-room wall
 const wallColumns = [
   wallPanels.slice(0, 4),
   wallPanels.slice(4, 8),
   wallPanels.slice(8, 12),
   wallPanels.slice(12, 16),
-  wallPanels.slice(16, 19),
+  wallPanels.slice(16, 20),
 ];
-const wallRotations = [38, 19, 0, -19, -38];
+const wallRotations = [52, 26, 0, -26, -52];
 
 function VideoWall() {
   return (
     <div
-      className="absolute inset-0 bg-slate-950 overflow-hidden"
-      style={{ perspective: "1000px", perspectiveOrigin: "50% 50%" }}
+      className="absolute inset-0 overflow-hidden bg-[#050810]"
+      // Close perspective (460 px) + eye-level origin = viewer inside the room
+      style={{ perspective: "460px", perspectiveOrigin: "50% 58%" }}
     >
-      <div className="absolute inset-3 flex gap-2 items-stretch">
+      <div className="absolute inset-0 flex gap-[3px] items-stretch">
         {wallColumns.map((col, ci) => (
           <div
             key={ci}
-            className="flex-1 flex flex-col gap-2"
+            className="flex-1 flex flex-col gap-[3px]"
             style={{ transform: `rotateY(${wallRotations[ci]}deg)` }}
           >
             {col.map((src, pi) => (
-              <div key={pi} className="flex-1 overflow-hidden rounded-[2px] border border-white/10">
+              <div key={pi} className="flex-1 overflow-hidden border border-white/[0.06]">
                 <img src={src} alt="" className="h-full w-full object-cover" />
               </div>
             ))}
@@ -348,25 +350,31 @@ function Index() {
       <SiteNav />
 
       <main className="overflow-x-hidden pt-14">
-        {/* HERO */}
-        <section className="border-b border-border overflow-hidden">
-          <div className="mx-auto grid max-w-[1440px] lg:grid-cols-2 lg:min-h-[92vh]">
-            {/* Left: text on clean background */}
-            <div className="relative flex flex-col justify-end px-6 pb-14 pt-20 sm:px-10 md:pb-20 lg:px-16">
-              <div className="vx-grid pointer-events-none absolute inset-0 opacity-20" />
-              <div className="relative vx-reveal">
+        {/* HERO — full-bleed video wall, viewer inside the control room */}
+        <section className="relative border-b border-border overflow-hidden min-h-[95vh]">
+          {/* Video wall fills the full section */}
+          <VideoWall />
+
+          {/* Scrim — left-side only so right half of wall stays fully visible */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050810]/92 via-[#050810]/55 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#050810]/75 to-transparent" />
+
+          {/* Text */}
+          <div className="relative flex min-h-[95vh] items-end">
+            <div className="mx-auto w-full max-w-[1440px] px-6 pb-14 sm:px-10 md:pb-20 lg:px-16">
+              <div className="max-w-2xl vx-reveal">
                 <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
-                <h1 className="mb-7 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:mb-9 md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
+                <h1 className="mb-7 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight text-white sm:text-5xl md:mb-9 md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
                   <br />
                   infrastructure.
                 </h1>
-                <p className="w-full text-base leading-relaxed text-muted-foreground md:text-lg">
+                <p className="w-full text-base leading-relaxed text-slate-300 md:text-lg">
                   Vertifex Technology specializes in smart integration solutions for
                   infrastructure and industrial environments. We deliver smart infrastructure
                   solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
@@ -385,21 +393,17 @@ function Index() {
                   </a>
                   <a
                     href="#services"
-                    className="inline-flex items-center gap-2 border border-border px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
+                    className="inline-flex items-center gap-2 border border-white/30 px-5 py-3 tracking-widest text-white transition-colors hover:border-primary hover:text-primary"
                   >
                     Explore Services
                   </a>
                 </div>
               </div>
-              <div className="relative mt-8 border-l-2 border-primary pl-4">
-                <p className="text-sm font-bold uppercase tracking-widest text-primary">
+              <div className="mt-8 border-l-2 border-primary pl-4">
+                <p className="text-sm font-bold uppercase tracking-widest text-slate-300">
                   Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
                 </p>
               </div>
-            </div>
-            {/* Right: curved video wall */}
-            <div className="relative min-h-[50vh] order-first lg:order-last">
-              <VideoWall />
             </div>
           </div>
         </section>
