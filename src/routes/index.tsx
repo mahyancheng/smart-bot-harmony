@@ -13,13 +13,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Vertifex Technology Sdn. Bhd. — solution developer delivering smart transportation, smart city, ICT & IoT, energy solutions, and integrated automation for infrastructure and industrial environments.",
+          "Vertifex Technology Sdn. Bhd. — solution developer delivering smart transportation, smart city, Information & Communication Technology (ICT) and Internet of Things (IoT), energy solutions, and integrated automation for infrastructure and industrial environments.",
       },
       { property: "og:title", content: "Vertifex Technology — Company Profile" },
       {
         property: "og:description",
         content:
-          "Official company profile of Vertifex Technology — smart infrastructure, transportation, ICT & IoT, energy, and integrated automation solutions.",
+          "Official company profile of Vertifex Technology — smart infrastructure, transportation, Information & Communication Technology (ICT) and Internet of Things (IoT), energy, and integrated automation solutions.",
       },
       { property: "og:image", content: heroImage },
       { name: "twitter:image", content: heroImage },
@@ -32,7 +32,7 @@ const serviceTags = [
   "Solution Developer",
   "Smart Transportation",
   "Smart City",
-  "ICT & IoT",
+  "Information & Communication Technology (ICT) & Internet of Things (IoT)",
   "Energy Solutions",
   "Integrated Systems",
   "Engineering Delivery",
@@ -82,7 +82,7 @@ const services = [
     desc: "Delivering smart system integration solutions for infrastructure and industrial environments.",
     capabilities: [
       "Industrial System Integration",
-      "ICT & IoT Integration",
+      "Information & Communication Technology (ICT) and Internet of Things (IoT) Integration",
       "Infrastructure Connectivity",
       "Smart Monitoring Platforms",
       "Integrated Operational Systems",
@@ -165,18 +165,18 @@ const capabilities = [
     title: "Smart City Solutions",
     description:
       "Centralized management systems, digital twin technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) integration, intelligent analytics, and connected operational technologies for sustainable urban environments.",
-    note: "DIGITAL TWIN // ANALYTICS // URBAN IOT",
+    note: "DIGITAL TWIN // ANALYTICS // URBAN INTERNET OF THINGS (IoT)",
     image: cityImage,
     alt: "Aerial view of smart city at twilight with floating dark data surveillance panels",
   },
   {
     index: "03",
-    title: "ICT & IoT Infrastructure",
+    title: "Information & Communication Technology (ICT) and Internet of Things (IoT) Infrastructure",
     description:
       "Networking, edge compute, sensor fabrics, SCADA integration, and cloud-connected Internet of Things (IoT) platforms that turn field data into operational decisions — built for mission-critical environments.",
     note: "NETWORK // EDGE // CLOUD // SCADA",
     image: datacenterImage,
-    alt: "White data center corridor with floating cyan network topology and IoT sensor feed panels",
+    alt: "White data center corridor with floating cyan network topology and Internet of Things (IoT) sensor feed panels",
   },
 ];
 
@@ -187,7 +187,7 @@ const techPillars = [
     items: [
       "Centralized Management Systems",
       "Intelligent Detection & Sensing",
-      "ICT & IoT for Transport",
+      "Information & Communication Technology (ICT) and Internet of Things (IoT) for Transport",
       "ELV & Operational Systems",
     ],
   },
@@ -196,17 +196,17 @@ const techPillars = [
     title: "Smart City & Digital Twin",
     items: [
       "Digital Twin Technologies",
-      "Urban IoT Platforms",
+      "Urban Internet of Things (IoT) Platforms",
       "Intelligent Analytics",
       "Connected Infrastructure",
     ],
   },
   {
     code: "T.03",
-    title: "ICT & IoT",
+    title: "Information & Communication Technology (ICT) and Internet of Things (IoT)",
     items: [
-      "ICT Infrastructure",
-      "IoT Connectivity",
+      "Information & Communication Technology (ICT) Infrastructure",
+      "Internet of Things (IoT) Connectivity",
       "Network Integration",
       "Smart Devices & Sensors",
     ],
@@ -691,7 +691,7 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">SPECIALTY</span>
-                  <span>SMART CITY / ICT / IOT</span>
+                  <span>SMART CITY / INFORMATION &amp; COMMUNICATION TECHNOLOGY (ICT) / INTERNET OF THINGS (IoT)</span>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">REGION</span>
