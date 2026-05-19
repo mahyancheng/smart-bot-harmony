@@ -66,7 +66,12 @@ const aboutCards = [
   {
     k: "// MISSION",
     t: "Mission",
-    d: "Empower infrastructure and industrial environments through smart integration and operational technology solutions. Accelerate digital transformation through intelligent connectivity, automation, and innovative technologies. Optimize operational efficiency, infrastructure reliability, and sustainable green development through integrated solutions. Deliver reliable engineering expertise and long-term technical support that create lasting customer value.",
+    d: [
+      "Empower infrastructure and industrial environments through smart integration and operational technology solutions.",
+      "Accelerate digital transformation through intelligent connectivity, automation, and innovative technologies.",
+      "Optimize operational efficiency, infrastructure reliability, and sustainable green development through integrated solutions.",
+      "Deliver reliable engineering expertise and long-term technical support that create lasting customer value.",
+    ],
   },
 ];
 
@@ -392,7 +397,18 @@ function Index() {
                     <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight">
                       {item.t}
                     </h3>
-                    <p className="mt-4 text-base leading-relaxed text-muted-foreground">{item.d}</p>
+                    {Array.isArray(item.d) ? (
+                      <div className="mt-4 space-y-3">
+                        {item.d.map((line, i) => (
+                          <p key={i} className="flex gap-2.5 text-base leading-relaxed text-muted-foreground">
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70" />
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="mt-4 text-base leading-relaxed text-muted-foreground">{item.d}</p>
+                    )}
                   </div>
                 ))}
               </div>
