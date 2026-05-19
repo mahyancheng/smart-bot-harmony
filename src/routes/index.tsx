@@ -291,29 +291,17 @@ function Index() {
 
       <main className="overflow-x-hidden pt-14">
         {/* HERO */}
-        <section className="relative min-h-[92vh] border-b border-border overflow-hidden">
-          {/* Background image — full bleed */}
-          <img
-            src={heroImage}
-            alt="Futuristic white control room with floating dark surveillance and analytics panels"
-            width={1920}
-            height={1080}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          {/* Gradient scrim — covers full area for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/85 to-background/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/30 to-transparent" />
-          <div className="vx-grid pointer-events-none absolute inset-0 opacity-25" />
-
-          {/* Text overlay */}
-          <div className="relative flex h-full min-h-[92vh] items-end">
-            <div className="mx-auto w-full max-w-[1440px] px-6 pb-14 sm:px-10 md:pb-20 lg:px-16">
-              <div className="vx-reveal">
+        <section className="border-b border-border overflow-hidden">
+          <div className="mx-auto grid max-w-[1440px] lg:grid-cols-2 lg:min-h-[92vh]">
+            {/* Left: text on clean background */}
+            <div className="relative flex flex-col justify-end px-6 pb-14 pt-20 sm:px-10 md:pb-20 lg:px-16">
+              <div className="vx-grid pointer-events-none absolute inset-0 opacity-20" />
+              <div className="relative vx-reveal">
                 <div className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-primary sm:text-base">
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
-                <h1 className="mb-7 font-display text-[3rem] font-black uppercase leading-[0.92] tracking-tight sm:text-6xl md:mb-9 md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]">
+                <h1 className="mb-7 font-display text-[3rem] font-black uppercase leading-[0.92] tracking-tight sm:text-6xl md:mb-9 md:text-7xl lg:text-[5.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
@@ -339,17 +327,27 @@ function Index() {
                   </a>
                   <a
                     href="#services"
-                    className="inline-flex items-center gap-2 border border-border bg-background/40 backdrop-blur-sm px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
+                    className="inline-flex items-center gap-2 border border-border px-5 py-3 tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
                   >
                     Explore Services
                   </a>
                 </div>
               </div>
-              <div className="mt-8">
-                <span className="rounded-sm border border-primary/40 bg-card/70 px-3 py-2 text-sm font-bold uppercase tracking-widest text-primary backdrop-blur-md">
+              <div className="relative mt-8">
+                <span className="rounded-sm border border-primary/40 bg-card px-3 py-2 text-sm font-bold uppercase tracking-widest text-primary">
                   Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
                 </span>
               </div>
+            </div>
+            {/* Right: hero image — no overlay */}
+            <div className="relative min-h-[50vh] order-first lg:order-last">
+              <img
+                src={heroImage}
+                alt="Futuristic white control room with floating dark surveillance and analytics panels"
+                width={1920}
+                height={1080}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
             </div>
           </div>
         </section>
@@ -552,7 +550,6 @@ function Index() {
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
             </div>
           </div>
 
@@ -630,7 +627,6 @@ function Index() {
                     loading="lazy"
                     className="h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-accent/20" />
                 </div>
               </div>
             </div>
