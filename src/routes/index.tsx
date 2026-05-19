@@ -248,10 +248,6 @@ const industries = [
     t: "Industrial & Manufacturing",
     d: "Automation systems, robotics integration, industrial monitoring, ICT infrastructure, and IoT technologies for manufacturing and production environments.",
   },
-  {
-    t: "Infrastructure & Utilities",
-    d: "Smart infrastructure systems, centralized monitoring platforms, ICT networks, and operational technology solutions for critical infrastructure environments.",
-  },
 ];
 
 const whyChoose = [
@@ -385,10 +381,6 @@ function Index() {
                   Solution developer for infrastructure modernization and industrial digitalization
                   — built around real connectivity, operational efficiency, and sustainable development.
                 </p>
-                <div className="mt-8 inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-bold uppercase tracking-widest text-primary">
-                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-                  Solution Developer · Malaysia
-                </div>
               </div>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:col-span-8 md:grid-cols-2">
                 {aboutCards.map((item) => (
