@@ -301,7 +301,7 @@ function Index() {
                   <span className="vx-gradient-bar h-2.5 w-2.5 rounded-full" />
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
-                <h1 className="mb-7 font-display text-[3rem] font-black uppercase leading-[0.92] tracking-tight sm:text-6xl md:mb-9 md:text-7xl lg:text-[5.5rem]">
+                <h1 className="mb-7 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:mb-9 md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
                   Smart systems
                   <br />
                   for <span className="vx-gradient-text">real</span>
@@ -333,10 +333,10 @@ function Index() {
                   </a>
                 </div>
               </div>
-              <div className="relative mt-8">
-                <span className="rounded-sm border border-primary/40 bg-card px-3 py-2 text-sm font-bold uppercase tracking-widest text-primary">
+              <div className="relative mt-8 border-l-2 border-primary pl-4">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary">
                   Empowering Businesses Through Integrated Digital Solutions &amp; Smart Systems
-                </span>
+                </p>
               </div>
             </div>
             {/* Right: hero image — no overlay */}
