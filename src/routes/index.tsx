@@ -252,49 +252,36 @@ const industries = [
 const whyChoose = [
   {
     n: "01",
-    t: "Integrated Engineering Approach",
-    d: "We deliver integrated systems and technologies as unified operational solutions rather than disconnected products.",
-  },
-  {
-    n: "02",
     t: "End-to-End Project Delivery",
     d: "Managing the complete project lifecycle from consultation and design to implementation, commissioning, and operational support.",
   },
   {
-    n: "03",
+    n: "02",
     t: "Smart Infrastructure Expertise",
     d: "Specializing in smart infrastructure, operational technologies, ICT & IoT, automation, and intelligent integration solutions for infrastructure environments.",
   },
   {
-    n: "04",
+    n: "03",
     t: "Practical & Scalable Solutions",
     d: "Developing reliable, scalable, and future-ready solutions aligned with operational and infrastructure requirements.",
   },
   {
-    n: "05",
+    n: "04",
     t: "Responsive Customer Support",
     d: "Providing responsive technical support, maintenance services, and operational assistance to ensure system reliability and business continuity.",
   },
   {
-    n: "06",
+    n: "05",
     t: "Customer-Centric Collaboration",
     d: "Working closely with customers to understand operational challenges, deliver tailored solutions, and build long-term trusted partnerships.",
   },
   {
-    n: "07",
+    n: "06",
     t: "Long-Term Service Commitment",
     d: "Committed to continuous support, system enhancement, and reliable service delivery that sustain operational performance and customer success.",
   },
 ];
 
-const deliverySteps: [string, string, string][] = [
-  ["01", "Consultation & Requirement Study", "Understanding operational requirements, project objectives, and site environments."],
-  ["02", "Design & Engineering", "Developing system architecture, engineering design, and implementation planning."],
-  ["03", "Integration & Implementation", "System integration, deployment, configuration, and infrastructure installation."],
-  ["04", "Testing & Commissioning", "Conducting testing, validation, commissioning, and operational verification."],
-  ["05", "Training & Handover", "Providing operational training, documentation, and system handover support."],
-  ["06", "Support & Maintenance", "Delivering technical support, monitoring, maintenance, and system enhancement services."],
-];
 
 function Index() {
   return (
@@ -569,7 +556,7 @@ function Index() {
           </div>
         </section>
 
-        {/* 05 WHY CHOOSE + DELIVERY APPROACH */}
+        {/* 05 WHY CHOOSE */}
         <section id="approach" className="border-b border-border">
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
@@ -587,7 +574,7 @@ function Index() {
               </div>
             </div>
 
-            <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
               {whyChoose.map((w) => (
                 <article key={w.n} className="vx-glow group bg-card p-7 md:p-8 transition-colors">
                   <div className="flex items-center justify-between">
@@ -601,30 +588,6 @@ function Index() {
                 </article>
               ))}
             </div>
-
-            <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:items-start">
-              <div className="lg:col-span-4">
-                <div className="text-sm font-bold text-primary">// PROJECT_DELIVERY_APPROACH</div>
-                <h3 className="mt-4 font-display text-2xl font-black uppercase tracking-tight md:text-3xl">
-                  From requirement to operational handover.
-                </h3>
-                <p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Six structured phases — designed for predictable, traceable engineering delivery.
-                </p>
-              </div>
-              <ol className="lg:col-span-8 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-2">
-                {deliverySteps.map(([n, t, d]) => (
-                  <li key={n} className="bg-card p-7">
-                    <div className="flex items-center gap-3">
-                      <span className="font-display text-3xl font-black text-primary">{n}</span>
-                      <span className="vx-gradient-bar h-px flex-1" />
-                    </div>
-                    <h4 className="mt-3 font-display text-base font-black uppercase tracking-tight md:text-lg">{t}</h4>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">{d}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
           </div>
         </section>
 
@@ -636,16 +599,12 @@ function Index() {
               <div className="lg:col-span-7">
                 <div className="text-sm font-bold text-primary">// 06_OUR_COMMITMENT</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase leading-[1.05] tracking-tight sm:text-4xl md:text-[3.2rem]">
-                  Practical. Reliable. <span className="vx-gradient-text">Integrated</span>.
+                  Reliable. Future-ready. <span className="vx-gradient-text">Integrated</span>.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-                  Vertifex Technology is committed to delivering practical, reliable, and integrated
-                  technology solutions that support operational efficiency, system reliability, and
-                  long-term customer success.
-                </p>
-                <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Partner with Vertifex for integrated automation, engineering, and operational
-                  technology solutions tailored for industrial and infrastructure environments.
+                  Vertifex Technology is committed to delivering reliable and future-ready smart
+                  integration solutions that support operational excellence, infrastructure
+                  reliability, sustainable development, and long-term customer partnerships.
                 </p>
               </div>
               <div className="lg:col-span-5">
@@ -672,18 +631,18 @@ function Index() {
             <div className="lg:col-span-7">
               <div className="mb-4 text-sm font-bold text-primary">// 07_CONTACT</div>
               <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-6xl">
-                Let's build the
+                Build smarter,
                 <br />
-                <span className="vx-gradient-text">smart infrastructure</span> layer.
+                <span className="vx-gradient-text">more connected</span> infrastructure.
               </h2>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                Smart transportation, smart city platforms, ICT &amp; IoT backbone, energy
-                solutions or full integrated system delivery — Vertifex can structure the
-                solution from concept to operational handover.
+                Partner with Vertifex Technology to build smarter, more connected, and sustainable
+                infrastructure through integrated technologies, engineering expertise, and reliable
+                operational solutions.
               </p>
               <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                 <a
-                  href="mailto:yc@vertifextechnology.com"
+                  href="mailto:info@vertifextechnology.com"
                   className="vx-glow inline-flex items-center gap-3 bg-primary px-7 py-4 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   Request Engagement →
@@ -727,8 +686,8 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3 border-b border-border pb-3">
                   <span className="text-muted-foreground">EMAIL</span>
-                  <a href="mailto:yc@vertifextechnology.com" className="text-primary">
-                    yc@vertifextechnology.com
+                  <a href="mailto:info@vertifextechnology.com" className="text-primary">
+                    info@vertifextechnology.com
                   </a>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">
