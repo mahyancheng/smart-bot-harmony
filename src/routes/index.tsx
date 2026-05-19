@@ -6,6 +6,64 @@ import datacenterImage from "@/assets/v2/cap-datacenter.png";
 import commitmentImage from "@/assets/v2/commitment.png";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
+// Command centre video wall panels
+import p01 from "@/assets/v2/panels/01_traffic_overview.png";
+import p02 from "@/assets/v2/panels/02_weather.png";
+import p04 from "@/assets/v2/panels/04_alerts.png";
+import p05 from "@/assets/v2/panels/05_plate_reader_anpr.png";
+import p06 from "@/assets/v2/panels/06_notifications.png";
+import p07 from "@/assets/v2/panels/07_system_health.png";
+import p08 from "@/assets/v2/panels/08_transit_status.png";
+import p09 from "@/assets/v2/panels/09_air_quality_downtown.png";
+import p10 from "@/assets/v2/panels/10_air_quality_harbor.png";
+import p11 from "@/assets/v2/panels/11_building_alerts.png";
+import p12 from "@/assets/v2/panels/12_crowd_density.png";
+import p13 from "@/assets/v2/panels/13_network_traffic.png";
+import p14 from "@/assets/v2/panels/14_shotspotter_alert.png";
+import p15 from "@/assets/v2/panels/15_unit_status.png";
+import p16 from "@/assets/v2/panels/16_incident_timeline.png";
+import p17 from "@/assets/v2/panels/17_recent_events.png";
+import p18 from "@/assets/v2/panels/18_communications.png";
+import pSurv from "@/assets/v2/panels/city wide surveillance.png";
+import pLPR from "@/assets/v2/panels/license plate recognition.png";
+
+const wallPanels = [p01, p02, p04, p05, p06, p07, p08, p09, p10, p11, p12, p13, p14, p15, p16, p17, p18, pSurv, pLPR];
+
+// 5 columns: [4, 4, 4, 4, 3] = 19 panels; centre column forward, sides curve back
+const wallColumns = [
+  wallPanels.slice(0, 4),
+  wallPanels.slice(4, 8),
+  wallPanels.slice(8, 12),
+  wallPanels.slice(12, 16),
+  wallPanels.slice(16, 19),
+];
+const wallRotations = [38, 19, 0, -19, -38];
+
+function VideoWall() {
+  return (
+    <div
+      className="absolute inset-0 bg-slate-950 overflow-hidden"
+      style={{ perspective: "1000px", perspectiveOrigin: "50% 50%" }}
+    >
+      <div className="absolute inset-3 flex gap-2 items-stretch">
+        {wallColumns.map((col, ci) => (
+          <div
+            key={ci}
+            className="flex-1 flex flex-col gap-2"
+            style={{ transform: `rotateY(${wallRotations[ci]}deg)` }}
+          >
+            {col.map((src, pi) => (
+              <div key={pi} className="flex-1 overflow-hidden rounded-[2px] border border-white/10">
+                <img src={src} alt="" className="h-full w-full object-cover" />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -339,15 +397,9 @@ function Index() {
                 </p>
               </div>
             </div>
-            {/* Right: hero image — no overlay */}
+            {/* Right: curved video wall */}
             <div className="relative min-h-[50vh] order-first lg:order-last">
-              <img
-                src={heroImage}
-                alt="Futuristic white control room with floating dark surveillance and analytics panels"
-                width={1920}
-                height={1080}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <VideoWall />
             </div>
           </div>
         </section>
