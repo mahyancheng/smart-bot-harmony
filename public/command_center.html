@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Citywide Surveillance — Ops Wall v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000;
+    --panel: #0a0d12;
+    --panel-2: #0e1218;
+    --panel-3: #141a23;
+    --border: #1a1f28;
+    --border-2: #232a35;
+    --text: #e6ebf2;
+    --text-dim: #8a94a3;
+    --text-faint: #5a6473;
+    --green: #34d96b;
+    --green-dim: #1f8a44;
+    --red: #ff4d4d;
+    --red-bg: #2a0f12;
+    --orange: #ff9d2e;
+    --yellow: #f5d142;
+    --blue: #4aa8ff;
+    --blue-bright: #5db4ff;
+    --purple: #a87bff;
+    --cyan: #3fd6d2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #000;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    width: 1920px;
+    padding: 24px;
+  }
+  .wall {
+    display: grid;
+    grid-template-columns: 180px 200px 1fr 240px 240px 180px;
+    grid-template-rows: 290px 290px auto;
+    gap: 14px;
+  }
+  .row3-grid {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr 1.4fr 1.3fr 1.4fr 1.2fr;
+    gap: 14px;
+    height: 320px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .live::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+  .status-normal { color: var(--green); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
+  .status-alert { color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
+
+  /* === ROW 1 grid placements === */
+  .traffic-overview { grid-column: 1; grid-row: 1; }
+  .weather { grid-column: 2; grid-row: 1; }
+  .map-main { grid-column: 3; grid-row: 1 / span 2; }
+  .alerts { grid-column: 4; grid-row: 1; }
+  .plate-reader { grid-column: 5; grid-row: 1; }
+  .notifications { grid-column: 6; grid-row: 1; }
+
+  /* === ROW 2 grid placements === */
+  .system-health { grid-column: 1; grid-row: 2; }
+  .transit { grid-column: 2; grid-row: 2; }
+  .air-quality-1 { grid-column: 4; grid-row: 2; }
+  .air-quality-2 { grid-column: 5; grid-row: 2; }
+  .building-alerts { grid-column: 6; grid-row: 2; }
+
+  .view-all-link { font-size: 10px; color: var(--blue); text-align: center; padding: 6px 0 0; cursor: pointer; }
+
+  /* === TRAFFIC OVERVIEW === */
+  .stat-row { display: flex; gap: 10px; margin-bottom: 8px; }
+  .stat { flex: 1; }
+  .stat-label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 500; line-height: 1.1; margin-top: 2px; }
+  .stat-sub { font-size: 9px; margin-top: 1px; }
+  .stat-sub.up { color: var(--green); }
+  .stat-sub.warn { color: var(--orange); }
+  .stat-sub.alert { color: var(--red); }
+  .sparkline { height: 60px; margin-top: 8px; position: relative; }
+  .sparkline svg { width: 100%; height: 100%; display: block; }
+  .axis-labels { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-faint); margin-top: 4px; }
+
+  /* === WEATHER === */
+  .weather-main { display: flex; align-items: center; gap: 10px; margin: 4px 0 10px; }
+  .weather-icon { font-size: 30px; line-height: 1; }
+  .weather-temp { font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 500; }
+  .weather-cond { font-size: 11px; color: var(--text); }
+  .weather-feels { font-size: 9px; color: var(--text-faint); }
+  .weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-top: 4px; }
+  .wmetric-label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.4px; }
+  .wmetric-value { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+  .forecast { display: flex; justify-content: space-between; margin-top: auto; padding-top: 8px; }
+  .forecast-hour { text-align: center; }
+  .fh-time { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-faint); }
+  .fh-icon { font-size: 12px; margin: 2px 0; }
+  .fh-temp { font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
+
+  /* ===========================================================
+     MAP MAIN (upgraded — reference 1)
+     =========================================================== */
+  .map-main { padding: 0; }
+  .map-header {
+    display: grid;
+    grid-template-columns: 30px 1fr auto auto;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .map-logo {
+    width: 26px; height: 26px;
+    border: 1.5px solid var(--text);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .map-title-main {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text);
+    flex-grow: 1;
+  }
+  .map-mode-toggle {
+    display: flex;
+    background: var(--panel-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .mode-btn {
+    padding: 4px 12px;
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text-dim);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .mode-btn.active {
+    background: var(--panel-3);
+    color: var(--text);
+  }
+  .map-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .map-header-actions > span { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+  .alert-badge {
+    background: var(--red);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 8px;
+    margin-left: 3px;
+  }
+  .map-timestamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .map-utc {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-left: 4px;
+  }
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .live-pill::before {
+    content: '';
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  .map-body { display: flex; flex: 1; min-height: 0; }
+  .map-sidebar-left {
+    width: 180px;
+    padding: 10px 12px;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .map-sidebar-right {
+    width: 220px;
+    padding: 10px 12px;
+    border-left: 1px solid var(--border);
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .map-canvas {
+    flex: 1;
+    position: relative;
+    background: #050709;
+    overflow: hidden;
+  }
+  .sidebar-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .sidebar-section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .sidebar-hide {
+    font-size: 10px;
+    color: var(--text-faint);
+    cursor: pointer;
+  }
+  .layer-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .layer-icon {
+    width: 16px; height: 16px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .layer-icon.cameras { background: rgba(74,168,255,0.15); color: var(--blue); }
+  .layer-icon.traffic { background: rgba(52,217,107,0.15); color: var(--green); }
+  .layer-icon.incidents { background: rgba(255,77,77,0.15); color: var(--red); }
+  .layer-icon.units { background: rgba(168,123,255,0.15); color: var(--purple); }
+  .layer-icon.events { background: rgba(255,157,46,0.15); color: var(--orange); }
+  .layer-icon.muted { background: var(--panel-2); color: var(--text-faint); }
+  .layer-name { flex: 1; }
+  .layer-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+  .layer-check {
+    width: 14px; height: 14px;
+    border: 1px solid var(--border-2);
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .layer-check.on { background: var(--green); border-color: var(--green); }
+  .layer-check.on::after { content: '✓'; color: #000; font-size: 9px; font-weight: 700; }
+  .add-layer {
+    margin-top: 10px;
+    padding: 7px;
+    border: 1px dashed var(--border-2);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .filter-row {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .filter-label { color: var(--text-dim); }
+  .filter-select {
+    background: var(--panel-2);
+    border: 1px solid var(--border-2);
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-size: 10px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    width: 100%;
+  }
+  .filter-search-input {
+    background: var(--panel-2);
+    border: 1px solid var(--border-2);
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-size: 10px;
+    color: var(--text-faint);
+    font-family: 'IBM Plex Mono', monospace;
+    width: 100%;
+  }
+
+  /* Map sidebar right column */
+  .io-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .io-stat-card {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 6px 8px;
+  }
+  .io-stat-label { font-size: 8px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .io-stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 500; margin-top: 1px; line-height: 1.1; }
+  .io-stat-value.red { color: var(--red); }
+  .io-stat-sub { font-size: 8px; margin-top: 1px; }
+  .io-stat-sub.up { color: var(--green); }
+  .io-stat-sub.down { color: var(--red); }
+
+  .incident-card {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .incident-card:last-of-type { border-bottom: none; }
+  .incident-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .incident-dot.red { background: var(--red); box-shadow: 0 0 6px rgba(255,77,77,0.5); }
+  .incident-dot.orange { background: var(--orange); }
+  .incident-dot.yellow { background: var(--yellow); }
+  .incident-dot.purple { background: var(--purple); }
+  .incident-dot.green { background: var(--green); }
+  .incident-name { font-size: 12px; color: var(--text); font-weight: 500; }
+  .incident-loc { font-size: 10px; color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; margin-top: 1px; }
+  .incident-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+  .unit-table-mini { width: 100%; font-size: 10px; margin-top: 4px; }
+  .unit-table-mini td { padding: 5px 4px; border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; }
+  .unit-table-mini tr:last-child td { border-bottom: none; }
+  .unit-id { color: var(--text); }
+  .unit-stat-en { color: var(--orange); font-size: 9px; }
+  .unit-stat-on { color: var(--green); font-size: 9px; }
+  .unit-stat-av { color: var(--text-dim); font-size: 9px; }
+
+  /* Map canvas */
+  .map-svg { width: 100%; height: 100%; display: block; }
+  .map-tool-rail {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(14,18,24,0.92);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 4px;
+    display: none; /* hidden because UNIT popup is in this corner */
+    flex-direction: column;
+    gap: 3px;
+    backdrop-filter: blur(8px);
+  }
+  .tool-btn {
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .tool-btn.active { background: var(--blue); color: #fff; }
+
+  /* Map popups */
+  .map-popup {
+    position: absolute;
+    background: rgba(14,18,24,0.96);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 8px 10px;
+    min-width: 140px;
+    max-width: 170px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+  }
+  .map-popup.incident { border-color: rgba(255,77,77,0.4); }
+  .popup-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .popup-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .popup-tag.incident { color: var(--red); }
+  .popup-tag.camera { color: var(--blue); }
+  .popup-tag.unit { color: var(--blue); }
+  .popup-actions { display: flex; gap: 6px; color: var(--text-faint); font-size: 10px; }
+  .popup-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .popup-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .popup-divider {
+    border-top: 1px solid var(--border);
+    margin: 6px -10px;
+  }
+  .popup-eta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    margin: 6px -10px -8px;
+    background: rgba(255,77,77,0.08);
+    border-top: 1px solid rgba(255,77,77,0.2);
+    border-radius: 0 0 6px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+  }
+  .popup-eta .label { color: var(--orange); }
+  .popup-eta .val { color: var(--text); }
+  .popup-cam-placeholder {
+    height: 40px;
+    background: var(--panel-3);
+    border: 1px dashed var(--border-2);
+    border-radius: 3px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    color: var(--text-faint);
+    letter-spacing: 1px;
+  }
+  .popup-unit-icon {
+    width: 24px; height: 24px;
+    background: var(--blue);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 12px;
+  }
+
+  /* District labels on map */
+  .district-label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    fill: rgba(230,235,242,0.5);
+    text-transform: uppercase;
+  }
+
+  /* Map bottom toolbar */
+  .map-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(14,18,24,0.92);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    padding: 4px;
+    backdrop-filter: blur(8px);
+  }
+  .map-bar-btn {
+    padding: 6px 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 48px;
+  }
+  .map-bar-btn .icon { font-size: 12px; color: var(--text-dim); }
+  .map-bar-btn .label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.4px; }
+  .map-bar-btn.active { background: rgba(74,168,255,0.15); }
+  .map-bar-btn.active .icon,
+  .map-bar-btn.active .label { color: var(--blue); }
+  .map-coords {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+  .map-scale {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .scale-bar {
+    width: 60px;
+    height: 6px;
+    border: 1px solid var(--text-faint);
+    border-top: none;
+  }
+  .map-footer-status {
+    display: flex;
+    gap: 24px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .map-footer-status .item .label { color: var(--text-faint); letter-spacing: 0.5px; text-transform: uppercase; font-size: 9px; }
+  .map-footer-status .item .val { color: var(--green); margin-top: 2px; font-size: 11px; }
+
+  /* === ALERTS === */
+  .alert-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
+  .alert-item-row {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .alert-item-row:last-of-type { border-bottom: none; }
+  .alert-time { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); }
+  .alert-body { font-size: 11px; }
+  .alert-title { color: var(--text); }
+  .alert-loc { font-size: 9px; color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; }
+
+  /* ===========================================================
+     PLATE READER (upgraded — inspired by reference 2)
+     =========================================================== */
+  .plate-table { width: 100%; font-size: 10px; border-collapse: collapse; }
+  .plate-table th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-faint);
+    font-weight: 400;
+    padding: 0 0 6px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+  .plate-table td {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .plate-table tr:last-child td { border-bottom: none; }
+  .plate-chip {
+    display: inline-block;
+    background: #f0f0e8;
+    color: #1a1a1a;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    border: 1px solid #888;
+  }
+  .plate-chip.flagged {
+    background: #ff4d4d;
+    color: #fff;
+    border-color: #cc0000;
+    box-shadow: 0 0 4px rgba(255,77,77,0.4);
+  }
+  .flag-cell { width: 18px; }
+  .flag {
+    width: 16px; height: 11px;
+    border-radius: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .flag.us {
+    background:
+      linear-gradient(to bottom,
+        #b22234 0, #b22234 1.2px, #fff 1.2px, #fff 2.4px,
+        #b22234 2.4px, #b22234 3.6px, #fff 3.6px, #fff 4.8px,
+        #b22234 4.8px, #b22234 6px, #fff 6px, #fff 7.2px,
+        #b22234 7.2px, #b22234 8.4px, #fff 8.4px, #fff 9.6px,
+        #b22234 9.6px, #b22234 11px);
+    position: relative;
+  }
+  .flag.us::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 7px; height: 5.5px; background: #3c3b6e;
+  }
+  .flag.mx {
+    background: linear-gradient(to right, #006847 33%, #fff 33%, #fff 66%, #ce1126 66%);
+  }
+  .flag.ca {
+    background: linear-gradient(to right, #ff0000 25%, #fff 25%, #fff 75%, #ff0000 75%);
+    position: relative;
+  }
+  .flag.ca::after {
+    content: '🍁'; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); font-size: 8px; color: red;
+  }
+  .flag.uk {
+    background:
+      linear-gradient(to bottom right, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+      linear-gradient(to bottom left, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+      linear-gradient(to right, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+      linear-gradient(to bottom, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+      #012169;
+  }
+  .conf {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+  }
+  .conf.high { color: var(--green); }
+  .conf.med { color: var(--yellow); }
+  .conf.low { color: var(--orange); }
+  .cam-id { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); }
+  .plate-time { font-family: 'IBM Plex Mono', monospace; color: var(--text-dim); font-size: 10px; text-align: right; }
+  .plate-time.flagged { color: var(--red); }
+
+  /* === NOTIFICATIONS PANEL (replaces street view) === */
+  .notif-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .notif-big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+  }
+  .notif-row {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 6px;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+  }
+  .notif-row:last-of-type { border-bottom: none; }
+  .notif-icon {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .notif-icon.red { background: var(--red); color: #fff; }
+  .notif-icon.orange { background: var(--orange); color: #000; }
+  .notif-icon.blue { background: var(--blue); color: #fff; }
+  .notif-icon.green { background: var(--green); color: #000; }
+  .notif-title { color: var(--text); }
+  .notif-time { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); }
+
+  /* === SYSTEM HEALTH (replaces camera grid) === */
+  .sys-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .sys-row:last-of-type { border-bottom: none; }
+  .sys-name { color: var(--text); }
+  .sys-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+  }
+  .sys-status .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .sys-status.ok { color: var(--green); }
+  .sys-status.ok .dot { background: var(--green); box-shadow: 0 0 4px var(--green); }
+  .sys-status.warn { color: var(--orange); }
+  .sys-status.warn .dot { background: var(--orange); }
+  .sys-status.err { color: var(--red); }
+  .sys-status.err .dot { background: var(--red); }
+  .sys-meta { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); margin-top: 1px; }
+  .sys-footer { margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
+  .sys-foot-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.4px; font-size: 8px; }
+  .sys-foot-val { color: var(--green); font-size: 11px; margin-top: 1px; }
+
+  /* === TRANSIT === */
+  .transit-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .transit-row:last-of-type { border-bottom: none; }
+  .transit-name { color: var(--text); }
+
+  /* === AIR QUALITY === */
+  .aqi-big { font-family: 'IBM Plex Mono', monospace; font-size: 38px; font-weight: 500; line-height: 1; }
+  .aqi-status { color: var(--green); font-size: 11px; margin-top: -2px; }
+  .aqi-bar { height: 6px; background: linear-gradient(90deg, #34d96b 0%, #f5d142 40%, #ff9d2e 70%, #ff4d4d 100%); border-radius: 3px; margin: 8px 0 4px; position: relative; }
+  .aqi-bar::after { content: ''; position: absolute; top: -2px; left: 14%; width: 2px; height: 10px; background: #fff; }
+  .aqi-bar-labels { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-faint); }
+  .aqi-metrics { display: grid; grid-template-columns: auto auto 1fr auto; gap: 4px 8px; font-size: 10px; margin-top: 8px; }
+  .aqi-metrics .lbl { color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; }
+  .aqi-metrics .val { font-family: 'IBM Plex Mono', monospace; color: var(--text); }
+  .aqi-metrics .stat { color: var(--green); font-family: 'IBM Plex Mono', monospace; text-align: right; }
+
+  /* === BUILDING ALERTS === */
+  .bldg-item { display: grid; grid-template-columns: 14px 1fr auto; gap: 6px; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 10px; }
+  .bldg-item:last-of-type { border-bottom: none; }
+  .bldg-icon { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 8px; color: #000; font-weight: 700; }
+  .bldg-icon.red { background: var(--red); color: #fff; }
+  .bldg-name { font-size: 10px; }
+  .bldg-desc { font-size: 9px; color: var(--text-faint); }
+  .bldg-time { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); }
+
+  /* === CROWD DENSITY === */
+  .crowd-heatmap { flex: 1; background: radial-gradient(circle at 60% 40%, rgba(255,77,77,0.6), rgba(255,157,46,0.4) 25%, rgba(245,209,66,0.2) 45%, transparent 65%); position: relative; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .crowd-heatmap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .crowd-info { position: absolute; top: 8px; left: 8px; }
+  .crowd-level { font-size: 14px; color: var(--red); font-weight: 600; }
+  .crowd-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+  .crowd-legend { position: absolute; bottom: 6px; left: 8px; right: 8px; display: flex; align-items: center; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-faint); }
+  .crowd-legend-bar { flex: 1; height: 4px; background: linear-gradient(90deg, #34d96b, #f5d142, #ff9d2e, #ff4d4d); border-radius: 2px; }
+
+  /* === NETWORK TRAFFIC === */
+  .net-chart { flex: 1; position: relative; margin-top: 4px; min-height: 120px; }
+  .net-chart svg { width: 100%; height: 100%; display: block; }
+  .net-foot { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); margin-top: 4px; }
+
+  /* === SHOTSPOTTER === */
+  .ss-title { color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; }
+  .ss-x { color: var(--text-faint); font-size: 14px; cursor: pointer; }
+  .ss-district { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .ss-time-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .ss-time { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 500; }
+  .ss-today { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); margin-left: 4px; }
+  .ss-shots { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .ss-shot-num { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 600; }
+  .ss-shot-label { font-size: 11px; color: var(--text); }
+  .ss-confidence { background: var(--red); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; padding: 3px 7px; border-radius: 3px; margin-left: auto; }
+  .ss-waveform { height: 24px; display: flex; align-items: center; gap: 1px; margin-bottom: 8px; }
+  .ss-wf-bar { width: 2px; background: var(--red); border-radius: 1px; }
+  .ss-addr { font-size: 11px; color: var(--text); line-height: 1.4; }
+  .ss-addr-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+  /* === UNIT STATUS === */
+  .unit-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  .unit-big { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 600; color: var(--blue); }
+  .unit-label { font-size: 10px; color: var(--text-dim); }
+  .unit-chips { display: flex; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; margin-bottom: 6px; }
+  .chip { background: var(--panel-2); border: 1px solid var(--border-2); border-radius: 3px; padding: 2px 5px; color: var(--text-dim); }
+  .chip .v { color: var(--text); margin-left: 3px; }
+  .chip.fire .v { color: var(--orange); }
+  .chip.ems .v { color: var(--cyan); }
+  .unit-table { width: 100%; font-size: 9px; }
+  .unit-table th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-faint); font-weight: 400; padding: 0 4px 4px 0; letter-spacing: 0.5px; text-transform: uppercase; }
+  .unit-table td { padding: 3px 4px 3px 0; font-family: 'IBM Plex Mono', monospace; font-size: 9px; border-bottom: 1px solid var(--border); }
+
+  /* === INCIDENT TIMELINE === */
+  .tl-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
+  .tl-item { display: grid; grid-template-columns: 12px 50px 1fr; gap: 6px; align-items: flex-start; padding: 3px 0; }
+  .tl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-top: 4px; }
+  .tl-dot.orange { background: var(--orange); }
+  .tl-dot.red { background: var(--red); }
+  .tl-time { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+  .tl-body { font-size: 10px; }
+  .tl-title { color: var(--text); }
+  .tl-sub { font-size: 9px; color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; margin-top: 1px; }
+
+  /* === RECENT EVENTS === */
+  .ev-item { display: grid; grid-template-columns: 50px 1fr; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 10px; }
+  .ev-item:last-of-type { border-bottom: none; }
+  .ev-time { font-family: 'IBM Plex Mono', monospace; color: var(--text-dim); font-size: 10px; }
+  .ev-title { color: var(--text); font-size: 10px; }
+  .ev-sub { color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
+
+  /* === COMMUNICATIONS (new in row 3) === */
+  .comm-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .comm-row:last-of-type { border-bottom: none; }
+  .comm-name { color: var(--text); }
+  .comm-right { display: flex; align-items: center; gap: 6px; }
+  .comm-count { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); background: var(--panel-2); border: 1px solid var(--border-2); border-radius: 10px; padding: 1px 8px; }
+
+  /* === LIVE ANIMATIONS === */
+  @keyframes blink-dot  { 0%,100%{opacity:1}  50%{opacity:.1}  }
+  @keyframes pulse-red  { 0%,100%{box-shadow:0 0 6px rgba(255,77,77,.4)} 50%{box-shadow:0 0 20px rgba(255,77,77,1)} }
+  @keyframes wf-bar-ani { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(.1)} }
+  @keyframes vx-draw    { from{stroke-dashoffset:500} to{stroke-dashoffset:0} }
+  @keyframes vx-fill    { 0%,100%{opacity:.35} 50%{opacity:.85} }
+  .live::before          { animation: blink-dot 1.4s ease-in-out infinite; }
+  .live-pill::before     { animation: blink-dot 1.4s ease-in-out infinite; }
+  .status-alert          { animation: blink-dot 1.8s ease-in-out infinite; }
+  .incident-dot.red      { animation: pulse-red 1.2s ease-in-out infinite; }
+  .ss-wf-bar             { transform-origin: center bottom; animation: wf-bar-ani var(--d,.8s) ease-in-out infinite; }
+  /* Sparkline draw loop */
+  .sparkline path[stroke]      { stroke-dasharray:500; animation: vx-draw 4s ease-in-out infinite alternate; }
+  .sparkline path:not([stroke]){ animation: vx-fill 4s ease-in-out infinite alternate; }
+  .net-chart path[stroke]      { stroke-dasharray:500; animation: vx-draw 5s ease-in-out 0.5s infinite alternate; }
+  .net-chart path:not([stroke]){ animation: vx-fill 5s ease-in-out 0.5s infinite alternate; }
+
+</style>
+</head>
+<body>
+
+<div class="wall">
+
+  <!-- ============ ROW 1 ============ -->
+
+  <!-- TRAFFIC OVERVIEW -->
+  <div class="panel traffic-overview">
+    <div class="panel-head">
+      <span class="panel-title">Traffic Overview</span>
+      <span class="live">Live</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-label">Average Speed</div>
+        <div class="stat-value">32 <span style="font-size: 11px; color: var(--text-dim);">mph</span></div>
+        <div class="stat-sub up">+12% vs avg</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-label">Congestion</div>
+        <div class="stat-value">68%</div>
+        <div class="stat-sub warn">High</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Incidents</div>
+        <div class="stat-value">15</div>
+        <div class="stat-sub alert">+3 vs avg</div>
+      </div>
+    </div>
+    <div class="sparkline">
+      <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="trafGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ff9d2e" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ff9d2e" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,40 L15,35 L30,38 L45,28 L60,32 L75,20 L90,25 L105,16 L120,22 L135,12 L150,20 L165,25 L180,28 L200,32 L200,60 L0,60 Z" fill="url(#trafGrad)"/>
+        <path d="M0,40 L15,35 L30,38 L45,28 L60,32 L75,20 L90,25 L105,16 L120,22 L135,12 L150,20 L165,25 L180,28 L200,32" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="axis-labels">
+      <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+    </div>
+  </div>
+
+  <!-- WEATHER -->
+  <div class="panel weather">
+    <div class="panel-head">
+      <span class="panel-title">Weather</span>
+      <span class="live">Live</span>
+    </div>
+    <div class="weather-main">
+      <div class="weather-icon">☁</div>
+      <div>
+        <div class="weather-temp">58°<span style="font-size: 14px;">F</span></div>
+        <div class="weather-cond">Cloudy</div>
+        <div class="weather-feels">Feels like 57°F</div>
+      </div>
+    </div>
+    <div class="weather-grid">
+      <div><div class="wmetric-label">Rain</div><div class="wmetric-value">10%</div></div>
+      <div><div class="wmetric-label">Humidity</div><div class="wmetric-value">87%</div></div>
+      <div><div class="wmetric-label">Wind</div><div class="wmetric-value">8 mph</div></div>
+      <div><div class="wmetric-label">Visibility</div><div class="wmetric-value">8 mi</div></div>
+    </div>
+    <div class="forecast">
+      <div class="forecast-hour"><div class="fh-time">Now</div><div class="fh-icon">☁</div><div class="fh-temp">58°</div></div>
+      <div class="forecast-hour"><div class="fh-time">15:00</div><div class="fh-icon">☁</div><div class="fh-temp">59°</div></div>
+      <div class="forecast-hour"><div class="fh-time">16:00</div><div class="fh-icon">⛅</div><div class="fh-temp">60°</div></div>
+      <div class="forecast-hour"><div class="fh-time">17:00</div><div class="fh-icon">⛅</div><div class="fh-temp">59°</div></div>
+      <div class="forecast-hour"><div class="fh-time">18:00</div><div class="fh-icon">☁</div><div class="fh-temp">57°</div></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MAP MAIN — full fidelity from reference 1
+       ==================================================== -->
+  <div class="panel map-main">
+    <!-- Header -->
+    <div class="map-header">
+      <div class="map-logo">◆</div>
+      <div class="map-title-main">CITYWIDE SURVEILLANCE</div>
+      <div class="map-mode-toggle">
+        <div class="mode-btn active">Real-time</div>
+        <div class="mode-btn">Historical</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 4px;">🔔 <span class="alert-badge">12</span></span>
+        <span class="map-timestamp">14:32:16<span class="map-utc">UTC-7</span></span>
+        <span class="live-pill">Live</span>
+      </div>
+    </div>
+
+    <div class="map-body">
+      <!-- LEFT SIDEBAR -->
+      <div class="map-sidebar-left">
+        <div class="sidebar-section-head">
+          <span class="sidebar-section-title">Layers</span>
+          <span class="sidebar-hide">Hide ✕</span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon cameras">▣</span>
+          <span class="layer-name">Cameras</span>
+          <span class="layer-count">2,451</span>
+          <span class="layer-check on"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon traffic">⇄</span>
+          <span class="layer-name">Traffic</span>
+          <span class="layer-count">1,842</span>
+          <span class="layer-check on"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon incidents">▲</span>
+          <span class="layer-name">Incidents</span>
+          <span class="layer-count">327</span>
+          <span class="layer-check on"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon units">●</span>
+          <span class="layer-name">Units</span>
+          <span class="layer-count">143</span>
+          <span class="layer-check on"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon events">★</span>
+          <span class="layer-name">Events</span>
+          <span class="layer-count">78</span>
+          <span class="layer-check on"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">▦</span>
+          <span class="layer-name" style="color: var(--text-dim);">Crowd Density</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">▤</span>
+          <span class="layer-name" style="color: var(--text-dim);">Building Footprint</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">☁</span>
+          <span class="layer-name" style="color: var(--text-dim);">Weather</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">⊕</span>
+          <span class="layer-name" style="color: var(--text-dim);">Air Quality</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">⌒</span>
+          <span class="layer-name" style="color: var(--text-dim);">Road Conditions</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-icon muted">⊞</span>
+          <span class="layer-name" style="color: var(--text-dim);">Transit</span>
+          <span class="layer-check"></span>
+        </div>
+        <div class="add-layer">+ Add Layer</div>
+
+        <div style="margin-top: 14px; display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="sidebar-section-title">Filters</span>
+          <span class="sidebar-hide" style="color: var(--blue);">Reset</span>
+        </div>
+        <div class="filter-row"><span class="filter-label">Time</span><select class="filter-select"><option>Live</option></select></div>
+        <div class="filter-row"><span class="filter-label">Zone</span><select class="filter-select"><option>All Zones</option></select></div>
+        <div class="filter-row"><span class="filter-label">Type</span><select class="filter-select"><option>All Types</option></select></div>
+        <div style="margin-top: 8px;">
+          <input class="filter-search-input" placeholder="Search location..."/>
+        </div>
+      </div>
+
+      <!-- MAP CANVAS -->
+      <div class="map-canvas">
+        <svg class="map-svg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="cityGlow" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#0d1825"/>
+              <stop offset="100%" stop-color="#040608"/>
+            </radialGradient>
+            <pattern id="microGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#0a1018" stroke-width="0.4"/>
+            </pattern>
+          </defs>
+          <rect width="900" height="600" fill="url(#cityGlow)"/>
+          <rect width="900" height="600" fill="url(#microGrid)"/>
+
+          <!-- River (large diagonal) -->
+          <path d="M -50,420 Q 120,400 220,380 Q 320,360 420,400 Q 540,440 660,400 Q 780,360 950,380"
+                stroke="#0a2030" stroke-width="40" fill="none" opacity="0.7"/>
+          <path d="M -50,420 Q 120,400 220,380 Q 320,360 420,400 Q 540,440 660,400 Q 780,360 950,380"
+                stroke="#15314a" stroke-width="36" fill="none" opacity="0.5"/>
+
+          <!-- Major streets grid -->
+          <g stroke="#1c2735" stroke-width="2.5" fill="none">
+            <line x1="0" y1="80" x2="900" y2="80"/>
+            <line x1="0" y1="180" x2="900" y2="180"/>
+            <line x1="0" y1="280" x2="900" y2="280"/>
+            <line x1="0" y1="500" x2="900" y2="500"/>
+            <line x1="120" y1="0" x2="120" y2="600"/>
+            <line x1="280" y1="0" x2="280" y2="600"/>
+            <line x1="440" y1="0" x2="440" y2="600"/>
+            <line x1="600" y1="0" x2="600" y2="600"/>
+            <line x1="780" y1="0" x2="780" y2="600"/>
+          </g>
+          <!-- Secondary streets -->
+          <g stroke="#121823" stroke-width="1" fill="none">
+            <line x1="0" y1="40" x2="900" y2="40"/>
+            <line x1="0" y1="130" x2="900" y2="130"/>
+            <line x1="0" y1="230" x2="900" y2="230"/>
+            <line x1="0" y1="330" x2="900" y2="330"/>
+            <line x1="0" y1="550" x2="900" y2="550"/>
+            <line x1="60" y1="0" x2="60" y2="600"/>
+            <line x1="200" y1="0" x2="200" y2="600"/>
+            <line x1="360" y1="0" x2="360" y2="600"/>
+            <line x1="520" y1="0" x2="520" y2="600"/>
+            <line x1="680" y1="0" x2="680" y2="600"/>
+            <line x1="840" y1="0" x2="840" y2="600"/>
+          </g>
+          <!-- Building blocks scatter -->
+          <g fill="#0c1320" opacity="0.7">
+            <rect x="30" y="50" width="25" height="25"/>
+            <rect x="70" y="55" width="30" height="20"/>
+            <rect x="135" y="50" width="30" height="22"/>
+            <rect x="180" y="55" width="35" height="20"/>
+            <rect x="230" y="50" width="40" height="25"/>
+            <rect x="300" y="48" width="30" height="28"/>
+            <rect x="345" y="55" width="35" height="20"/>
+            <rect x="395" y="50" width="40" height="25"/>
+            <rect x="460" y="55" width="30" height="20"/>
+            <rect x="505" y="50" width="35" height="25"/>
+            <rect x="560" y="55" width="30" height="20"/>
+            <rect x="620" y="50" width="40" height="25"/>
+            <rect x="680" y="50" width="30" height="25"/>
+            <rect x="720" y="55" width="35" height="20"/>
+            <rect x="800" y="50" width="40" height="25"/>
+            <rect x="860" y="55" width="30" height="20"/>
+
+            <rect x="30" y="150" width="30" height="20"/>
+            <rect x="80" y="145" width="35" height="25"/>
+            <rect x="135" y="148" width="30" height="22"/>
+            <rect x="180" y="150" width="35" height="20"/>
+            <rect x="230" y="148" width="40" height="22"/>
+            <rect x="300" y="150" width="30" height="20"/>
+            <rect x="350" y="148" width="35" height="22"/>
+            <rect x="395" y="150" width="35" height="20"/>
+            <rect x="460" y="150" width="30" height="22"/>
+            <rect x="510" y="148" width="30" height="22"/>
+            <rect x="555" y="150" width="35" height="20"/>
+            <rect x="620" y="148" width="40" height="22"/>
+            <rect x="680" y="150" width="30" height="22"/>
+            <rect x="720" y="148" width="35" height="22"/>
+            <rect x="805" y="150" width="30" height="20"/>
+            <rect x="855" y="148" width="35" height="22"/>
+
+            <rect x="30" y="240" width="30" height="30"/>
+            <rect x="75" y="245" width="35" height="25"/>
+            <rect x="135" y="240" width="30" height="30"/>
+            <rect x="180" y="245" width="35" height="25"/>
+            <rect x="230" y="240" width="40" height="30"/>
+            <rect x="300" y="245" width="30" height="25"/>
+            <rect x="345" y="240" width="35" height="30"/>
+            <rect x="395" y="245" width="35" height="25"/>
+            <rect x="460" y="240" width="30" height="30"/>
+            <rect x="510" y="245" width="30" height="25"/>
+            <rect x="555" y="240" width="40" height="30"/>
+            <rect x="620" y="245" width="35" height="25"/>
+            <rect x="680" y="240" width="30" height="30"/>
+            <rect x="720" y="245" width="35" height="25"/>
+            <rect x="800" y="240" width="35" height="30"/>
+            <rect x="855" y="245" width="35" height="25"/>
+
+            <rect x="30" y="465" width="30" height="25"/>
+            <rect x="75" y="460" width="35" height="30"/>
+            <rect x="130" y="465" width="35" height="25"/>
+            <rect x="180" y="460" width="35" height="30"/>
+            <rect x="230" y="465" width="40" height="25"/>
+            <rect x="300" y="460" width="30" height="30"/>
+            <rect x="345" y="465" width="35" height="25"/>
+            <rect x="395" y="460" width="35" height="30"/>
+            <rect x="460" y="465" width="30" height="25"/>
+            <rect x="510" y="460" width="35" height="30"/>
+            <rect x="560" y="465" width="35" height="25"/>
+            <rect x="620" y="460" width="40" height="30"/>
+            <rect x="680" y="465" width="30" height="25"/>
+            <rect x="720" y="460" width="35" height="30"/>
+            <rect x="800" y="465" width="35" height="25"/>
+            <rect x="855" y="460" width="35" height="25"/>
+          </g>
+          <!-- Small lights/windows -->
+          <g fill="#f5d142" opacity="0.4">
+            <circle cx="45" cy="62" r="0.7"/><circle cx="80" cy="65" r="0.7"/><circle cx="150" cy="60" r="0.7"/>
+            <circle cx="195" cy="65" r="0.7"/><circle cx="245" cy="62" r="0.7"/><circle cx="315" cy="62" r="0.7"/>
+            <circle cx="360" cy="65" r="0.7"/><circle cx="410" cy="60" r="0.7"/><circle cx="475" cy="65" r="0.7"/>
+            <circle cx="520" cy="62" r="0.7"/><circle cx="575" cy="65" r="0.7"/><circle cx="635" cy="62" r="0.7"/>
+            <circle cx="695" cy="62" r="0.7"/><circle cx="735" cy="65" r="0.7"/><circle cx="815" cy="62" r="0.7"/>
+            <circle cx="50" cy="158" r="0.7"/><circle cx="95" cy="155" r="0.7"/><circle cx="155" cy="158" r="0.7"/>
+            <circle cx="245" cy="158" r="0.7"/><circle cx="315" cy="158" r="0.7"/><circle cx="365" cy="158" r="0.7"/>
+            <circle cx="410" cy="158" r="0.7"/><circle cx="475" cy="160" r="0.7"/><circle cx="525" cy="158" r="0.7"/>
+            <circle cx="570" cy="158" r="0.7"/><circle cx="635" cy="158" r="0.7"/><circle cx="695" cy="158" r="0.7"/>
+            <circle cx="735" cy="158" r="0.7"/><circle cx="820" cy="158" r="0.7"/><circle cx="870" cy="158" r="0.7"/>
+            <circle cx="45" cy="252" r="0.7"/><circle cx="90" cy="255" r="0.7"/><circle cx="150" cy="252" r="0.7"/>
+            <circle cx="245" cy="252" r="0.7"/><circle cx="315" cy="255" r="0.7"/><circle cx="360" cy="252" r="0.7"/>
+            <circle cx="475" cy="252" r="0.7"/><circle cx="525" cy="255" r="0.7"/><circle cx="635" cy="255" r="0.7"/>
+            <circle cx="695" cy="252" r="0.7"/><circle cx="815" cy="252" r="0.7"/>
+            <circle cx="50" cy="475" r="0.7"/><circle cx="95" cy="472" r="0.7"/><circle cx="155" cy="475" r="0.7"/>
+            <circle cx="245" cy="475" r="0.7"/><circle cx="315" cy="472" r="0.7"/><circle cx="365" cy="475" r="0.7"/>
+            <circle cx="475" cy="475" r="0.7"/><circle cx="525" cy="472" r="0.7"/><circle cx="575" cy="475" r="0.7"/>
+            <circle cx="635" cy="475" r="0.7"/><circle cx="695" cy="475" r="0.7"/><circle cx="735" cy="472" r="0.7"/>
+            <circle cx="815" cy="475" r="0.7"/><circle cx="870" cy="472" r="0.7"/>
+          </g>
+
+          <!-- District labels -->
+          <text x="200" y="100" class="district-label">NORTHSIDE</text>
+          <text x="660" y="100" class="district-label">RIVERFRONT</text>
+          <text x="100" y="320" class="district-label">WEST END</text>
+          <text x="730" y="320" class="district-label">EAST SIDE</text>
+          <text x="380" y="320" class="district-label">DOWNTOWN</text>
+          <text x="160" y="560" class="district-label">HARBOR DISTRICT</text>
+          <text x="430" y="560" class="district-label">SOUTHSIDE</text>
+          <text x="720" y="560" class="district-label">INDUSTRIAL PARK</text>
+
+          <!-- Routing line (unit en route) -->
+          <path d="M 460,310 Q 510,330 540,360 Q 570,400 580,440 Q 590,475 600,490"
+                stroke="#4aa8ff" stroke-width="2" fill="none" stroke-dasharray="4,3" opacity="0.85"/>
+
+          <!-- Camera icons (blue squares) -->
+          <g fill="#4aa8ff">
+            <rect x="146" y="116" width="14" height="14" rx="3"/>
+            <rect x="266" y="106" width="14" height="14" rx="3"/>
+            <rect x="386" y="106" width="14" height="14" rx="3"/>
+            <rect x="526" y="116" width="14" height="14" rx="3"/>
+            <rect x="666" y="86" width="14" height="14" rx="3"/>
+            <rect x="86" y="206" width="14" height="14" rx="3"/>
+            <rect x="226" y="216" width="14" height="14" rx="3"/>
+            <rect x="346" y="216" width="14" height="14" rx="3"/>
+            <rect x="606" y="216" width="14" height="14" rx="3"/>
+            <rect x="726" y="206" width="14" height="14" rx="3"/>
+            <rect x="826" y="216" width="14" height="14" rx="3"/>
+            <rect x="86" y="306" width="14" height="14" rx="3"/>
+            <rect x="166" y="316" width="14" height="14" rx="3"/>
+            <rect x="426" y="486" width="14" height="14" rx="3"/>
+            <rect x="606" y="490" width="14" height="14" rx="3"/>
+            <rect x="846" y="486" width="14" height="14" rx="3"/>
+          </g>
+          <!-- Camera icon symbol -->
+          <g fill="#fff" opacity="0.95">
+            <text x="148" y="127" font-size="9" font-family="monospace">▢</text>
+            <text x="268" y="117" font-size="9" font-family="monospace">▢</text>
+            <text x="388" y="117" font-size="9" font-family="monospace">▢</text>
+            <text x="528" y="127" font-size="9" font-family="monospace">▢</text>
+            <text x="668" y="97" font-size="9" font-family="monospace">▢</text>
+            <text x="88" y="217" font-size="9" font-family="monospace">▢</text>
+            <text x="228" y="227" font-size="9" font-family="monospace">▢</text>
+            <text x="348" y="227" font-size="9" font-family="monospace">▢</text>
+            <text x="608" y="227" font-size="9" font-family="monospace">▢</text>
+            <text x="728" y="217" font-size="9" font-family="monospace">▢</text>
+            <text x="828" y="227" font-size="9" font-family="monospace">▢</text>
+            <text x="88" y="317" font-size="9" font-family="monospace">▢</text>
+            <text x="168" y="327" font-size="9" font-family="monospace">▢</text>
+            <text x="428" y="497" font-size="9" font-family="monospace">▢</text>
+            <text x="608" y="501" font-size="9" font-family="monospace">▢</text>
+            <text x="848" y="497" font-size="9" font-family="monospace">▢</text>
+          </g>
+
+          <!-- Incident markers (red triangle) -->
+          <g>
+            <circle cx="370" cy="220" r="11" fill="#ff4d4d" opacity="0.25"/>
+            <circle cx="370" cy="220" r="9" fill="#ff4d4d"/>
+            <text x="367" y="224" font-size="10" font-family="sans-serif" fill="#fff" font-weight="700">!</text>
+
+            <circle cx="510" cy="180" r="9" fill="#ff9d2e"/>
+            <text x="507" y="184" font-size="10" font-family="sans-serif" fill="#000" font-weight="700">!</text>
+
+            <circle cx="685" cy="280" r="9" fill="#f5d142"/>
+            <text x="682" y="284" font-size="10" font-family="sans-serif" fill="#000" font-weight="700">!</text>
+
+            <circle cx="245" cy="135" r="9" fill="#a87bff"/>
+            <text x="242" y="139" font-size="10" font-family="sans-serif" fill="#fff" font-weight="700">!</text>
+
+            <circle cx="460" cy="310" r="11" fill="#ff4d4d" opacity="0.25"/>
+            <circle cx="460" cy="310" r="9" fill="#ff4d4d"/>
+            <text x="457" y="314" font-size="10" font-family="sans-serif" fill="#fff" font-weight="700">!</text>
+          </g>
+
+          <!-- Unit markers (green circles with car-ish) -->
+          <g>
+            <circle cx="305" cy="380" r="8" fill="#34d96b"/>
+            <circle cx="555" cy="380" r="8" fill="#34d96b"/>
+            <circle cx="135" cy="450" r="8" fill="#34d96b"/>
+            <circle cx="765" cy="450" r="8" fill="#34d96b"/>
+            <circle cx="600" cy="490" r="9" fill="#4aa8ff"/>
+            <circle cx="220" cy="510" r="8" fill="#34d96b"/>
+          </g>
+
+          <!-- Event markers (orange star) -->
+          <g fill="#ff9d2e">
+            <circle cx="320" cy="490" r="7"/>
+            <circle cx="450" cy="120" r="7"/>
+            <circle cx="800" cy="350" r="7"/>
+          </g>
+        </svg>
+
+        <!-- INCIDENT POPUP -->
+        <div class="map-popup incident" style="top: 20px; left: 20px;">
+          <div class="popup-head">
+            <span class="popup-tag incident">▲ Incident</span>
+            <div class="popup-actions"><span>✕</span></div>
+          </div>
+          <div class="popup-title">Traffic Collision</div>
+          <div class="popup-row"><span>5th &amp; Main</span><span style="color:var(--text);">14:28:47</span></div>
+          <div class="popup-eta"><span class="label">● En Route</span><span class="val">ETA 02:14</span></div>
+        </div>
+
+        <!-- CAMERA POPUP -->
+        <div class="map-popup" style="bottom: 80px; left: 20px;">
+          <div class="popup-head">
+            <span class="popup-tag camera">▣ Camera</span>
+            <div class="popup-actions"><span>↗</span></div>
+          </div>
+          <div class="popup-title">BRG-0456</div>
+          <div style="font-size:10px; color: var(--text-dim);">Harbor Bridge S.</div>
+          <div style="display: flex; align-items: center; gap: 4px; margin-top: 3px;">
+            <span style="width:5px; height:5px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green);"></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--green);">Live</span>
+          </div>
+          <div class="popup-cam-placeholder">— FEED HIDDEN —</div>
+        </div>
+
+        <!-- UNIT POPUP -->
+        <div class="map-popup" style="top: 20px; right: 20px;">
+          <div class="popup-head">
+            <span class="popup-tag unit">● Unit</span>
+            <div class="popup-actions"><span>✕</span></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div>
+              <div class="popup-title">Unit 2A12</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--orange); margin-top: 2px;">En Route</div>
+            </div>
+            <div class="popup-unit-icon" style="margin-left: auto;">🚓</div>
+          </div>
+          <div class="popup-row" style="margin-top: 4px;"><span>To Collision</span><span style="color:var(--text);">02:14</span></div>
+        </div>
+
+        <!-- Tool rail -->
+        <div class="map-tool-rail">
+          <div class="tool-btn active">◀</div>
+          <div class="tool-btn">✋</div>
+          <div class="tool-btn">▢</div>
+          <div class="tool-btn">⌾</div>
+          <div class="tool-btn">⌖</div>
+          <div class="tool-btn">▦</div>
+          <div class="tool-btn">⊞</div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="map-bottom-bar">
+          <div class="map-bar-btn"><span class="icon">⊕</span><span class="label">Zoom In</span></div>
+          <div class="map-bar-btn"><span class="icon">⊖</span><span class="label">Zoom Out</span></div>
+          <div class="map-bar-btn"><span class="icon">⌖</span><span class="label">Tilt</span></div>
+          <div class="map-bar-btn"><span class="icon">↻</span><span class="label">Rotate</span></div>
+          <div class="map-bar-btn active"><span class="icon">▢</span><span class="label">3D Buildings</span></div>
+          <div class="map-bar-btn"><span class="icon">▦</span><span class="label">Heat Map</span></div>
+          <div class="map-bar-btn"><span class="icon">●</span><span class="label">Density</span></div>
+          <div class="map-bar-btn"><span class="icon">◉</span><span class="label">Clusters</span></div>
+          <div class="map-bar-btn"><span class="icon">◷</span><span class="label">Timeline</span></div>
+        </div>
+
+        <!-- Coords + scale -->
+        <div class="map-scale" style="bottom: 6px; right: 14px;">
+          <div class="scale-bar"></div>
+          <span>500 m</span>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="map-sidebar-right">
+        <div class="sidebar-section-head">
+          <span class="sidebar-section-title">Incident Overview</span>
+          <span class="sidebar-hide">Hide ✕</span>
+        </div>
+        <div class="io-grid">
+          <div class="io-stat-card">
+            <div class="io-stat-label">Total Incidents</div>
+            <div class="io-stat-value">24</div>
+            <div class="io-stat-sub up">↑ 12% hour</div>
+          </div>
+          <div class="io-stat-card">
+            <div class="io-stat-label">Active</div>
+            <div class="io-stat-value red">8</div>
+            <div class="io-stat-sub up">↑ 14% vs last hour</div>
+          </div>
+          <div class="io-stat-card">
+            <div class="io-stat-label">Resolved</div>
+            <div class="io-stat-value">16</div>
+            <div class="io-stat-sub up">↑ 8% vs last hour</div>
+          </div>
+          <div class="io-stat-card">
+            <div class="io-stat-label">Units Deployed</div>
+            <div class="io-stat-value">37</div>
+            <div class="io-stat-sub up">↑ 5% vs last hour</div>
+          </div>
+        </div>
+
+        <div class="sidebar-section-head" style="margin-top: 8px;">
+          <span class="sidebar-section-title">Active Incidents</span>
+          <span class="sidebar-hide" style="color: var(--blue);">View All ›</span>
+        </div>
+        <div class="incident-card">
+          <div class="incident-dot red"></div>
+          <div>
+            <div class="incident-name">Traffic Collision</div>
+            <div class="incident-loc">5th St &amp; Main Ave</div>
+          </div>
+          <div class="incident-time">14:28</div>
+        </div>
+        <div class="incident-card">
+          <div class="incident-dot orange"></div>
+          <div>
+            <div class="incident-name">Vehicle Pursuit</div>
+            <div class="incident-loc">I-40 E / 5th St</div>
+          </div>
+          <div class="incident-time">14:27</div>
+        </div>
+        <div class="incident-card">
+          <div class="incident-dot purple"></div>
+          <div>
+            <div class="incident-name">Suspicious Activity</div>
+            <div class="incident-loc">Market St / 1st St</div>
+          </div>
+          <div class="incident-time">14:21</div>
+        </div>
+        <div class="incident-card">
+          <div class="incident-dot yellow"></div>
+          <div>
+            <div class="incident-name">Fire Alarm</div>
+            <div class="incident-loc">7th St / Brennan St</div>
+          </div>
+          <div class="incident-time">14:18</div>
+        </div>
+        <div class="incident-card">
+          <div class="incident-dot green"></div>
+          <div>
+            <div class="incident-name">Medical Emergency</div>
+            <div class="incident-loc">300 Main St</div>
+          </div>
+          <div class="incident-time">14:12</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer status bar -->
+    <div class="map-footer-status">
+      <div class="item"><div class="label">System Status</div><div class="val">All Systems Operational</div></div>
+      <div class="item"><div class="label">Data Streams</div><div class="val">98% Active</div></div>
+      <div class="item"><div class="label">Uptime</div><div class="val" style="color: var(--text);">15d 07h 24m</div></div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="panel alerts">
+    <div class="panel-head">
+      <span class="panel-title">Alerts</span>
+      <span class="live">Live</span>
+    </div>
+    <div class="alert-list">
+      <div class="alert-item-row">
+        <span class="alert-time">14:29</span>
+        <div class="alert-body"><div class="alert-title">Crowd Detected</div></div>
+        <div class="alert-loc">Union Square</div>
+      </div>
+      <div class="alert-item-row">
+        <span class="alert-time">14:27</span>
+        <div class="alert-body"><div class="alert-title">Vehicle Pursuit</div></div>
+        <div class="alert-loc">I-80 E / 5th St</div>
+      </div>
+      <div class="alert-item-row">
+        <span class="alert-time">14:21</span>
+        <div class="alert-body"><div class="alert-title">Traffic Collision</div></div>
+        <div class="alert-loc">Howard St / 3rd St</div>
+      </div>
+      <div class="alert-item-row">
+        <span class="alert-time">14:19</span>
+        <div class="alert-body"><div class="alert-title">Suspicious Activity</div></div>
+        <div class="alert-loc">Market St / 1st St</div>
+      </div>
+      <div class="alert-item-row">
+        <span class="alert-time">14:18</span>
+        <div class="alert-body"><div class="alert-title">Fire Alarm</div></div>
+        <div class="alert-loc">7th St / Brannan</div>
+      </div>
+    </div>
+    <div class="view-all-link">View All Alerts</div>
+  </div>
+
+  <!-- ====================================================
+       PLATE READER — upgraded with realistic plates
+       ==================================================== -->
+  <div class="panel plate-reader">
+    <div class="panel-head">
+      <span class="panel-title">Plate Reader Hits</span>
+      <span class="live">9,842 Today</span>
+    </div>
+    <table class="plate-table">
+      <thead>
+        <tr>
+          <th>TIME</th>
+          <th>PLATE</th>
+          <th></th>
+          <th>CAM</th>
+          <th style="text-align:right;">CONF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="plate-time">14:32:14</td>
+          <td><span class="plate-chip flagged">8DZY727</span></td>
+          <td class="flag-cell"><span class="flag us"></span></td>
+          <td class="cam-id">CAM 03</td>
+          <td class="conf high" style="text-align:right;">96%</td>
+        </tr>
+        <tr>
+          <td class="plate-time">14:32:12</td>
+          <td><span class="plate-chip">7XJR193</span></td>
+          <td class="flag-cell"><span class="flag us"></span></td>
+          <td class="cam-id">CAM 01</td>
+          <td class="conf high" style="text-align:right;">95%</td>
+        </tr>
+        <tr>
+          <td class="plate-time">14:32:10</td>
+          <td><span class="plate-chip">CDX-4471</span></td>
+          <td class="flag-cell"><span class="flag mx"></span></td>
+          <td class="cam-id">CAM 04</td>
+          <td class="conf high" style="text-align:right;">97%</td>
+        </tr>
+        <tr>
+          <td class="plate-time">14:32:09</td>
+          <td><span class="plate-chip">LB22 KFD</span></td>
+          <td class="flag-cell"><span class="flag uk"></span></td>
+          <td class="cam-id">CAM 02</td>
+          <td class="conf med" style="text-align:right;">94%</td>
+        </tr>
+        <tr>
+          <td class="plate-time">14:32:08</td>
+          <td><span class="plate-chip">9HKT145</span></td>
+          <td class="flag-cell"><span class="flag ca"></span></td>
+          <td class="cam-id">CAM 06</td>
+          <td class="conf high" style="text-align:right;">96%</td>
+        </tr>
+        <tr>
+          <td class="plate-time">14:32:07</td>
+          <td><span class="plate-chip">5YJG781</span></td>
+          <td class="flag-cell"><span class="flag us"></span></td>
+          <td class="cam-id">CAM 05</td>
+          <td class="conf med" style="text-align:right;">93%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="view-all-link">View All Reads</div>
+  </div>
+
+  <!-- NOTIFICATIONS (replaces Street View) -->
+  <div class="panel notifications">
+    <div class="panel-head">
+      <span class="panel-title">Notifications</span>
+      <span class="live">7 New</span>
+    </div>
+    <div class="notif-stat">
+      <span class="notif-big">7</span>
+      <span style="font-size: 10px; color: var(--text-dim);">unread</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon red">!</span>
+      <div><div class="notif-title">Priority Dispatch</div></div>
+      <span class="notif-time">14:32</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon orange">▲</span>
+      <div><div class="notif-title">BOLO Updated</div></div>
+      <span class="notif-time">14:30</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon blue">i</span>
+      <div><div class="notif-title">Camera Online</div></div>
+      <span class="notif-time">14:28</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon orange">▲</span>
+      <div><div class="notif-title">Watchlist Hit</div></div>
+      <span class="notif-time">14:25</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon green">✓</span>
+      <div><div class="notif-title">Backup Complete</div></div>
+      <span class="notif-time">14:20</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-icon blue">i</span>
+      <div><div class="notif-title">Shift Briefing</div></div>
+      <span class="notif-time">14:15</span>
+    </div>
+    <div class="view-all-link">View All</div>
+  </div>
+
+  <!-- ============ ROW 2 ============ -->
+
+  <!-- SYSTEM HEALTH (replaces camera grid) -->
+  <div class="panel system-health">
+    <div class="panel-head">
+      <span class="panel-title">System Health</span>
+      <span class="status-normal">● All OK</span>
+    </div>
+    <div class="sys-row">
+      <div>
+        <div class="sys-name">ALPR Service</div>
+        <div class="sys-meta">9,842 reads / day</div>
+      </div>
+      <span class="sys-status ok"><span class="dot"></span>Active</span>
+    </div>
+    <div class="sys-row">
+      <div>
+        <div class="sys-name">CCTV Network</div>
+        <div class="sys-meta">2,451 / 2,468 online</div>
+      </div>
+      <span class="sys-status ok"><span class="dot"></span>99.3%</span>
+    </div>
+    <div class="sys-row">
+      <div>
+        <div class="sys-name">CAD Dispatch</div>
+        <div class="sys-meta">37 active calls</div>
+      </div>
+      <span class="sys-status ok"><span class="dot"></span>Online</span>
+    </div>
+    <div class="sys-row">
+      <div>
+        <div class="sys-name">Storage Cluster</div>
+        <div class="sys-meta">78% capacity</div>
+      </div>
+      <span class="sys-status warn"><span class="dot"></span>Notice</span>
+    </div>
+    <div class="sys-footer">
+      <div><div class="sys-foot-label">Uptime</div><div class="sys-foot-val" style="color:var(--text);">15d 07h</div></div>
+      <div><div class="sys-foot-label">DB Latency</div><div class="sys-foot-val">42 ms</div></div>
+    </div>
+  </div>
+
+  <!-- TRANSIT STATUS -->
+  <div class="panel transit">
+    <div class="panel-head">
+      <span class="panel-title">Transit Status</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 4px; letter-spacing: 0.5px;">
+      <span>SYSTEM STATUS</span><span class="status-normal">● NORMAL</span>
+    </div>
+    <div class="transit-row"><span class="transit-name">MUNI Metro</span><span class="status-normal">On Time</span></div>
+    <div class="transit-row"><span class="transit-name">MUNI Bus</span><span class="status-normal">On Time</span></div>
+    <div class="transit-row"><span class="transit-name">BART</span><span class="status-normal">On Time</span></div>
+    <div class="transit-row"><span class="transit-name">Caltrain</span><span class="status-normal">On Time</span></div>
+    <div class="view-all-link" style="margin-top: auto;">View All Lines</div>
+  </div>
+
+  <!-- AIR QUALITY 1 -->
+  <div class="panel air-quality-1">
+    <div class="panel-head">
+      <span class="panel-title">Air Quality · Downtown</span>
+      <span class="live">Live</span>
+    </div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 1px;">AQI</div>
+    <div class="aqi-big">42</div>
+    <div class="aqi-status">Good</div>
+    <div class="aqi-bar"></div>
+    <div class="aqi-bar-labels"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300</span></div>
+    <div class="aqi-metrics">
+      <span class="lbl">PM2.5</span><span class="val">12 µg/m³</span><span></span><span class="stat">Good</span>
+      <span class="lbl">PM10</span><span class="val">24 µg/m³</span><span></span><span class="stat">Good</span>
+      <span class="lbl">O₃</span><span class="val">28 ppb</span><span></span><span class="stat">Good</span>
+      <span class="lbl">NO₂</span><span class="val">15 ppb</span><span></span><span class="stat">Good</span>
+      <span class="lbl">CO</span><span class="val">0.4 ppm</span><span></span><span class="stat">Good</span>
+    </div>
+    <div class="view-all-link" style="margin-top: 4px;">View Full Report</div>
+  </div>
+
+  <!-- AIR QUALITY 2 -->
+  <div class="panel air-quality-2">
+    <div class="panel-head">
+      <span class="panel-title">Air Quality · Harbor</span>
+      <span class="live">Live</span>
+    </div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 1px;">AQI</div>
+    <div class="aqi-big">42</div>
+    <div class="aqi-status">Good</div>
+    <div class="aqi-bar"></div>
+    <div class="aqi-bar-labels"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300</span></div>
+    <div class="aqi-metrics">
+      <span class="lbl">PM2.5</span><span class="val">12 µg/m³</span><span></span><span class="stat">Good</span>
+      <span class="lbl">PM10</span><span class="val">24 µg/m³</span><span></span><span class="stat">Good</span>
+      <span class="lbl">O₃</span><span class="val">28 ppb</span><span></span><span class="stat">Good</span>
+      <span class="lbl">NO₂</span><span class="val">15 ppb</span><span></span><span class="stat">Good</span>
+      <span class="lbl">CO</span><span class="val">0.4 ppm</span><span></span><span class="stat">Good</span>
+    </div>
+    <div class="view-all-link" style="margin-top: 4px;">View Full Report</div>
+  </div>
+
+  <!-- BUILDING ALERTS -->
+  <div class="panel building-alerts">
+    <div class="panel-head">
+      <span class="panel-title">Building Alerts</span>
+    </div>
+    <div class="bldg-item">
+      <span class="bldg-icon red">!</span>
+      <div><div class="bldg-name">101 3rd St</div><div class="bldg-desc">Smoke Detected</div></div>
+      <span class="bldg-time">14:20</span>
+    </div>
+    <div class="bldg-item">
+      <span class="bldg-icon">!</span>
+      <div><div class="bldg-name">One Market Plaza</div><div class="bldg-desc">Access Control</div></div>
+      <span class="bldg-time">14:18</span>
+    </div>
+    <div class="bldg-item">
+      <span class="bldg-icon">!</span>
+      <div><div class="bldg-name">Salesforce Tower</div><div class="bldg-desc">Elevator Fault</div></div>
+      <span class="bldg-time">14:15</span>
+    </div>
+    <div class="bldg-item">
+      <span class="bldg-icon">!</span>
+      <div><div class="bldg-name">555 Mission St</div><div class="bldg-desc">Water Leak</div></div>
+      <span class="bldg-time">14:12</span>
+    </div>
+    <div class="bldg-item">
+      <span class="bldg-icon">!</span>
+      <div><div class="bldg-name">300 Main St</div><div class="bldg-desc">Power Outage</div></div>
+      <span class="bldg-time">14:08</span>
+    </div>
+    <div class="view-all-link">View All</div>
+  </div>
+
+  <!-- ============ ROW 3 ============ -->
+  <div class="row3-grid">
+
+    <!-- CROWD DENSITY -->
+    <div class="panel" id="panel-crowd">
+      <div class="panel-head">
+        <span class="panel-title">Crowd Density</span>
+        <span class="status-alert">● High</span>
+      </div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim);">Union Square</div>
+      <div class="crowd-heatmap">
+        <div class="crowd-info">
+          <div class="crowd-level">High Density</div>
+          <div class="crowd-num">2.7 people/m²</div>
+        </div>
+        <div class="crowd-legend">
+          <span>Low</span>
+          <div class="crowd-legend-bar"></div>
+          <span>High</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NETWORK TRAFFIC -->
+    <div class="panel" id="panel-network">
+      <div class="panel-head">
+        <span class="panel-title">Network Traffic</span>
+        <span class="live">Live</span>
+      </div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.5px;">BANDWIDTH USAGE</div>
+      <div class="net-chart">
+        <svg viewBox="0 0 240 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="netGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#4aa8ff" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#4aa8ff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,70 L20,65 L40,72 L60,55 L80,60 L100,45 L120,50 L140,35 L160,42 L180,28 L200,35 L220,40 L240,30 L240,100 L0,100 Z" fill="url(#netGrad)"/>
+          <path d="M0,70 L20,65 L40,72 L60,55 L80,60 L100,45 L120,50 L140,35 L160,42 L180,28 L200,35 L220,40 L240,30" stroke="#4aa8ff" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="net-foot">
+        <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+      </div>
+      <div style="text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); margin-top: 4px;">1.03 Tbps</div>
+    </div>
+
+    <!-- SHOTSPOTTER -->
+    <div class="panel" id="panel-ss" style="border-color: var(--red);">
+      <div class="panel-head" style="border-bottom: 1px solid var(--red); padding-bottom: 8px;">
+        <span class="ss-title">SHOTSPOTTER ALERT</span>
+        <span class="ss-x">×</span>
+      </div>
+      <div class="ss-district">Mission District</div>
+      <div class="ss-time-row">
+        <div><span class="ss-time">14:32:15</span><span class="ss-today">Today</span></div>
+      </div>
+      <div class="ss-shots">
+        <span class="ss-shot-num">7</span>
+        <span class="ss-shot-label">Shots Detected</span>
+        <span class="ss-confidence">99%</span>
+      </div>
+      <div class="ss-waveform" id="waveform"></div>
+      <div class="ss-addr">2100 Block of Mission St</div>
+      <div class="ss-addr-sub">San Francisco, CA 94110</div>
+      <div class="view-all-link" style="margin-top: auto;">View on Map</div>
+    </div>
+
+    <!-- UNIT STATUS -->
+    <div class="panel" id="panel-units">
+      <div class="panel-head">
+        <span class="panel-title">Unit Status</span>
+      </div>
+      <div class="unit-head">
+        <span class="unit-big">37</span>
+        <span class="unit-label">Units Deployed</span>
+      </div>
+      <div class="unit-chips">
+        <span class="chip"><span>Police</span><span class="v">19</span></span>
+        <span class="chip fire"><span>Fire</span><span class="v">6</span></span>
+        <span class="chip ems"><span>EMS</span><span class="v">12</span></span>
+      </div>
+      <table class="unit-table">
+        <thead>
+          <tr><th>UNIT</th><th>STATUS</th><th>LOCATION</th><th>ETA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2A12</td><td class="unit-stat-en">En Route</td><td>Union Sq</td><td>02:14</td></tr>
+          <tr><td>1B07</td><td class="unit-stat-on">On Scene</td><td>3rd / Bryant</td><td>01:23</td></tr>
+          <tr><td>4C22</td><td class="unit-stat-on">On Scene</td><td>Howard / 3rd</td><td>00:45</td></tr>
+          <tr><td>3A18</td><td class="unit-stat-en">En Route</td><td>I-80 / 5th</td><td>03:11</td></tr>
+          <tr><td>2D09</td><td class="unit-stat-av">Available</td><td>Park 03</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="view-all-link" style="margin-top: auto;">View All</div>
+    </div>
+
+    <!-- INCIDENT TIMELINE -->
+    <div class="panel" id="panel-timeline">
+      <div class="panel-head">
+        <span class="panel-title">Incident Timeline</span>
+      </div>
+      <div class="tl-list">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">14:30:42</div><div class="tl-body"><div class="tl-title">Traffic Collision</div><div class="tl-sub">Howard St / 3rd St</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">14:30</div><div class="tl-body"><div class="tl-title">Roadblock Created</div></div></div>
+        <div class="tl-item"><div class="tl-dot orange"></div><div class="tl-time">14:28</div><div class="tl-body"><div class="tl-title">Unit Deployed</div></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">14:26</div><div class="tl-body"><div class="tl-title">Unit On Scene</div></div></div>
+        <div class="tl-item"><div class="tl-dot orange"></div><div class="tl-time">14:21</div><div class="tl-body"><div class="tl-title">Suspect Pursued</div></div></div>
+      </div>
+      <div class="view-all-link" style="margin-top: auto;">View Full Timeline</div>
+    </div>
+
+    <!-- RECENT EVENTS -->
+    <div class="panel" id="panel-events">
+      <div class="panel-head">
+        <span class="panel-title">Recent Events</span>
+      </div>
+      <div class="ev-item">
+        <span class="ev-time">14:30:16</span>
+        <div><div class="ev-title">ShotSpotter Alert</div><div class="ev-sub">Mission District</div></div>
+      </div>
+      <div class="ev-item">
+        <span class="ev-time">14:30:02</span>
+        <div><div class="ev-title">Plate Reader Alert</div><div class="ev-sub">7XJR193 / 3rd St</div></div>
+      </div>
+      <div class="ev-item">
+        <span class="ev-time">14:29:41</span>
+        <div><div class="ev-title">Traffic Signal Fault</div><div class="ev-sub">2nd St / Market St</div></div>
+      </div>
+      <div class="ev-item">
+        <span class="ev-time">14:27:01</span>
+        <div><div class="ev-title">Wrong Way Driver</div><div class="ev-sub">Bay Bridge / I-80</div></div>
+      </div>
+      <div class="ev-item">
+        <span class="ev-time">14:26:09</span>
+        <div><div class="ev-title">Street Light Outage</div><div class="ev-sub">1000 Blk / Valencia</div></div>
+      </div>
+      <div class="view-all-link" style="margin-top: auto;">View All Events</div>
+    </div>
+
+    <!-- COMMUNICATIONS (new) -->
+    <div class="panel" id="panel-comms">
+      <div class="panel-head">
+        <span class="panel-title">Communications</span>
+        <span class="live">5 Active</span>
+      </div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-faint); padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 4px; letter-spacing: 0.5px;">TALK GROUPS</div>
+      <div class="comm-row">
+        <span class="comm-name">Police Dispatch</span>
+        <span class="comm-count">12</span>
+      </div>
+      <div class="comm-row">
+        <span class="comm-name">Fire Dispatch</span>
+        <span class="comm-count">8</span>
+      </div>
+      <div class="comm-row">
+        <span class="comm-name">EMS Dispatch</span>
+        <span class="comm-count">6</span>
+      </div>
+      <div class="comm-row">
+        <span class="comm-name">City Services</span>
+        <span class="comm-count">4</span>
+      </div>
+      <div class="comm-row">
+        <span class="comm-name">Transit Control</span>
+        <span class="comm-count">3</span>
+      </div>
+      <div class="view-all-link" style="margin-top: auto;">Active Channels: 5</div>
+    </div>
+
+  </div> <!-- /row3-grid -->
+
+</div>
+
+<script>
+// ── WAVEFORM BARS ─────────────────────────────────────────────────────────
+const wf = document.getElementById('waveform');
+if (wf) {
+  for (let i = 0; i < 50; i++) {
+    const b = document.createElement('div');
+    b.className = 'ss-wf-bar';
+    const center = Math.abs(i - 25);
+    b.style.height = Math.max(2, (Math.random() * 18 + 4) * (1 - center / 25)) + 'px';
+    b.style.setProperty('--d', (0.3 + Math.random() * 0.9) + 's');
+    b.style.animationDelay = (Math.random() * 0.6) + 's';
+    wf.appendChild(b);
+  }
+}
+
+// ── PANEL ISOLATION  (?p=panel-id → show only that panel fullscreen) ──────
+(function () {
+  const p = new URLSearchParams(location.search).get('p');
+  if (!p) return;
+  function isolate() {
+    const panel = document.querySelector('.' + p) || document.getElementById(p);
+    if (!panel) return;
+    document.documentElement.style.cssText = 'width:360px;height:360px;overflow:hidden;';
+    document.body.style.cssText = 'width:360px;height:360px;padding:0;margin:0;overflow:hidden;background:#0a0d12;';
+    const wall = document.querySelector('.wall');
+    if (wall) wall.style.display = 'none';
+    panel.style.cssText = [
+      'position:fixed;top:0;left:0;width:360px;height:360px',
+      'padding:12px 14px;box-sizing:border-box',
+      'display:flex;flex-direction:column',
+      'background:#0a0d12;border:none;border-radius:0;overflow:hidden',
+    ].join(';');
+    document.body.appendChild(panel);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', isolate);
+  else isolate();
+})();
+
+// ── LIVE CLOCK ────────────────────────────────────────────────────────────
+function _tick() {
+  const n = new Date();
+  const t = [n.getHours(), n.getMinutes(), n.getSeconds()].map(v => String(v).padStart(2, '0')).join(':');
+  document.querySelectorAll('.map-timestamp').forEach(el => el.textContent = t);
+  const ss = document.querySelector('.ss-time');
+  if (ss) ss.textContent = t;
+}
+setInterval(_tick, 1000); _tick();
+
+// ── FLUCTUATING STATS ─────────────────────────────────────────────────────
+function _rnd(base, range) { return base + Math.floor((Math.random() - .5) * range * 2); }
+setInterval(function () {
+  const spd = document.querySelector('.traffic-overview .stat-row:first-of-type .stat-value');
+  if (spd) spd.innerHTML = _rnd(32, 6) + ' <span style="font-size:11px;color:var(--text-dim)">mph</span>';
+  const sv = document.querySelectorAll('.traffic-overview .stat-value');
+  if (sv[1]) sv[1].textContent = _rnd(68, 6) + '%';
+  if (sv[2]) sv[2].textContent = _rnd(15, 3);
+  const net = document.querySelector('#panel-network div[style*="right"]');
+  if (net && net.textContent.includes('Tbps')) net.textContent = (_rnd(103, 8) / 100).toFixed(2) + ' Tbps';
+}, 3500);
+
+// ── RECENT EVENTS STREAM ──────────────────────────────────────────────────
+const _evData = [
+  ['Plate Reader Hit',  'I-80 / 5th St'],
+  ['Camera Offline',    'Pier 39 CAM-07'],
+  ['Crowd Alert',       'Civic Center'],
+  ['Traffic Jam',       'Bay Bridge EB'],
+  ['Signal Override',   'Market / 1st'],
+  ['Unit Dispatch',     'Mission / 24th'],
+  ['Weather Alert',     'High Wind Advisory'],
+  ['SCADA Timeout',     'Node 14-B'],
+  ['Gate Open',         'North Port Entry'],
+];
+let _evIdx = 0;
+setInterval(function () {
+  const panel = document.getElementById('panel-events');
+  if (!panel) return;
+  const n = new Date();
+  const t = [n.getHours(), n.getMinutes(), n.getSeconds()].map(v => String(v).padStart(2, '0')).join(':');
+  const [title, sub] = _evData[_evIdx++ % _evData.length];
+  const div = document.createElement('div');
+  div.className = 'ev-item'; div.style.opacity = '0'; div.style.transition = 'opacity .4s';
+  div.innerHTML = `<span class="ev-time">${t}</span><div><div class="ev-title">${title}</div><div class="ev-sub">${sub}</div></div>`;
+  const first = panel.querySelector('.ev-item');
+  panel.insertBefore(div, first || panel.querySelector('.view-all-link'));
+  requestAnimationFrame(() => requestAnimationFrame(() => { div.style.opacity = '1'; }));
+  const items = panel.querySelectorAll('.ev-item');
+  if (items.length > 6) items[items.length - 1].remove();
+}, 4000);
+
+// ── INCIDENT TIMELINE STREAM ──────────────────────────────────────────────
+const _tlData = [
+  ['Traffic Collision', 'Howard / 3rd St',  ''],
+  ['Unit Deployed',     'ShotSpotter Zone',  'orange'],
+  ['Alert Resolved',    'Bay Bridge',        ''],
+  ['Camera Fault',      'SOMA-CAM-14',       'orange'],
+  ['Plate Match',       '7XJR193 / 3rd St',  'red'],
+  ['Signal Override',   'Market / 1st',      ''],
+  ['Crowd Threshold',   'Union Square',      'orange'],
+];
+let _tlIdx = 0;
+setInterval(function () {
+  const list = document.querySelector('#panel-timeline .tl-list') || document.querySelector('.tl-list');
+  if (!list) return;
+  const n = new Date();
+  const t = [n.getHours(), n.getMinutes(), n.getSeconds()].map(v => String(v).padStart(2, '0')).join(':');
+  const [title, sub, color] = _tlData[_tlIdx++ % _tlData.length];
+  const div = document.createElement('div');
+  div.className = 'tl-item'; div.style.opacity = '0'; div.style.transition = 'opacity .4s';
+  div.innerHTML = `<div class="tl-dot${color ? ' ' + color : ''}"></div><div class="tl-time">${t}</div><div class="tl-body"><div class="tl-title">${title}</div>${sub ? `<div class="tl-sub">${sub}</div>` : ''}</div>`;
+  list.insertBefore(div, list.firstChild);
+  requestAnimationFrame(() => requestAnimationFrame(() => { div.style.opacity = '1'; }));
+  const items = list.querySelectorAll('.tl-item');
+  if (items.length > 6) items[items.length - 1].remove();
+}, 5000);
+
+// ── COMMUNICATIONS COUNT FLICKER ──────────────────────────────────────────
+setInterval(function () {
+  document.querySelectorAll('.comm-count').forEach(el => {
+    const v = parseInt(el.textContent) || 0;
+    const delta = Math.random() < .3 ? (Math.random() < .5 ? 1 : -1) : 0;
+    if (v + delta > 0) el.textContent = v + delta;
+  });
+}, 6000);
+</script>
+
+</body>
+</html>

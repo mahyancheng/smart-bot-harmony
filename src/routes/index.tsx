@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useRef, useEffect, useState } from "react";
 import heroImage from "@/assets/v2/hero-controlroom.png";
 import transportImage from "@/assets/v2/cap-transport.png";
 import cityImage from "@/assets/v2/cap-city.png";
@@ -27,15 +28,57 @@ import p18 from "@/assets/v2/panels/18_communications.png";
 import pSurv from "@/assets/v2/panels/city wide surveillance.png";
 import pLPR from "@/assets/v2/panels/license plate recognition.png";
 
-// Continuously scrolling video wall strip
-// Each strip independently scrolls left or right at its own speed
+// ── Types ──────────────────────────────────────────────────────────────────
+type StripItem =
+  | { type: 'img';    src: string; featured?: boolean }
+  | { type: 'iframe'; panelId: string };
+
+// ── IframePanel — measures its container height and scales accordingly ─────
+function IframePanel({ panelId }: { panelId: string }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.7);
+
+  useEffect(() => {
+    const update = () => {
+      if (wrapRef.current) setScale(wrapRef.current.offsetHeight / 360);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const px = Math.round(360 * scale);
+  return (
+    <div
+      ref={wrapRef}
+      className="flex-shrink-0 overflow-hidden"
+      style={{ width: px, height: '100%' }}
+    >
+      <iframe
+        src={`/command_center.html?p=${panelId}`}
+        scrolling="no"
+        style={{
+          width: '360px',
+          height: '360px',
+          border: 'none',
+          display: 'block',
+          transformOrigin: 'top left',
+          transform: `scale(${scale})`,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
+  );
+}
+
+// ── ScrollStrip — continuously scrolling video wall strip ──────────────────
 function ScrollStrip({
   items,
   direction = 'left',
   duration = '35s',
   flexGrow = 1,
 }: {
-  items: { src: string; featured?: boolean }[];
+  items: StripItem[];
   direction?: 'left' | 'right';
   duration?: string;
   flexGrow?: number;
@@ -47,15 +90,19 @@ function ScrollStrip({
         className={direction === 'right' ? 'vx-marquee-rev' : 'vx-marquee'}
         style={{ animationDuration: duration, display: 'flex', height: '100%', gap: '3px', width: 'max-content' }}
       >
-        {doubled.map(({ src, featured }, i) => (
-          <div
-            key={i}
-            className={`flex-shrink-0 overflow-hidden${featured ? ' ring-[1.5px] ring-inset ring-primary/40' : ''}`}
-            style={{ width: featured ? '40vw' : '22vw', height: '100%' }}
-          >
-            <img src={src} alt="" className="h-full w-full object-cover block" />
-          </div>
-        ))}
+        {doubled.map((item, i) =>
+          item.type === 'iframe' ? (
+            <IframePanel key={i} panelId={item.panelId} />
+          ) : (
+            <div
+              key={i}
+              className={`flex-shrink-0 overflow-hidden bg-[#060911]${item.featured ? ' ring-[1.5px] ring-inset ring-primary/40' : ''}`}
+              style={{ width: item.featured ? '40vw' : '22vw', height: '100%' }}
+            >
+              <img src={item.src} alt="" className="h-full w-full object-contain block" />
+            </div>
+          )
+        )}
       </div>
     </div>
   );
@@ -352,32 +399,54 @@ function Index() {
             className="flex flex-col bg-[#060911]"
             style={{ height: '76vh', minHeight: '480px', gap: '3px' }}
           >
-            {/* Strip 1 — scrolls left, thin row */}
+            {/* Strip 1 — thin, left, PNG panels (object-contain, no cut) */}
             <ScrollStrip
-              items={[{src:p12},{src:p13},{src:p16},{src:p17},{src:p04},{src:p07},{src:p11},{src:p15}]}
+              items={[
+                {type:'img',src:p12},{type:'img',src:p13},{type:'img',src:p16},
+                {type:'img',src:p17},{type:'img',src:p04},{type:'img',src:p07},
+                {type:'img',src:p11},{type:'img',src:p15},
+              ]}
               direction="left"
               duration="30s"
               flexGrow={1.5}
             />
-            {/* Strip 2 — scrolls right, tall — city surveillance centrepiece */}
+            {/* Strip 2 — tall, right — city surveillance centrepiece + live HTML panels */}
             <ScrollStrip
-              items={[{src:p14},{src:pSurv,featured:true},{src:p18},{src:p01},{src:p09},{src:p02}]}
+              items={[
+                {type:'iframe',panelId:'panel-ss'},
+                {type:'img',   src:pSurv, featured:true},
+                {type:'iframe',panelId:'panel-comms'},
+                {type:'iframe',panelId:'traffic-overview'},
+                {type:'iframe',panelId:'air-quality-1'},
+                {type:'iframe',panelId:'weather'},
+              ]}
               direction="right"
-              duration="55s"
+              duration="60s"
               flexGrow={3}
             />
-            {/* Strip 3 — scrolls left, thin row */}
+            {/* Strip 3 — thin, left, PNG panels (object-contain, no cut) */}
             <ScrollStrip
-              items={[{src:p05},{src:p08},{src:p10},{src:p06},{src:p13},{src:p17},{src:p07}]}
+              items={[
+                {type:'img',src:p05},{type:'img',src:p08},{type:'img',src:p10},
+                {type:'img',src:p06},{type:'img',src:p13},{type:'img',src:p17},
+                {type:'img',src:p07},
+              ]}
               direction="left"
               duration="28s"
               flexGrow={1.5}
             />
-            {/* Strip 4 — scrolls right, medium — license plate recognition centrepiece */}
+            {/* Strip 4 — medium, right — LPR centrepiece + live HTML panels */}
             <ScrollStrip
-              items={[{src:pLPR,featured:true},{src:p16},{src:p11},{src:p12},{src:p14},{src:p18}]}
+              items={[
+                {type:'img',   src:pLPR, featured:true},
+                {type:'iframe',panelId:'panel-timeline'},
+                {type:'iframe',panelId:'building-alerts'},
+                {type:'iframe',panelId:'panel-crowd'},
+                {type:'iframe',panelId:'panel-units'},
+                {type:'iframe',panelId:'panel-events'},
+              ]}
               direction="right"
-              duration="48s"
+              duration="52s"
               flexGrow={2.5}
             />
           </div>
