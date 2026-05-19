@@ -78,15 +78,17 @@ function ScrollStrip({
   direction = 'left',
   duration = '35s',
   flexGrow = 1,
+  height,
 }: {
   items: StripItem[];
   direction?: 'left' | 'right';
   duration?: string;
   flexGrow?: number;
+  height?: string;          // explicit CSS height — overrides flex when set
 }) {
   const doubled = [...items, ...items];
   return (
-    <div className="overflow-hidden w-full" style={{ flex: flexGrow }}>
+    <div className="overflow-hidden w-full" style={height ? { height, minHeight: height } : { flex: flexGrow }}>
       <div
         className={direction === 'right' ? 'vx-marquee-rev' : 'vx-marquee'}
         style={{ animationDuration: duration, display: 'flex', height: '100%', gap: 0, width: 'max-content' }}
@@ -95,12 +97,23 @@ function ScrollStrip({
           item.type === 'iframe' ? (
             <IframePanel key={i} panelId={item.panelId} />
           ) : (
+            /* natural-width container — image drives the width, no letterbox gaps */
             <div
               key={i}
-              className={`flex-shrink-0 overflow-hidden bg-[#060911]${item.featured ? ' ring-[1.5px] ring-inset ring-primary/40' : ''}`}
-              style={{ width: item.featured ? '40vw' : '22vw', height: '100%' }}
+              className={`flex-shrink-0 overflow-hidden${item.featured ? ' ring-[1.5px] ring-inset ring-primary/40' : ''}`}
+              style={{ height: '100%' }}
             >
-              <img src={item.src} alt="" className="h-full w-full object-contain block" />
+              <img
+                src={item.src}
+                alt=""
+                style={{
+                  height: '100%',
+                  width: item.featured ? '42vw' : 'auto',
+                  maxWidth: item.featured ? '42vw' : 'none',
+                  objectFit: item.featured ? 'cover' : undefined,
+                  display: 'block',
+                }}
+              />
             </div>
           )
         )}
@@ -404,12 +417,9 @@ function Index() {
             >
               {[p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06,
                 p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06].map((src, i) => (
-                <div
-                  key={i}
-                  className="flex-shrink-0 overflow-hidden bg-[#060911]"
-                  style={{ height: '100%', aspectRatio: '16/9' }}
-                >
-                  <img src={src} alt="" className="h-full w-full object-contain block" />
+                /* natural width — image drives its own width, zero gaps guaranteed */
+                <div key={i} className="flex-shrink-0" style={{ height: '100%' }}>
+                  <img src={src} alt="" style={{ height: '100%', width: 'auto', display: 'block' }} />
                 </div>
               ))}
             </div>
@@ -457,40 +467,50 @@ function Index() {
             </div>
           </div>
 
-          {/* ── Rows 2 + 3: tall scrolling strips with live panels ── */}
-          <div
-            className="flex flex-col bg-[#060911]"
-            style={{ height: '52vh', minHeight: '340px' }}
-          >
-            {/* Row 2 — city surveillance centrepiece, left to right */}
-            <ScrollStrip
-              items={[
-                {type:'iframe', panelId:'panel-ss'},
-                {type:'img',    src:pSurv, featured:true},
-                {type:'iframe', panelId:'panel-comms'},
-                {type:'iframe', panelId:'traffic-overview'},
-                {type:'iframe', panelId:'air-quality-1'},
-                {type:'iframe', panelId:'weather'},
-              ]}
-              direction="right"
-              duration="65s"
-              flexGrow={1.3}
-            />
-            {/* Row 3 — LPR centrepiece, right to left */}
-            <ScrollStrip
-              items={[
-                {type:'img',    src:pLPR, featured:true},
-                {type:'iframe', panelId:'panel-timeline'},
-                {type:'iframe', panelId:'building-alerts'},
-                {type:'iframe', panelId:'panel-crowd'},
-                {type:'iframe', panelId:'panel-units'},
-                {type:'iframe', panelId:'panel-events'},
-              ]}
-              direction="left"
-              duration="55s"
-              flexGrow={1}
-            />
+          {/* ── Row 2: city surveillance centrepiece — left to right ── */}
+          <ScrollStrip
+            items={[
+              {type:'iframe', panelId:'panel-ss'},
+              {type:'img',    src:pSurv, featured:true},
+              {type:'iframe', panelId:'panel-comms'},
+              {type:'iframe', panelId:'traffic-overview'},
+              {type:'iframe', panelId:'air-quality-1'},
+              {type:'iframe', panelId:'weather'},
+            ]}
+            direction="right"
+            duration="65s"
+            height="32vh"
+          />
+
+          {/* ── Ticker between rows 2 and 3 ── */}
+          <div className="overflow-hidden" style={{ background: '#06090f', borderTop: '1px solid #131b28', borderBottom: '1px solid #131b28' }}>
+            <div
+              className="vx-marquee flex w-max whitespace-nowrap font-bold uppercase"
+              style={{ gap: '2.5rem', padding: '0.625rem 1.5rem', fontSize: '0.7rem', letterSpacing: '0.1em', color: '#8a94a3', animationDuration: '38s' }}
+            >
+              {[...serviceTags, ...serviceTags].map((tag, idx) => (
+                <span key={idx} className="inline-flex items-center gap-2">
+                  <span style={{ color: '#5a8fff' }}>+</span>
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
+
+          {/* ── Row 3: LPR centrepiece — right to left ── */}
+          <ScrollStrip
+            items={[
+              {type:'img',    src:pLPR, featured:true},
+              {type:'iframe', panelId:'panel-timeline'},
+              {type:'iframe', panelId:'building-alerts'},
+              {type:'iframe', panelId:'panel-crowd'},
+              {type:'iframe', panelId:'panel-units'},
+              {type:'iframe', panelId:'panel-events'},
+            ]}
+            direction="left"
+            duration="55s"
+            height="28vh"
+          />
 
         </section>
 
