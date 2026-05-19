@@ -1925,12 +1925,12 @@ if (wf) {
   function isolate() {
     const panel = document.querySelector('.' + p) || document.getElementById(p);
     if (!panel) return;
-    document.documentElement.style.cssText = 'width:360px;height:360px;overflow:hidden;';
-    document.body.style.cssText = 'width:360px;height:360px;padding:0;margin:0;overflow:hidden;background:#0a0d12;';
+    document.documentElement.style.cssText = 'width:340px;height:300px;overflow:hidden;';
+    document.body.style.cssText = 'width:340px;height:300px;padding:0;margin:0;overflow:hidden;background:#0a0d12;';
     const wall = document.querySelector('.wall');
     if (wall) wall.style.display = 'none';
     panel.style.cssText = [
-      'position:fixed;top:0;left:0;width:360px;height:360px',
+      'position:fixed;top:0;left:0;width:340px;height:300px',
       'padding:12px 14px;box-sizing:border-box',
       'display:flex;flex-direction:column',
       'background:#0a0d12;border:none;border-radius:0;overflow:hidden',
@@ -2026,6 +2026,68 @@ setInterval(function () {
     if (v + delta > 0) el.textContent = v + delta;
   });
 }, 6000);
+
+// ── SMOOTH COUNTER (RAF interpolation) ────────────────────────────────────
+function _smoothTo(el, target, ms) {
+  if (!el) return;
+  const start = parseFloat(el.textContent) || 0;
+  if (Math.abs(start - target) < 0.5) return;
+  const t0 = performance.now();
+  function step(t) {
+    const p = Math.min(1, (t - t0) / (ms || 900));
+    const ease = p < .5 ? 2*p*p : -1+(4-2*p)*p; // ease-in-out
+    el.textContent = Math.round(start + (target - start) * ease);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Units deployed — smooth animation
+setInterval(function () {
+  _smoothTo(document.querySelector('.unit-big'), _rnd(37, 5), 1100);
+}, 5200);
+
+// Shots detected — smooth animation
+setInterval(function () {
+  _smoothTo(document.querySelector('.ss-shot-num'), _rnd(7, 2), 700);
+}, 7000);
+
+// Map sidebar I/O stats (cameras, incidents, etc.)
+setInterval(function () {
+  const bases = [312, 3, 14, 7];
+  document.querySelectorAll('.io-stat-value').forEach(function(el, i) {
+    _smoothTo(el, _rnd(bases[i % bases.length], Math.max(1, Math.floor(bases[i % bases.length] * 0.06))), 1000);
+  });
+}, 4200);
+
+// Unit table ETA countdown
+setInterval(function () {
+  document.querySelectorAll('.unit-table td:last-child').forEach(function(el) {
+    if (el.textContent === '—') return;
+    const parts = el.textContent.split(':');
+    if (parts.length !== 2) return;
+    let total = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    total = Math.max(0, total - Math.floor(Math.random() * 8 + 4));
+    const m = Math.floor(total / 60), s = total % 60;
+    el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  });
+}, 5000);
+
+// ── CROWD HEATMAP SCANNING LINE ───────────────────────────────────────────
+(function () {
+  const s = document.createElement('style');
+  s.textContent = `
+    @keyframes scan { from{top:0} to{top:100%} }
+    .crowd-heatmap { position: relative; }
+    .crowd-heatmap::after {
+      content:''; position:absolute; left:0; right:0; height:2px;
+      background: linear-gradient(90deg,transparent,rgba(52,217,107,.7),transparent);
+      box-shadow: 0 0 8px rgba(52,217,107,.6);
+      animation: scan 2.8s linear infinite;
+    }
+  `;
+  document.head.appendChild(s);
+})();
 </script>
 
 </body>
