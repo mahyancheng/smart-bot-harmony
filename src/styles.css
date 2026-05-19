@@ -196,6 +196,15 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes vx-marquee-rev {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
 .vx-marquee {
   animation: vx-marquee 40s linear infinite;
+}
+
+.vx-marquee-rev {
+  animation: vx-marquee-rev 40s linear infinite;
 }
