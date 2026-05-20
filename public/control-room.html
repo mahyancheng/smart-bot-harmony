@@ -205,18 +205,19 @@ const WALL_Z   = -800;
 const CURVE_R  = 4000;   // arc radius — panels curve back and face camera
 const P_SCALE  = 2.2;    // 340px × 2.2 = 748 scene units wide
 
-// ── Centre — 2×2 tile of 4 panels (each iframe renders at native 340×300) ──
-// Container 700×620 at CTR_SCALE=1.40 → 980×868 scene (half-w=490, half-h=434)
+// ── Centre — the two real centrepiece dashboards (PNG) stacked ──
+// Container 700×620: two 700×300 dashboard images with a 20px gap.
+// At CTR_SCALE=1.40 → 980×868 scene (half-w=490, half-h=434)
 const CTR_SCALE = 1.40;
 const cwrap = document.createElement('div');
 cwrap.className = 'p-wrap';
-cwrap.style.cssText = 'width:700px;height:620px;display:grid;grid-template-columns:340px 340px;grid-template-rows:300px 300px;gap:20px;background:#060d1a;';
-['traffic-overview', 'system-health', 'building-alerts', 'panel-crowd'].forEach(id => {
-  const ifr = document.createElement('iframe');
-  ifr.src = '/command_center.html?p=' + id;
-  ifr.style.cssText = 'display:block;border:none;width:340px;height:300px;background:#060d1a;';
-  ifr.setAttribute('scrolling', 'no');
-  cwrap.appendChild(ifr);
+cwrap.style.cssText = 'width:700px;height:620px;display:flex;flex-direction:column;gap:20px;background:#060d1a;';
+['/citywide-surveillance.png', '/license-plate-recognition.png'].forEach(src => {
+  const img = document.createElement('img');
+  img.src = src;
+  img.style.cssText = 'display:block;width:700px;height:300px;object-fit:cover;object-position:center;background:#060d1a;';
+  img.draggable = false;
+  cwrap.appendChild(img);
 });
 const centerObj = new CSS3DObject(cwrap);
 centerObj.position.set(0, 0, WALL_Z);   // centre = apex of arc (theta=0, no rotation)
@@ -253,26 +254,29 @@ const C1 = 880, C2 = 1650, C3 = 2420;
 // R1 = 434+20+330 = 784; R3 = −784; R2 = 0
 const R1 = 784, R2 = 0, R3 = -784;
 
-// ── 15 UNIQUE PANELS — no duplicates ─────────────────────────
-// CENTRE 2×2: traffic-overview, system-health, building-alerts, panel-crowd
-// Sides total = 11 panels arranged as 6+4+1 across 3 rows
+// ── 15 UNIQUE PANELS on the sides (centre = 2 PNG dashboards) ──
+// Layout: 6 top + 6 mid (flanking centre) + 3 bottom = 15 panels, no duplicates
 
-// ROW 1 (top, full 3-col width per side = 6 panels)
+// ROW 1 (top, full 3 cols per side)
 mkPanel('weather',         -C3, R1);
-mkPanel('panel-units',     -C2, R1);
-mkPanel('notifications',   -C1, R1);
-mkPanel('panel-ss',        +C1, R1);
-mkPanel('transit',         +C2, R1);
-mkPanel('panel-network',   +C3, R1);
+mkPanel('system-health',   -C2, R1);
+mkPanel('panel-units',     -C1, R1);
+mkPanel('notifications',   +C1, R1);
+mkPanel('building-alerts', +C2, R1);
+mkPanel('panel-ss',        +C3, R1);
 
-// ROW 2 (mid, 2 cols per side flanking the centre = 4 panels)
-mkPanel('panel-comms',     -C2, R2);
-mkPanel('air-quality-1',   -C1, R2);
-mkPanel('air-quality-2',   +C1, R2);
+// ROW 2 (mid, full 3 cols per side — flanking the centre PNGs)
+mkPanel('transit',         -C3, R2);
+mkPanel('panel-network',   -C2, R2);
+mkPanel('panel-comms',     -C1, R2);
+mkPanel('traffic-overview',+C1, R2);
 mkPanel('panel-events',    +C2, R2);
+mkPanel('panel-crowd',     +C3, R2);
 
-// ROW 3 (single wide panel directly below centre)
-mkPanel('panel-timeline',  0, R3);
+// ROW 3 (bottom, 3 panels centred below the wall)
+mkPanel('panel-timeline',  -C1, R3);
+mkPanel('air-quality-1',     0, R3);
+mkPanel('air-quality-2',   +C1, R3);
 
 // ════════════════════════════════════════════════════════════
 //  WALKING PEOPLE — cone body + sphere head, white tones
