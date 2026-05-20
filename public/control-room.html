@@ -254,29 +254,37 @@ const C1 = 880, C2 = 1650, C3 = 2420;
 // R1 = 434+20+330 = 784; R3 = −784; R2 = 0
 const R1 = 784, R2 = 0, R3 = -784;
 
-// ── 15 UNIQUE PANELS on the sides (centre = 2 PNG dashboards) ──
-// Layout: 6 top + 6 mid (flanking centre) + 3 bottom = 15 panels, no duplicates
+// ── CLEAN VIDEO-WALL ALIGNMENT — symmetric 5/4/5 grid + 2-PNG centre ──
+//
+//        col:  −C2    −C1     0     +C1    +C2
+//   R1  top:  [P]    [P]    [P]    [P]    [P]         ← 5 panels
+//   R2  mid:  [P]    [P]   [CTR]   [P]    [P]         ← 4 panels (centre is the 2-PNG stack)
+//   R3  bot:  [P]    [P]    [P]    [P]    [P]         ← 5 panels
+//
+// All rows symmetric; identical 20-unit gaps between adjacent panels;
+// every panel sits on the same CURVE_R=4000 arc, facing the camera.
 
-// ROW 1 (top, full 3 cols per side)
-mkPanel('weather',         -C3, R1);
-mkPanel('system-health',   -C2, R1);
-mkPanel('panel-units',     -C1, R1);
-mkPanel('notifications',   +C1, R1);
-mkPanel('building-alerts', +C2, R1);
-mkPanel('panel-ss',        +C3, R1);
+// ROW 1 (top, 5 panels)
+mkPanel('weather',          -C2, R1);
+mkPanel('system-health',    -C1, R1);
+mkPanel('traffic-overview',   0, R1);
+mkPanel('notifications',    +C1, R1);
+mkPanel('building-alerts',  +C2, R1);
 
-// ROW 2 (mid, full 3 cols per side — flanking the centre PNGs)
-mkPanel('transit',         -C3, R2);
-mkPanel('panel-network',   -C2, R2);
-mkPanel('panel-comms',     -C1, R2);
-mkPanel('traffic-overview',+C1, R2);
-mkPanel('panel-events',    +C2, R2);
-mkPanel('panel-crowd',     +C3, R2);
+// ROW 2 (mid, 4 panels flanking the centre PNGs)
+mkPanel('transit',          -C2, R2);
+mkPanel('panel-network',    -C1, R2);
+mkPanel('panel-comms',      +C1, R2);
+mkPanel('panel-events',     +C2, R2);
 
-// ROW 3 (bottom, 3 panels centred below the wall)
-mkPanel('panel-timeline',  -C1, R3);
-mkPanel('air-quality-1',     0, R3);
-mkPanel('air-quality-2',   +C1, R3);
+// ROW 3 (bottom, 5 panels)
+mkPanel('panel-timeline',   -C2, R3);
+mkPanel('air-quality-1',    -C1, R3);
+mkPanel('panel-crowd',        0, R3);
+mkPanel('air-quality-2',    +C1, R3);
+mkPanel('panel-ss',         +C2, R3);
+
+// (panel-units unused — 14 sides + 2-PNG centre tile = clean symmetric wall)
 
 // ════════════════════════════════════════════════════════════
 //  WALKING PEOPLE — cone body + sphere head, white tones
