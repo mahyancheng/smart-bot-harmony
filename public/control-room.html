@@ -205,22 +205,22 @@ const WALL_Z   = -800;
 const CURVE_R  = 4000;   // arc radius — panels curve back and face camera
 const P_SCALE  = 1.5;    // side panels (smaller): 340×1.5=510 wide, 300×1.5=450 tall
 
-// ── Centre — TWO LARGE framed panels (the real centrepiece dashboards) ──
+// ── Centre — TWO LARGE framed panels stacked to span the FULL wall height ──
 // Each PNG is its own CSS3DObject with .p-wrap blue-glow frame.
-// CTR_SCALE=2.0 → each PNG: 700×220 CSS → 1400×440 scene (half-w=700, half-h=220).
-// Top centre at y=+260, bottom centre at y=-260 → ~80-unit visible gap in 3D.
-// (Height trimmed from 280 to 220 so the tighter camera doesn't clip R1/R3 panels.)
+// CTR_SCALE=2.0 → each PNG: 700×340 CSS → 1400×680 scene (half-w=700, half-h=340).
+// Top centre at y=+360, bottom centre at y=-360 → ~40-unit gap between PNGs.
+// Total centre extent ±700 — matches the height of the 3-row side stack (2×450+20=920 incl. gaps; ±~460).
 const CTR_SCALE = 2.0;
 [
-  { src: '/citywide-surveillance.png',     y: +260 },
-  { src: '/license-plate-recognition.png', y: -260 },
+  { src: '/citywide-surveillance.png',     y: +360 },
+  { src: '/license-plate-recognition.png', y: -360 },
 ].forEach(({ src, y }) => {
   const wrap = document.createElement('div');
   wrap.className = 'p-wrap';
-  wrap.style.cssText = 'width:700px;height:220px;overflow:hidden;background:#060d1a;';
+  wrap.style.cssText = 'width:700px;height:340px;overflow:hidden;background:#060d1a;';
   const img = document.createElement('img');
   img.src = src;
-  img.style.cssText = 'display:block;width:700px;height:220px;object-fit:cover;object-position:center;background:#060d1a;';
+  img.style.cssText = 'display:block;width:700px;height:340px;object-fit:cover;object-position:center;background:#060d1a;';
   img.draggable = false;
   wrap.appendChild(img);
   const obj = new CSS3DObject(wrap);
@@ -253,43 +253,41 @@ function mkPanel(id, x, y) {
 
 // Column x-centres (centre half=700, panel half=255, gap=20):
 // C1 = 700+20+255 = 975 ≈ 980;  C2 = 980+255+20+255 = 1510
-const C1 = 980, C2 = 1510, C3 = 2040;   // C3 unused but kept for reference
+const C1 = 980, C2 = 1510;
 
-// Row y-centres (top-centre's top edge at y=480 with new shorter PNGs, panel half-h=225, gap=20):
-// R1 = 480+20+225 = 725 ≈ 730;  R3 = -730;  R2 = 0
-const R1 = 730, R2 = 0, R3 = -730;
+// Row y-centres — tight 3-row stack on each side (panel half-h=225, gap=20):
+// rows centered around y=0 with 20-unit gaps between adjacent rows
+// R1 = 225+20+225 = 470;  R2 = 0;  R3 = -470
+const R1 = 470, R2 = 0, R3 = -470;
 
-// ── CLEAN VIDEO-WALL ALIGNMENT — symmetric 5/4/5 grid + 2-PNG centre ──
+// ── VIDEO-WALL LAYOUT — tight 2×3 cluster on each side of the centre ──
 //
-//        col:  −C2    −C1     0     +C1    +C2
-//   R1  top:  [P]    [P]    [P]    [P]    [P]         ← 5 panels
-//   R2  mid:  [P]    [P]   [CTR]   [P]    [P]         ← 4 panels (centre is the 2-PNG stack)
-//   R3  bot:  [P]    [P]    [P]    [P]    [P]         ← 5 panels
+//   col:    −C2  −C1   [ CENTRE PNGs ]   +C1  +C2
+//   R1  top: [P]  [P]                    [P]  [P]
+//   R2  mid: [P]  [P]      [ CTR ]       [P]  [P]
+//   R3  bot: [P]  [P]                    [P]  [P]
 //
-// All rows symmetric; identical 20-unit gaps between adjacent panels;
-// every panel sits on the same CURVE_R=4000 arc, facing the camera.
+// 6 LEFT panels (3 rows × 2 cols) stacked tight with 20-unit gaps in every
+// direction; 6 RIGHT panels mirror them. Centre PNGs span the full vertical
+// extent so there's no empty space above/below them.
 
-// ROW 1 (top, 5 panels)
+// LEFT cluster (6 panels)
 mkPanel('weather',          -C2, R1);
 mkPanel('system-health',    -C1, R1);
-mkPanel('traffic-overview',   0, R1);
-mkPanel('notifications',    +C1, R1);
-mkPanel('building-alerts',  +C2, R1);
-
-// ROW 2 (mid, 4 panels flanking the centre PNGs)
 mkPanel('transit',          -C2, R2);
 mkPanel('panel-network',    -C1, R2);
-mkPanel('panel-comms',      +C1, R2);
-mkPanel('panel-events',     +C2, R2);
-
-// ROW 3 (bottom, 5 panels) — air-quality-2 removed: it duplicates air-quality-1's UI
 mkPanel('panel-timeline',   -C2, R3);
 mkPanel('air-quality-1',    -C1, R3);
-mkPanel('panel-crowd',        0, R3);
+
+// RIGHT cluster (6 panels)
+mkPanel('notifications',    +C1, R1);
+mkPanel('building-alerts',  +C2, R1);
+mkPanel('panel-comms',      +C1, R2);
+mkPanel('panel-events',     +C2, R2);
 mkPanel('panel-units',      +C1, R3);
 mkPanel('panel-ss',         +C2, R3);
 
-// (air-quality-2 dropped — visually identical to air-quality-1; all 14 panels now distinct)
+// (traffic-overview, panel-crowd, air-quality-2 unused — removed per user request)
 
 // (Walking people removed per user request)
 
