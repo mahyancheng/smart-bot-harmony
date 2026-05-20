@@ -104,7 +104,7 @@ scene.fog = new THREE.FogExp2(0xf0f4ff, 0.000018);
 // Camera: elevated overview — pulled back to z=2200 so all 3 side columns
 // (C3 outer edge at x=2794) fit within the horizontal FOV with margin.
 const camera = new THREE.PerspectiveCamera(62, W / H, 5, 28000);
-const CAM_BASE = new THREE.Vector3(0, 700, 2500);
+const CAM_BASE = new THREE.Vector3(0, 700, 1800);   // pulled in closer for more dramatic framing
 camera.position.copy(CAM_BASE);
 camera.lookAt(0, 0, -800);
 
@@ -203,18 +203,16 @@ scene.add(screenPool);
 // ════════════════════════════════════════════════════════════
 const WALL_Z   = -800;
 const CURVE_R  = 4000;   // arc radius — panels curve back and face camera
-const P_SCALE  = 2.2;    // 340px × 2.2 = 748 scene units wide
+const P_SCALE  = 1.5;    // side panels (smaller): 340×1.5=510 wide, 300×1.5=450 tall
 
-// ── Centre — the two real centrepiece dashboards as SEPARATE framed panels ──
-// Each PNG is its own CSS3DObject with its own glowing .p-wrap frame.
-// Visible 100-unit gap in 3D between the two panels.
-//  • Top:    citywide-surveillance.png at y = +220
-//  • Bottom: license-plate-recognition.png at y = -220
-// Each 700×280 CSS at CTR_SCALE=1.40 → 980×392 scene (half-w=490, half-h=196)
-const CTR_SCALE = 1.40;
+// ── Centre — TWO LARGE framed panels (the real centrepiece dashboards) ──
+// Each PNG is its own CSS3DObject with .p-wrap blue-glow frame.
+// CTR_SCALE=2.0 → each PNG: 700×280 CSS → 1400×560 scene (half-w=700, half-h=280).
+// Top centre at y=+320, bottom centre at y=-320 → ~80-unit visible gap in 3D.
+const CTR_SCALE = 2.0;
 [
-  { src: '/citywide-surveillance.png',     y: +220 },
-  { src: '/license-plate-recognition.png', y: -220 },
+  { src: '/citywide-surveillance.png',     y: +320 },
+  { src: '/license-plate-recognition.png', y: -320 },
 ].forEach(({ src, y }) => {
   const wrap = document.createElement('div');
   wrap.className = 'p-wrap';
@@ -225,7 +223,7 @@ const CTR_SCALE = 1.40;
   img.draggable = false;
   wrap.appendChild(img);
   const obj = new CSS3DObject(wrap);
-  obj.position.set(0, y, WALL_Z);   // both on the arc apex (theta=0, no rotation)
+  obj.position.set(0, y, WALL_Z);
   obj.scale.setScalar(CTR_SCALE);
   cssScene.add(obj);
 });
@@ -252,13 +250,13 @@ function mkPanel(id, x, y) {
   cssScene.add(obj);
 }
 
-// Column x-centres (centre half=490, panel half=374, gap=20):
-// C1 = 490+20+374 = 884≈880; C2 = 880+748+20 = 1648≈1650; C3 = 1650+748+20 = 2418≈2420
-const C1 = 880, C2 = 1650, C3 = 2420;
+// Column x-centres (centre half=700, panel half=255, gap=20):
+// C1 = 700+20+255 = 975 ≈ 980;  C2 = 980+255+20+255 = 1510
+const C1 = 980, C2 = 1510, C3 = 2040;   // C3 unused but kept for reference
 
-// Row y-centres (centre half-h=434, panel half-h=330, gap=20):
-// R1 = 434+20+330 = 784; R3 = −784; R2 = 0
-const R1 = 784, R2 = 0, R3 = -784;
+// Row y-centres (top-centre's top edge at y=600, panel half-h=225, gap=20):
+// R1 = 600+20+225 = 845 ≈ 850;  R3 = -850;  R2 = 0
+const R1 = 850, R2 = 0, R3 = -850;
 
 // ── CLEAN VIDEO-WALL ALIGNMENT — symmetric 5/4/5 grid + 2-PNG centre ──
 //
