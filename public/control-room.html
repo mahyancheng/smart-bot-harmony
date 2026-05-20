@@ -6,66 +6,64 @@
   <title>Vertifex — Operations Control Centre</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- Three.js loaded via full CDN URLs — no importmap needed -->
-
-
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     html,body {
       width:100%; height:100%; overflow:hidden;
-      /* Deep navy → near-black: same cool-dark palette as the main website */
-      background: radial-gradient(ellipse at 50% 38%, #081428 0%, #030810 52%, #010407 100%);
+      /* Website white palette */
+      background:#f4f7ff;
     }
 
-    /* Layering: css3d below, webgl (alpha) on top */
+    /* CSS3D below, WebGL (alpha) on top.
+       KEY RULE: only put WebGL geometry that does NOT overlap the
+       video-wall area in screen space (no solid back/side-wall planes). */
     #css3d-layer { position:absolute; inset:0; z-index:1; }
     #webgl-layer { position:absolute; inset:0; z-index:2; pointer-events:none; }
 
-    /* Panel iframe container — stronger blue glow to match site primary */
+    /* Dark-glass panel — strong contrast against white room */
     .p-wrap {
       border-radius:4px;
       overflow:hidden;
-      background:#070d18;
+      background:#060d1a;
       box-shadow:
-        0 0 0 1px rgba(74,168,255,0.35),
-        0 0 60px rgba(74,168,255,0.14),
-        0 0 120px rgba(40,100,220,0.06),
-        inset 0 0 0 1px rgba(255,255,255,0.06);
+        0 0 0 2px rgba(30,90,220,0.55),
+        0 0 55px rgba(40,100,255,0.24),
+        inset 0 0 0 1px rgba(255,255,255,0.07);
     }
-    .p-wrap iframe { display:block; border:none; background:#070d18; }
+    .p-wrap iframe { display:block; border:none; background:#060d1a; }
 
-    /* ── HUD ───────────────────────────────────────────────── */
+    /* HUD — light theme */
     #hud {
       position:absolute; top:0; left:0; right:0; z-index:10;
       display:flex; align-items:center; justify-content:space-between;
-      padding:13px 28px;
-      background:linear-gradient(to bottom,rgba(2,4,8,0.92) 0%,transparent 100%);
+      padding:14px 28px;
+      background:linear-gradient(to bottom,rgba(244,247,255,0.96) 0%,transparent 100%);
+      border-bottom:1px solid rgba(30,80,200,0.12);
       pointer-events:none;
       font-family:'IBM Plex Mono',monospace;
-      font-size:10px; color:#4a5464; letter-spacing:1.6px; text-transform:uppercase;
+      font-size:10px; color:#4a5870; letter-spacing:1.6px; text-transform:uppercase;
     }
-    #hud .brand { font-size:13px; color:#4aa8ff; font-weight:500; letter-spacing:2px; }
+    #hud .brand { font-size:13px; color:#1a44cc; font-weight:500; letter-spacing:2px; }
     #hud .status-bar { display:flex; align-items:center; gap:22px; }
     .live-dot {
       display:inline-block; width:6px; height:6px; border-radius:50%;
-      background:#34d96b; box-shadow:0 0 8px #34d96b;
+      background:#00bb55; box-shadow:0 0 7px #00bb55;
       margin-right:7px; animation:blink 1.4s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.12} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
-    /* ── NAV PILL ──────────────────────────────────────────── */
     #nav {
       position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
       z-index:10; display:flex; gap:10px;
     }
     .nav-btn {
       font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px;
-      text-transform:uppercase; text-decoration:none; color:#5a6473;
-      padding:8px 18px; border:1px solid rgba(255,255,255,0.08); border-radius:2px;
-      background:rgba(3,5,8,0.75); backdrop-filter:blur(6px);
+      text-transform:uppercase; text-decoration:none; color:#3a4e6a;
+      padding:8px 18px; border:1px solid rgba(30,80,200,0.22); border-radius:2px;
+      background:rgba(244,247,255,0.92); backdrop-filter:blur(8px);
       cursor:pointer; transition:all 0.2s;
     }
-    .nav-btn:hover { color:#4aa8ff; border-color:rgba(74,168,255,0.35); }
+    .nav-btn:hover { color:#1a44cc; border-color:rgba(30,80,200,0.5); }
   </style>
 </head>
 <body>
@@ -94,19 +92,23 @@ import { CSS3DRenderer, CSS3DObject } from 'https://esm.sh/three@0.160.0/example
 
 // ════════════════════════════════════════════════════════════
 //  SCENE & CAMERA
+//  High bird's-eye view: camera elevated, looking down + forward
 // ════════════════════════════════════════════════════════════
 const W = window.innerWidth, H = window.innerHeight;
 const scene    = new THREE.Scene();
 const cssScene = new THREE.Scene();
 
-scene.fog = new THREE.FogExp2(0x030810, 0.000080);
+// Very faint white fog (depth without obscuring panels)
+scene.fog = new THREE.FogExp2(0xf0f4ff, 0.000018);
 
-const camera = new THREE.PerspectiveCamera(54, W/H, 5, 24000);
-const CAM_BASE = new THREE.Vector3(0, 310, 2180);
+// Camera: elevated view — high enough for "control room overview" feel
+// but level enough to see all 3 panel rows clearly.
+const camera = new THREE.PerspectiveCamera(62, W / H, 5, 28000);
+const CAM_BASE = new THREE.Vector3(0, 700, 1700);
 camera.position.copy(CAM_BASE);
-camera.lookAt(0, 70, 0);
+camera.lookAt(0, 0, -800);
 
-// ── WebGL renderer ────────────────────────────────────────────
+// ── WebGL renderer (transparent — CSS3D shows through) ────────
 const gl = new THREE.WebGLRenderer({ antialias:true, alpha:true });
 gl.setPixelRatio(Math.min(devicePixelRatio, 2));
 gl.setSize(W, H);
@@ -122,346 +124,326 @@ Object.assign(css.domElement.style, { position:'absolute', top:'0', left:'0' });
 document.getElementById('css3d-layer').appendChild(css.domElement);
 
 // ════════════════════════════════════════════════════════════
-//  LIGHTING
+//  LIGHTING — bright white room
 // ════════════════════════════════════════════════════════════
-scene.add(new THREE.AmbientLight(0x0a1624, 7));
+scene.add(new THREE.AmbientLight(0xffffff, 14));
 
-// Main ceiling wash — cool blue (matches website primary)
-const ceilRing = new THREE.PointLight(0x4488bb, 18, 6000, 1);
-ceilRing.position.set(0, 920, -100);
-scene.add(ceilRing);
+const keyLight = new THREE.DirectionalLight(0xffffff, 5.5);
+keyLight.position.set(0, 1600, 800);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+scene.add(keyLight);
 
-// Screen-wall back-glow — the screens illuminate the room
-const wallGlow = new THREE.PointLight(0x1a44cc, 22, 4800, 1.3);
-wallGlow.position.set(0, 220, -700);
-scene.add(wallGlow);
+// Screen-glow: blue light emanating from the video wall
+const screenGlow = new THREE.PointLight(0x3366ff, 24, 5500, 1.2);
+screenGlow.position.set(0, 0, -1100);
+scene.add(screenGlow);
 
-// Side fill lights — navy blue flanks
-[-2200, 2200].forEach(x => {
-  const sl = new THREE.PointLight(0x0a1e55, 8, 4500, 1);
-  sl.position.set(x, 180, 0);
-  scene.add(sl);
+// Gentle side fills
+[-2400, 2400].forEach(x => {
+  const fillLight = new THREE.PointLight(0xddeeff, 6, 9000, 0.4);
+  fillLight.position.set(x, 400, -200);
+  scene.add(fillLight);
 });
 
-// Operator-zone floor glow
-const floorGlow = new THREE.PointLight(0x0d2248, 14, 2800, 2);
-floorGlow.position.set(0, 80, 1100);
-scene.add(floorGlow);
+// Floor bounce (screen light reflecting off white floor)
+const floorBounce = new THREE.PointLight(0x8aaeff, 10, 4200, 1.7);
+floorBounce.position.set(0, -700, 200);
+scene.add(floorBounce);
 
-// Dedicated fill light over the walking area — makes figures visible
-const headLight = new THREE.PointLight(0x3366aa, 14, 3000, 1.5);
-headLight.position.set(0, 50, 850);
-scene.add(headLight);
+// Overhead spots above walking area
+[-700, 0, 700].forEach(x => {
+  const sp = new THREE.PointLight(0xffffff, 4, 3200, 1.5);
+  sp.position.set(x, 200, 700);
+  scene.add(sp);
+});
 
 // ════════════════════════════════════════════════════════════
-//  FLOOR — dark polished concrete with grid overlay
+//  FLOOR — white polished concrete with grid
+//  IMPORTANT: no solid wall planes — they would overlay CSS3D panels.
+//  The page background (#f4f7ff) acts as the white room "walls".
 // ════════════════════════════════════════════════════════════
-const FLOOR_Y = -420;
+const FLOOR_Y = -1100;   // well below panels so floor doesn't occlude CSS3D rows
 
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(11000, 9000),
-  new THREE.MeshStandardMaterial({ color:0x060b16, roughness:0.72, metalness:0.55 })
-);
-floor.rotation.x = -Math.PI/2;
-floor.position.y = FLOOR_Y;
-floor.receiveShadow = true;
-scene.add(floor);
+// NOTE: no solid floor PlaneGeometry — it would render at z-index:2 (WebGL) and
+// cover the CSS3D panel rows below, since the floor projects onto the same screen area.
+// The CSS body background (#f4f7ff) provides the white "floor" appearance.
 
-// Fine grid — the hallmark of a real ops floor
-const grid = new THREE.GridHelper(9000, 48, 0x112244, 0x0c1830);
+// Very faint grid — sparse and semi-transparent to minimise occlusion of CSS3D panels below
+const grid = new THREE.GridHelper(10000, 30, 0xc8d8ee, 0xe0eaf8);
 grid.position.y = FLOOR_Y + 1;
+grid.material.transparent = true;
+grid.material.opacity = 0.22;
 scene.add(grid);
 
-// Subtle radial glow under the operator zone
-const gDisk = new THREE.Mesh(
-  new THREE.CircleGeometry(1000, 64),
-  new THREE.MeshBasicMaterial({ color:0x0d2045, transparent:true, opacity:0.18 })
+// Blue screen-light pool — keep very subtle (opacity 0.07) to not occlude panels much
+const screenPool = new THREE.Mesh(
+  new THREE.CircleGeometry(1200, 48),
+  new THREE.MeshBasicMaterial({ color:0xaabcff, transparent:true, opacity:0.07 })
 );
-gDisk.rotation.x = -Math.PI/2;
-gDisk.position.set(0, FLOOR_Y + 2, 800);
-scene.add(gDisk);
+screenPool.rotation.x = -Math.PI / 2;
+screenPool.position.set(0, FLOOR_Y + 2, -200);
+scene.add(screenPool);
 
 // ════════════════════════════════════════════════════════════
-//  CEILING ARC GLOW STRIP (no solid ceiling — gradient bg handles it)
+//  CEILING — only the curved arc + inner ring (thin tubes, no solid plane)
+//  Thin geometry won't cover panel area in screen space.
 // ════════════════════════════════════════════════════════════
-const CEIL_Y = 900;
+const CEIL_Y = 1100;
 
-// Curved ceiling glow tube — wider arc, prominent landmark
-const arcPts = [];
-for (let i = -74; i <= 74; i += 2) {
-  const r = i * Math.PI / 180;
-  arcPts.push(new THREE.Vector3(1300*Math.sin(r), 0, -1300*Math.cos(r) + 150));
+function makeCeilingArc(r, thickness, color, opacity, n = 88) {
+  const pts = [];
+  for (let i = -72; i <= 72; i += 2) {
+    const rad = i * Math.PI / 180;
+    pts.push(new THREE.Vector3(r * Math.sin(rad), 0, -r * Math.cos(rad) + 150));
+  }
+  const mat = opacity < 1
+    ? new THREE.MeshBasicMaterial({ color, transparent:true, opacity })
+    : new THREE.MeshBasicMaterial({ color });
+  const mesh = new THREE.Mesh(
+    new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), n, thickness, 8, false),
+    mat
+  );
+  mesh.position.y = CEIL_Y;
+  scene.add(mesh);
 }
-const ceilTube = new THREE.Mesh(
-  new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPts), 90, 8, 8, false),
-  new THREE.MeshBasicMaterial({ color:0x88bce0 })
-);
-ceilTube.position.y = CEIL_Y - 10;
-scene.add(ceilTube);
+makeCeilingArc(1400, 10, 0x2255ee, 1);     // primary brand-blue arc
+makeCeilingArc(1000,  5, 0x4477cc, 0.60);  // inner softer ring
 
-// Second inner arc — tighter, dimmer — depth cue
-const arcPts2 = [];
-for (let i = -55; i <= 55; i += 2) {
-  const r = i * Math.PI / 180;
-  arcPts2.push(new THREE.Vector3(950*Math.sin(r), 0, -950*Math.cos(r) + 100));
-}
-const ceilTube2 = new THREE.Mesh(
-  new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPts2), 70, 4, 8, false),
-  new THREE.MeshBasicMaterial({ color:0x4a7aaa, transparent:true, opacity:0.65 })
-);
-ceilTube2.position.y = CEIL_Y - 12;
-scene.add(ceilTube2);
-
-// Soft downward glow halo under the primary arc
-const halo = new THREE.Mesh(
-  new THREE.PlaneGeometry(3800, 380),
-  new THREE.MeshBasicMaterial({ color:0x2255aa, transparent:true, opacity:0.05 })
-);
-halo.rotation.x = Math.PI/2;
-halo.position.set(0, CEIL_Y - 50, -130);
-scene.add(halo);
+// Ceiling downlights (small circles — no depth occlusion issue)
+[-750, 0, 750].forEach(x => {
+  [-500, 200, 900, 1550].forEach(z => {
+    const dl = new THREE.Mesh(
+      new THREE.CircleGeometry(24, 16),
+      new THREE.MeshBasicMaterial({ color:0xffffff })
+    );
+    dl.rotation.x = Math.PI / 2;
+    dl.position.set(x, CEIL_Y - 1, z);
+    scene.add(dl);
+  });
+});
 
 // ════════════════════════════════════════════════════════════
-//  CURVED BACK WALL (behind the panels)
-// ════════════════════════════════════════════════════════════
-const backWall = new THREE.Mesh(
-  new THREE.CylinderGeometry(2000, 2000, 1500, 72, 1, true,
-    -Math.PI * 0.65, Math.PI * 1.30),
-  new THREE.MeshStandardMaterial({
-    color:0x07101c, roughness:0.88, metalness:0.15, side:THREE.BackSide
-  })
-);
-backWall.position.y = 140;
-scene.add(backWall);
-
-// ════════════════════════════════════════════════════════════
-//  EQUIPMENT RACKS (flanking the screen wall)
+//  EQUIPMENT RACKS — white chassis, coloured LEDs
+//  Placed on far sides (x > ±1900) — outside the panel x-range
+//  so they never overlap CSS3D panels in screen space.
 // ════════════════════════════════════════════════════════════
 function mkRack(x, z, rotY) {
   const g    = new THREE.Group();
   const body = new THREE.Mesh(
-    new THREE.BoxGeometry(200, 720, 110),
-    new THREE.MeshStandardMaterial({ color:0x0b1622, roughness:0.38, metalness:0.82 })
+    new THREE.BoxGeometry(210, 740, 115),
+    new THREE.MeshStandardMaterial({ color:0xe4eaf6, roughness:0.40, metalness:0.10 })
   );
-  body.position.y = 0;
   g.add(body);
 
-  // Rack unit dividers
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 17; i++) {
     const div = new THREE.Mesh(
-      new THREE.BoxGeometry(190, 3, 100),
-      new THREE.MeshBasicMaterial({ color:0x090f1c })
+      new THREE.BoxGeometry(200, 2, 105),
+      new THREE.MeshBasicMaterial({ color:0xc8d4ea })
     );
-    div.position.set(0, -340 + i * 44, 0);
+    div.position.set(0, -355 + i * 44, 0);
     g.add(div);
   }
 
-  // LED status indicators (green = ok, blue = data, amber = warn)
-  const ledColors = [0x00cc55, 0x00cc55, 0x0055ff, 0x0055ff, 0x0055ff, 0xcc8800];
+  const lc = [0x0055ff, 0x00cc44, 0x00cc44, 0x0055ff, 0x00cc44, 0xff8800];
   for (let i = 0; i < 12; i++) {
     const led = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 5, 3),
-      new THREE.MeshBasicMaterial({
-        color: ledColors[Math.floor(Math.random() * ledColors.length)]
-      })
+      new THREE.BoxGeometry(8, 5, 3),
+      new THREE.MeshBasicMaterial({ color: lc[Math.floor(Math.random() * lc.length)] })
     );
-    led.position.set(-78 + Math.random()*156, -300 + i * 54 + Math.random()*20, 57);
+    led.position.set(-76 + Math.random() * 152, -310 + i * 54 + Math.random() * 18, 59);
     g.add(led);
   }
 
-  // Mounting rails
-  [-88, 88].forEach(rx => {
+  [-90, 90].forEach(rx => {
     const rail = new THREE.Mesh(
-      new THREE.BoxGeometry(6, 700, 8),
-      new THREE.MeshStandardMaterial({ color:0x0e1a2c, roughness:0.3, metalness:0.9 })
+      new THREE.BoxGeometry(6, 720, 9),
+      new THREE.MeshStandardMaterial({ color:0xccd8f0, roughness:0.4 })
     );
-    rail.position.set(rx, 0, 48);
+    rail.position.set(rx, 0, 50);
     g.add(rail);
   });
 
-  g.position.set(x, FLOOR_Y + 360, z);
+  g.position.set(x, FLOOR_Y + 370, z);
   g.rotation.y = rotY;
   scene.add(g);
-  return g;
 }
 
-// Three columns of racks on each side
-[-2050, -2200, -2050].forEach((x, i) => mkRack(x, -500 + i*500, 0.38));
-[ 2050,  2200,  2050].forEach((x, i) => mkRack(x, -500 + i*500, -0.38));
+[-2050, -2210, -2050].forEach((x, i) => mkRack(x, -500 + i * 500, 0.28));
+[ 2050,  2210,  2050].forEach((x, i) => mkRack(x, -500 + i * 500, -0.28));
 
-// ════════════════════════════════════════════════════════════
-//  VERTICAL LED COLUMN STRIPS (edge lighting on back wall)
-// ════════════════════════════════════════════════════════════
-[-1920, 1920].forEach(x => {
-  for (let col = 0; col < 3; col++) {
-    const strip = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 700, 5),
-      new THREE.MeshBasicMaterial({ color:0x1a4488, transparent:true, opacity:0.75 })
+// Vertical LED accent strips beside racks (anchored to new FLOOR_Y)
+[-2000, 2000].forEach(x => {
+  [0, 26, 52].forEach(dx => {
+    const s = new THREE.Mesh(
+      new THREE.BoxGeometry(8, 720, 5),
+      new THREE.MeshBasicMaterial({ color:0x2255dd, transparent:true, opacity:0.75 })
     );
-    strip.position.set(x + col * 28, 100, -280);
-    scene.add(strip);
-  }
+    s.position.set(x + dx * Math.sign(x), FLOOR_Y + 360, -350);
+    scene.add(s);
+  });
 });
 
-// ════════════════════════════════════════════════════════════
-//  RAISED FLOOR ACCENT LINES (thin LED-lit floor channels)
-// ════════════════════════════════════════════════════════════
-// Subtle blue inset lines running toward the screen wall
-[-700, 0, 700].forEach(x => {
-  const line = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 3, 3000),
-    new THREE.MeshBasicMaterial({ color:0x1a3a70, transparent:true, opacity:0.55 })
+// Floor guide lines (very thin, semi-transparent — minimal occlusion)
+[-850, 0, 850].forEach(x => {
+  const ln = new THREE.Mesh(
+    new THREE.BoxGeometry(3, 2, 3600),
+    new THREE.MeshBasicMaterial({ color:0x7898cc, transparent:true, opacity:0.30 })
   );
-  line.position.set(x, FLOOR_Y + 2, -100);
-  scene.add(line);
+  ln.position.set(x, FLOOR_Y + 2, -100);
+  scene.add(ln);
 });
 
 // ════════════════════════════════════════════════════════════
-//  CSS3D PANELS — website panels, 1.5× scale
+//  VIDEO WALL — flat alignment at WALL_Z
+//
+//  All panels face camera (no Y-rotation) so content is never
+//  clipped or foreshortened. Panel scale = 2.2 so they read
+//  clearly at the chosen camera distance.
+//
+//  Layout (3 cols × 3 rows each side + big centre):
+//
+//  col x:  −2420  −1650  −880   [BIG 960 WIDE]  +880  +1650  +2420
+//  row y=790: ████   ████   ████               ████  ████   ████
+//  row y=200: ████   ████   ████  [  cmd  ]    ████  ████   ████
+//  row y=−390:████   ████   ████               ████  ████   ████
 // ════════════════════════════════════════════════════════════
-const ARC_R   = 1680;
-const P_SCALE = 1.5;  // 340×300 content appears ~510×450 in scene
+const WALL_Z      = -800;   // video wall z-position
+const P_SCALE     = 2.2;    // scene units per CSS pixel  (340×2.2=748 wide)
+const CTR_SCALE   = 0.50;   // big centre: 1920×0.50=960 wide, 920×0.50=460 tall
 
-function mkPanel(panelId, deg, y, sc) {
-  const scale = sc ?? P_SCALE;
-  const wrap  = document.createElement('div');
-  wrap.className   = 'p-wrap';
-  wrap.style.width  = '340px';
-  wrap.style.height = '300px';
-
-  const ifr = document.createElement('iframe');
-  ifr.src           = '/command_center.html?p=' + panelId;
-  ifr.style.cssText = 'display:block;border:none;width:340px;height:300px;';
-  ifr.setAttribute('scrolling', 'no');
-  wrap.appendChild(ifr);
-
-  const obj = new CSS3DObject(wrap);
-  const rad = deg * Math.PI / 180;
-  obj.position.set(ARC_R * Math.sin(rad), y, -ARC_R * Math.cos(rad));
-  obj.rotation.y = -rad;
-  obj.scale.setScalar(scale);
-  cssScene.add(obj);
-  return obj;
-}
-
-// ── TOP ROW  y = 490 — panels used on Row 1 of the main site ──
-mkPanel('traffic-overview', -62, 490);
-mkPanel('weather',          -40, 490);
-mkPanel('system-health',    -18, 490);
-mkPanel('panel-units',       18, 490);
-mkPanel('notifications',     40, 490);
-mkPanel('building-alerts',   62, 490);
-
-// ── MID ROW  y = 80 — panels from Row 2 & 3 of the site ──────
-mkPanel('panel-ss',         -62, 80);
-mkPanel('transit',          -40, 80);
-mkPanel('panel-network',    -18, 80);
-mkPanel('panel-comms',       18, 80);
-mkPanel('panel-events',      40, 80);
-mkPanel('panel-crowd',       62, 80);
-
-// ── CENTER — full command_center.html, enlarged ───────────────
+// ── Big centre display ────────────────────────────────────────
 const cwrap = document.createElement('div');
-cwrap.className   = 'p-wrap';
-cwrap.style.width  = '1920px';
-cwrap.style.height = '920px';
-const cifr = document.createElement('iframe');
-cifr.src           = '/command_center.html';
-cifr.style.cssText = 'display:block;border:none;width:1920px;height:920px;';
+cwrap.className     = 'p-wrap';
+cwrap.style.cssText = 'width:1920px;height:920px;';
+const cifr          = document.createElement('iframe');
+cifr.src            = '/command_center.html';
+cifr.style.cssText  = 'display:block;border:none;width:1920px;height:920px;';
 cifr.setAttribute('scrolling', 'no');
 cwrap.appendChild(cifr);
 const centerObj = new CSS3DObject(cwrap);
-centerObj.position.set(0, 295, -1440);
-centerObj.scale.setScalar(0.50);   // 1920 × 0.50 = 960 scene-units wide
+centerObj.position.set(0, 0, WALL_Z);   // centre panel at camera lookAt y
+centerObj.scale.setScalar(CTR_SCALE);
 cssScene.add(centerObj);
 
-// ── BOTTOM ROW  y = −360 — AQ & timeline from Row 1 & 3 ──────
-mkPanel('panel-timeline',  -40, -360);
-mkPanel('air-quality-1',   -14, -360);
-mkPanel('air-quality-2',    14, -360);
-mkPanel('panel-events',     40, -360);
+// ── Side panel factory ────────────────────────────────────────
+function mkPanel(id, x, y) {
+  const wrap = document.createElement('div');
+  wrap.className     = 'p-wrap';
+  wrap.style.cssText = 'width:340px;height:300px;';
+  const ifr          = document.createElement('iframe');
+  ifr.src            = '/command_center.html?p=' + id;
+  ifr.style.cssText  = 'display:block;border:none;width:340px;height:300px;';
+  ifr.setAttribute('scrolling', 'no');
+  wrap.appendChild(ifr);
+  const obj = new CSS3DObject(wrap);
+  obj.position.set(x, y, WALL_Z);
+  obj.scale.setScalar(P_SCALE);
+  cssScene.add(obj);
+}
+
+// Column centres (same — verified they fit within hFOV=98.6° at distance 2500):
+// centre half=480, panel half=374, gap=20 → C1=874≈880; C2=880+748+20=1648≈1650; C3≈2420
+const C1 = 880, C2 = 1650, C3 = 2420;
+
+// Row centres — corrected to avoid overlap between adjacent rows.
+// Panel half-height = 330. Row spacing = 330+20+330 = 680 (guaranteed 20-unit gap).
+// Centre panel half-height = 230; centre is at y=0 (= lookAt y).
+// R1 = 0 + 330 + 20 + 330 = 680;  R3 = −680.
+// (Centre top=230 < R1 bottom=680-330=350 ✓, Centre bottom=−230 > R3 top=−680+330=−350 ✓)
+const R1 = 680, R2 = 0, R3 = -680;
+
+// ── ROW 1 — top ───────────────────────────────────────────────
+mkPanel('traffic-overview', -C3, R1);
+mkPanel('weather',          -C2, R1);
+mkPanel('system-health',    -C1, R1);
+mkPanel('panel-units',      +C1, R1);
+mkPanel('notifications',    +C2, R1);
+mkPanel('building-alerts',  +C3, R1);
+
+// ── ROW 2 — mid (flanking big centre) ─────────────────────────
+mkPanel('panel-ss',         -C3, R2);
+mkPanel('transit',          -C2, R2);
+mkPanel('panel-network',    -C1, R2);
+mkPanel('panel-comms',      +C1, R2);
+mkPanel('panel-events',     +C2, R2);
+mkPanel('panel-crowd',      +C3, R2);
+
+// ── ROW 3 — bottom ────────────────────────────────────────────
+mkPanel('panel-timeline',   -C3, R3);
+mkPanel('air-quality-1',    -C2, R3);
+mkPanel('air-quality-2',    -C1, R3);
+mkPanel('panel-crowd',      +C1, R3);   // independent iframe instance
+mkPanel('panel-events',     +C2, R3);
+mkPanel('building-alerts',  +C3, R3);
 
 // ════════════════════════════════════════════════════════════
-//  WALKING PEOPLE  — cone body + sphere head + cylinder legs
+//  WALKING PEOPLE — cone body + sphere head, white tones
 // ════════════════════════════════════════════════════════════
-const PEOPLE_BASE_Y = FLOOR_Y;  // legs touch this y
-
 class Person {
-  constructor({ startAngle, cx, cz, rx, rz, speed, bodyHex }) {
+  constructor({ startAngle, cx, cz, rx, rz, speed }) {
     const g = new THREE.Group();
 
     const bodyMat = new THREE.MeshStandardMaterial({
-      color: bodyHex, roughness: 0.65, metalness: 0.08
+      color: 0xe8edf8, roughness: 0.68, metalness: 0.0
     });
     const headMat = new THREE.MeshStandardMaterial({
-      color: 0xc8a87a, roughness: 0.72
+      color: 0xf4e8d8, roughness: 0.65
     });
 
-    // Cone body — wide base, narrow top
-    const body = new THREE.Mesh(new THREE.ConeGeometry(36, 115, 8), bodyMat);
-    body.position.y = 58;
+    // Cone body (wide at base, narrow top)
+    const body = new THREE.Mesh(new THREE.ConeGeometry(36, 118, 8), bodyMat);
+    body.position.y = 59;
     g.add(body);
 
-    // Sphere head — slightly detached above cone tip, emissive so it catches the light
-    const head = new THREE.Mesh(new THREE.SphereGeometry(28, 12, 10),
-      new THREE.MeshStandardMaterial({ color:0xd4aa82, roughness:0.65, emissive:0x441a00, emissiveIntensity:0.18 })
-    );
-    head.position.y = 138;
+    // Sphere head — gap above cone tip reads as neck
+    const head = new THREE.Mesh(new THREE.SphereGeometry(28, 12, 10), headMat);
+    head.position.y = 144;
     g.add(head);
 
-    // Left & right legs as cylinders
-    this.legL = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 80, 6), bodyMat);
-    this.legL.position.set(-17, -40, 0);
+    // Cylinder legs
+    this.legL = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 82, 6), bodyMat);
+    this.legL.position.set(-17, -41, 0);
     g.add(this.legL);
 
-    this.legR = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 80, 6), bodyMat);
-    this.legR.position.set( 17, -40, 0);
+    this.legR = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 82, 6), bodyMat);
+    this.legR.position.set( 17, -41, 0);
     g.add(this.legR);
 
-    // Root at floor: leg bottom at (y=-40-40=-80) → group.y = FLOOR + 80
-    g.position.y = PEOPLE_BASE_Y + 80;
+    // Place so feet (local y = −82) touch the floor
+    g.position.y = FLOOR_Y + 82;
 
-    this.group  = g;
-    this.angle  = startAngle;
+    this.g     = g;
+    this.angle = startAngle;
     this.cx = cx; this.cz = cz;
     this.rx = rx; this.rz = rz;
-    this.speed  = speed;
-
+    this.speed = speed;
     scene.add(g);
   }
 
   update(t) {
     this.angle += this.speed;
+    this.g.position.x = this.cx + Math.cos(this.angle) * this.rx;
+    this.g.position.z = this.cz + Math.sin(this.angle) * this.rz;
+    this.g.position.y = FLOOR_Y + 82 + Math.abs(Math.sin(t * 5.0)) * 11;
 
-    // Elliptical path in XZ plane
-    const x = this.cx + Math.cos(this.angle) * this.rx;
-    const z = this.cz + Math.sin(this.angle) * this.rz;
-
-    this.group.position.x = x;
-    this.group.position.z = z;
-    // Slight walk bob on Y
-    this.group.position.y = PEOPLE_BASE_Y + 80 + Math.abs(Math.sin(t * 5.2)) * 11;
-
-    // Face in direction of travel (tangent of ellipse × speed sign)
+    // Face direction of travel
     const s = Math.sign(this.speed);
-    const velX = -Math.sin(this.angle) * this.rx * s;
-    const velZ =  Math.cos(this.angle) * this.rz * s;
-    this.group.rotation.y = Math.atan2(velX, velZ);
+    this.g.rotation.y = Math.atan2(
+      -Math.sin(this.angle) * this.rx * s,
+       Math.cos(this.angle) * this.rz * s
+    );
 
-    // Leg swing opposite phase
-    const swing = Math.sin(t * 5.8) * 0.42;
-    this.legL.rotation.x =  swing;
-    this.legR.rotation.x = -swing;
+    const sw = Math.sin(t * 5.6) * 0.44;
+    this.legL.rotation.x =  sw;
+    this.legR.rotation.x = -sw;
   }
 }
 
 const people = [
-  // Medium steel-blue suit — clearly visible against the dark floor
-  new Person({ startAngle:0,              cx:-80,  cz:820,  rx:540, rz:95,  speed:-0.0055, bodyHex:0x2a5888 }),
-  // Darker teal-blue
-  new Person({ startAngle:Math.PI*0.65,   cx: 60,  cz:880,  rx:480, rz:85,  speed: 0.0075, bodyHex:0x1e4a72 }),
-  // Slate blue-grey
-  new Person({ startAngle:Math.PI*1.35,   cx:-40,  cz:760,  rx:510, rz:100, speed:-0.0060, bodyHex:0x335580 }),
+  new Person({ startAngle:0,               cx: -60, cz: 800, rx:520, rz:85,  speed:-0.0052 }),
+  new Person({ startAngle:Math.PI * 0.66,  cx:  70, cz: 850, rx:460, rz:78,  speed: 0.0074 }),
+  new Person({ startAngle:Math.PI * 1.33,  cx: -20, cz: 750, rx:490, rz:95,  speed:-0.0060 }),
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -475,10 +457,9 @@ setInterval(() => {
 }, 1000);
 
 // ════════════════════════════════════════════════════════════
-//  MOUSE PARALLAX + RESET
+//  MOUSE PARALLAX
 // ════════════════════════════════════════════════════════════
 let mx = 0, my = 0, cx = 0, cy = 0;
-
 document.addEventListener('mousemove', e => {
   mx = e.clientX / window.innerWidth  - 0.5;
   my = e.clientY / window.innerHeight - 0.5;
@@ -495,19 +476,16 @@ const t0 = performance.now();
   requestAnimationFrame(animate);
   const t = (performance.now() - t0) / 1000;
 
-  // Smooth camera parallax
   cx += (mx - cx) * 0.042;
   cy += (my - cy) * 0.042;
-  camera.position.x = CAM_BASE.x + cx * 170;
-  camera.position.y = CAM_BASE.y - cy * 70;
-  camera.lookAt(-cx * 60, 70 + cy * 38, 0);
+  camera.position.x = CAM_BASE.x + cx * 120;
+  camera.position.y = CAM_BASE.y - cy * 45;
+  camera.lookAt(-cx * 40, 0 + cy * 30, -800);
 
-  // Animated lights — gentle breathing
-  wallGlow.intensity = 20 + Math.sin(t * 0.37) * 4.5;
-  ceilRing.intensity = 16 + Math.sin(t * 0.22) * 3.0;
-  floorGlow.intensity = 12 + Math.sin(t * 0.53) * 3.0;
+  screenGlow.intensity = 22 + Math.sin(t * 0.33) * 4.5;
+  keyLight.intensity   = 5.2 + Math.sin(t * 0.19) * 0.7;
+  floorBounce.intensity = 9 + Math.sin(t * 0.47) * 2.5;
 
-  // Update walking people
   people.forEach(p => p.update(t));
 
   gl.render(scene, camera);
