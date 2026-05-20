@@ -104,7 +104,7 @@ scene.fog = new THREE.FogExp2(0xf0f4ff, 0.000018);
 // Camera: elevated overview — pulled back to z=2200 so all 3 side columns
 // (C3 outer edge at x=2794) fit within the horizontal FOV with margin.
 const camera = new THREE.PerspectiveCamera(62, W / H, 5, 28000);
-const CAM_BASE = new THREE.Vector3(0, 700, 1100);   // very close framing — side panels reach the viewport edges
+const CAM_BASE = new THREE.Vector3(0, 700, 800);    // even closer — side panels at viewport edges, centre dominates
 camera.position.copy(CAM_BASE);
 camera.lookAt(0, 0, -800);
 
