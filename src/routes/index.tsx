@@ -7,9 +7,8 @@ import datacenterImage from "@/assets/v2/cap-datacenter.png";
 import commitmentImage from "@/assets/v2/commitment.png";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
-// Centrepiece images (featured in strips 2 & 3)
-import pSurv from "@/assets/v2/panels/city-wide-surveillance.png";
-import pLPR from "@/assets/v2/panels/license-plate-recognition.png";
+// (Strip-2/3 centrepiece PNGs are still referenced by /public/control-room.html;
+//  they're no longer imported here because the homepage now embeds that page.)
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type StripItem =
@@ -398,26 +397,18 @@ function Index() {
         {/* HERO */}
         <section className="border-b border-border">
 
-          {/* ── Row 1: animated HTML command-centre panels ── */}
-          <ScrollStrip
-            items={[
-              {type:'iframe', panelId:'traffic-overview'},
-              {type:'iframe', panelId:'panel-units'},
-              {type:'iframe', panelId:'panel-crowd'},
-              {type:'iframe', panelId:'system-health'},
-              {type:'iframe', panelId:'transit'},
-              {type:'iframe', panelId:'panel-events'},
-              {type:'iframe', panelId:'air-quality-1'},
-              {type:'iframe', panelId:'panel-network'},
-              {type:'iframe', panelId:'notifications'},
-              {type:'iframe', panelId:'panel-timeline'},
-              {type:'iframe', panelId:'panel-comms'},
-              {type:'iframe', panelId:'air-quality-2'},
-            ]}
-            direction="left"
-            duration="70s"
-            height="40vh"
-          />
+          {/* ── 3D Operations Control Centre (replaces scrolling-panel strips) ── */}
+          <div
+            className="relative w-full bg-[#f4f7ff]"
+            style={{ height: 'min(85vh, 820px)', minHeight: '520px' }}
+          >
+            <iframe
+              src="/control-room.html"
+              title="Vertifex Operations Control Centre"
+              loading="eager"
+              className="absolute inset-0 block h-full w-full border-0"
+            />
+          </div>
 
           {/* ── Opening text ── */}
           <div className="bg-background px-6 py-12 sm:px-10 md:py-16 lg:px-16">
@@ -460,51 +451,6 @@ function Index() {
               </div>
             </div>
           </div>
-
-          {/* ── Row 2: city surveillance centrepiece — left to right ── */}
-          <ScrollStrip
-            items={[
-              {type:'iframe', panelId:'panel-ss'},
-              {type:'img',    src:pSurv, featured:true},
-              {type:'iframe', panelId:'panel-comms'},
-              {type:'iframe', panelId:'traffic-overview'},
-              {type:'iframe', panelId:'air-quality-1'},
-              {type:'iframe', panelId:'weather'},
-            ]}
-            direction="right"
-            duration="65s"
-            height="42vh"
-          />
-
-          {/* ── Ticker between rows 2 and 3 ── */}
-          <div className="overflow-hidden" style={{ background: '#06090f', borderTop: '1px solid #131b28', borderBottom: '1px solid #131b28' }}>
-            <div
-              className="vx-marquee flex w-max whitespace-nowrap font-bold uppercase"
-              style={{ gap: '2.5rem', padding: '0.625rem 1.5rem', fontSize: '0.7rem', letterSpacing: '0.1em', color: '#8a94a3', animationDuration: '38s' }}
-            >
-              {[...serviceTags, ...serviceTags].map((tag, idx) => (
-                <span key={idx} className="inline-flex items-center gap-2">
-                  <span style={{ color: '#5a8fff' }}>+</span>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Row 3: LPR centrepiece — right to left ── */}
-          <ScrollStrip
-            items={[
-              {type:'img',    src:pLPR, featured:true},
-              {type:'iframe', panelId:'panel-timeline'},
-              {type:'iframe', panelId:'building-alerts'},
-              {type:'iframe', panelId:'panel-crowd'},
-              {type:'iframe', panelId:'panel-units'},
-              {type:'iframe', panelId:'panel-events'},
-            ]}
-            direction="left"
-            duration="55s"
-            height="36vh"
-          />
 
         </section>
 
