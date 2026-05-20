@@ -32,19 +32,33 @@
     }
     .p-wrap iframe { display:block; border:none; background:#060d1a; }
 
-    /* HUD — light theme */
+    /* HUD — light theme, fully responsive */
     #hud {
       position:absolute; top:0; left:0; right:0; z-index:10;
       display:flex; align-items:center; justify-content:space-between;
-      padding:14px 28px;
+      gap:12px;
+      padding:10px 16px;
       background:linear-gradient(to bottom,rgba(244,247,255,0.96) 0%,transparent 100%);
       border-bottom:1px solid rgba(30,80,200,0.12);
       pointer-events:none;
       font-family:'IBM Plex Mono',monospace;
-      font-size:10px; color:#4a5870; letter-spacing:1.6px; text-transform:uppercase;
+      font-size:10px; color:#4a5870; letter-spacing:1.4px; text-transform:uppercase;
     }
-    #hud .brand { font-size:13px; color:#1a44cc; font-weight:500; letter-spacing:2px; }
-    #hud .status-bar { display:flex; align-items:center; gap:22px; }
+    #hud .brand { font-size:12px; color:#1a44cc; font-weight:500; letter-spacing:1.8px; white-space:nowrap; }
+    #hud .status-bar { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    #hud > div:last-child { white-space:nowrap; }
+    /* On narrow screens, hide the status-bar middle items + the right-side EST/location line  */
+    @media (max-width: 760px) {
+      #hud { padding:8px 12px; font-size:9px; letter-spacing:1px; }
+      #hud .brand { font-size:11px; letter-spacing:1.4px; }
+      #hud .status-bar > span:not(:first-child) { display:none; }
+      #hud > div:last-child { display:none; }
+    }
+    @media (max-width: 480px) {
+      #hud { padding:6px 10px; }
+      #hud .brand { font-size:10px; }
+      #hud .status-bar { gap:8px; }
+    }
     .live-dot {
       display:inline-block; width:6px; height:6px; border-radius:50%;
       background:#00bb55; box-shadow:0 0 7px #00bb55;
@@ -53,17 +67,21 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
     #nav {
-      position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
-      z-index:10; display:flex; gap:10px;
+      position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+      z-index:10; display:flex; gap:8px;
     }
     .nav-btn {
-      font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px;
+      font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1.8px;
       text-transform:uppercase; text-decoration:none; color:#3a4e6a;
-      padding:8px 18px; border:1px solid rgba(30,80,200,0.22); border-radius:2px;
+      padding:7px 14px; border:1px solid rgba(30,80,200,0.22); border-radius:2px;
       background:rgba(244,247,255,0.92); backdrop-filter:blur(8px);
-      cursor:pointer; transition:all 0.2s;
+      cursor:pointer; transition:all 0.2s; white-space:nowrap;
     }
     .nav-btn:hover { color:#1a44cc; border-color:rgba(30,80,200,0.5); }
+    @media (max-width: 480px) {
+      #nav { bottom:10px; gap:6px; }
+      .nav-btn { padding:6px 10px; font-size:8px; letter-spacing:1.4px; }
+    }
   </style>
 </head>
 <body>
@@ -101,10 +119,26 @@ const cssScene = new THREE.Scene();
 // Very faint white fog (depth without obscuring panels)
 scene.fog = new THREE.FogExp2(0xf0f4ff, 0.000018);
 
-// Camera: elevated overview — pulled back to z=2200 so all 3 side columns
-// (C3 outer edge at x=2794) fit within the horizontal FOV with margin.
+// Camera: elevated overview. Camera z adapts to viewport aspect so the
+// outermost side panels always sit just inside the horizontal FOV — works
+// from narrow mobile portrait through ultrawide desktop.
 const camera = new THREE.PerspectiveCamera(62, W / H, 5, 28000);
-const CAM_BASE = new THREE.Vector3(0, 700, 800);    // even closer — side panels at viewport edges, centre dominates
+
+// Compute the ideal camera-z for the current viewport aspect.
+// The far-right side panel (C2 column) has its right edge at world (1746, y, -604)
+// after the CURVE_R rotation. For that edge to sit at ~92% of hFOV/2:
+//   arctan(1746 / (z + 604)) = hFOV/2 * 0.92
+function computeIdealZ() {
+  const aspect = window.innerWidth / window.innerHeight;
+  const vFOVhalf = (62 / 2) * Math.PI / 180;
+  const hFOVhalf = Math.atan(Math.tan(vFOVhalf) * aspect);
+  const target   = hFOVhalf * 0.92;
+  let z = 1746 / Math.tan(target) - 604;
+  // Clamp: never closer than 700 (vertical fit), never farther than 3500 (looks tiny)
+  return Math.max(700, Math.min(3500, z));
+}
+
+const CAM_BASE = new THREE.Vector3(0, 700, computeIdealZ());
 camera.position.copy(CAM_BASE);
 camera.lookAt(0, 0, -800);
 
@@ -343,6 +377,10 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   gl.setSize(window.innerWidth, window.innerHeight);
   css.setSize(window.innerWidth, window.innerHeight);
+  // Re-pick the ideal camera-z for the new aspect (responsive on rotation / resize)
+  const newZ = computeIdealZ();
+  CAM_BASE.z = newZ;
+  camera.position.z = newZ;
 });
 </script>
 </body>

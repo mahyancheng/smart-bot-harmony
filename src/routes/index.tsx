@@ -397,10 +397,16 @@ function Index() {
         {/* HERO */}
         <section className="border-b border-border">
 
-          {/* ── 3D Operations Control Centre (replaces scrolling-panel strips) ── */}
+          {/* ── 3D Operations Control Centre — responsive height across all devices ── */}
+          {/*
+            Heights tuned per breakpoint so the 3D scene reads well on every viewport:
+              < 640px (mobile portrait):  55vh, min 360px — short enough to leave room for the hero copy
+              640–1023 (tablet / landscape phone): 65vh
+              ≥ 1024px (laptop / desktop): 85vh, capped at 820px
+            Camera-z inside the iframe adapts to its own aspect via computeIdealZ().
+          */}
           <div
-            className="relative w-full bg-[#f4f7ff]"
-            style={{ height: 'min(85vh, 820px)', minHeight: '520px' }}
+            className="relative w-full bg-[#f4f7ff] h-[55vh] min-h-[360px] sm:h-[65vh] lg:h-[85vh] lg:max-h-[820px]"
           >
             <iframe
               src="/control-room.html"
