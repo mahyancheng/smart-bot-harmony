@@ -205,24 +205,30 @@ const WALL_Z   = -800;
 const CURVE_R  = 4000;   // arc radius — panels curve back and face camera
 const P_SCALE  = 2.2;    // 340px × 2.2 = 748 scene units wide
 
-// ── Centre — the two real centrepiece dashboards (PNG) stacked ──
-// Container 700×620: two 700×300 dashboard images with a 20px gap.
-// At CTR_SCALE=1.40 → 980×868 scene (half-w=490, half-h=434)
+// ── Centre — the two real centrepiece dashboards as SEPARATE framed panels ──
+// Each PNG is its own CSS3DObject with its own glowing .p-wrap frame.
+// Visible 100-unit gap in 3D between the two panels.
+//  • Top:    citywide-surveillance.png at y = +220
+//  • Bottom: license-plate-recognition.png at y = -220
+// Each 700×280 CSS at CTR_SCALE=1.40 → 980×392 scene (half-w=490, half-h=196)
 const CTR_SCALE = 1.40;
-const cwrap = document.createElement('div');
-cwrap.className = 'p-wrap';
-cwrap.style.cssText = 'width:700px;height:620px;display:flex;flex-direction:column;gap:20px;background:#060d1a;';
-['/citywide-surveillance.png', '/license-plate-recognition.png'].forEach(src => {
+[
+  { src: '/citywide-surveillance.png',     y: +220 },
+  { src: '/license-plate-recognition.png', y: -220 },
+].forEach(({ src, y }) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'p-wrap';
+  wrap.style.cssText = 'width:700px;height:280px;overflow:hidden;background:#060d1a;';
   const img = document.createElement('img');
   img.src = src;
-  img.style.cssText = 'display:block;width:700px;height:300px;object-fit:cover;object-position:center;background:#060d1a;';
+  img.style.cssText = 'display:block;width:700px;height:280px;object-fit:cover;object-position:center;background:#060d1a;';
   img.draggable = false;
-  cwrap.appendChild(img);
+  wrap.appendChild(img);
+  const obj = new CSS3DObject(wrap);
+  obj.position.set(0, y, WALL_Z);   // both on the arc apex (theta=0, no rotation)
+  obj.scale.setScalar(CTR_SCALE);
+  cssScene.add(obj);
 });
-const centerObj = new CSS3DObject(cwrap);
-centerObj.position.set(0, 0, WALL_Z);   // centre = apex of arc (theta=0, no rotation)
-centerObj.scale.setScalar(CTR_SCALE);
-cssScene.add(centerObj);
 
 // ── Curved panel factory ──────────────────────────────────────
 // Each panel sits on a cylindrical arc of radius CURVE_R centred on x=0.
@@ -286,76 +292,7 @@ mkPanel('panel-ss',         +C2, R3);
 
 // (air-quality-2 dropped — visually identical to air-quality-1; all 14 panels now distinct)
 
-// ════════════════════════════════════════════════════════════
-//  WALKING PEOPLE — cone body + sphere head, white tones
-// ════════════════════════════════════════════════════════════
-class Person {
-  constructor({ startAngle, cx, cz, rx, rz, speed }) {
-    const g = new THREE.Group();
-
-    const bodyMat = new THREE.MeshStandardMaterial({
-      color: 0xe8edf8, roughness: 0.68, metalness: 0.0
-    });
-    const headMat = new THREE.MeshStandardMaterial({
-      color: 0xf4e8d8, roughness: 0.65
-    });
-
-    // Cone body (wide at base, narrow top)
-    const body = new THREE.Mesh(new THREE.ConeGeometry(36, 118, 8), bodyMat);
-    body.position.y = 59;
-    g.add(body);
-
-    // Sphere head — gap above cone tip reads as neck
-    const head = new THREE.Mesh(new THREE.SphereGeometry(28, 12, 10), headMat);
-    head.position.y = 144;
-    g.add(head);
-
-    // Cylinder legs
-    this.legL = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 82, 6), bodyMat);
-    this.legL.position.set(-17, -41, 0);
-    g.add(this.legL);
-
-    this.legR = new THREE.Mesh(new THREE.CylinderGeometry(11, 8, 82, 6), bodyMat);
-    this.legR.position.set( 17, -41, 0);
-    g.add(this.legR);
-
-    // Walk at y=0 (eye-level with lookAt — fully visible against the wall behind them)
-    g.position.y = 0;
-
-    this.g     = g;
-    this.angle = startAngle;
-    this.cx = cx; this.cz = cz;
-    this.rx = rx; this.rz = rz;
-    this.speed = speed;
-    scene.add(g);
-  }
-
-  update(t) {
-    this.angle += this.speed;
-    this.g.position.x = this.cx + Math.cos(this.angle) * this.rx;
-    this.g.position.z = this.cz + Math.sin(this.angle) * this.rz;
-    this.g.position.y = 0 + Math.abs(Math.sin(t * 5.0)) * 11;  // slight walk-bob
-
-    // Face direction of travel
-    const s = Math.sign(this.speed);
-    this.g.rotation.y = Math.atan2(
-      -Math.sin(this.angle) * this.rx * s,
-       Math.cos(this.angle) * this.rz * s
-    );
-
-    const sw = Math.sin(t * 5.6) * 0.44;
-    this.legL.rotation.x =  sw;
-    this.legR.rotation.x = -sw;
-  }
-}
-
-const people = [
-  // y=0, cz=800-950 — far from the wall (wall at z=-800), closer to camera.
-  // Distance from wall ≈ 1600-1750 units; appears at mid-screen as small figures.
-  new Person({ startAngle:0,               cx: -120, cz: 850, rx:520, rz:65,  speed:-0.0052 }),
-  new Person({ startAngle:Math.PI * 0.66,  cx:  140, cz: 920, rx:460, rz:60,  speed: 0.0074 }),
-  new Person({ startAngle:Math.PI * 1.33,  cx:  -40, cz: 780, rx:490, rz:70,  speed:-0.0060 }),
-];
+// (Walking people removed per user request)
 
 // ════════════════════════════════════════════════════════════
 //  HUD CLOCK
@@ -396,8 +333,6 @@ const t0 = performance.now();
   screenGlow.intensity = 22 + Math.sin(t * 0.33) * 4.5;
   keyLight.intensity   = 5.2 + Math.sin(t * 0.19) * 0.7;
   floorBounce.intensity = 9 + Math.sin(t * 0.47) * 2.5;
-
-  people.forEach(p => p.update(t));
 
   gl.render(scene, camera);
   css.render(cssScene, camera);
