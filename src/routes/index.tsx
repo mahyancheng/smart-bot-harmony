@@ -8,8 +8,8 @@ import commitmentImage from "@/assets/v2/commitment.png";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
 // Centrepiece images (featured in strips 2 & 3)
-import pSurv from "@/assets/v2/panels/city wide surveillance.png";
-import pLPR from "@/assets/v2/panels/license plate recognition.png";
+import pSurv from "@/assets/v2/panels/city-wide-surveillance.png";
+import pLPR from "@/assets/v2/panels/license-plate-recognition.png";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type StripItem =
