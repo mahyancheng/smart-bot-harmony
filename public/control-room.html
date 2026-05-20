@@ -101,10 +101,10 @@ const cssScene = new THREE.Scene();
 // Very faint white fog (depth without obscuring panels)
 scene.fog = new THREE.FogExp2(0xf0f4ff, 0.000018);
 
-// Camera: elevated view — high enough for "control room overview" feel
-// but level enough to see all 3 panel rows clearly.
+// Camera: elevated overview — pulled back to z=2200 so all 3 side columns
+// (C3 outer edge at x=2794) fit within the horizontal FOV with margin.
 const camera = new THREE.PerspectiveCamera(62, W / H, 5, 28000);
-const CAM_BASE = new THREE.Vector3(0, 700, 1700);
+const CAM_BASE = new THREE.Vector3(0, 700, 2200);
 camera.position.copy(CAM_BASE);
 camera.lookAt(0, 0, -800);
 
@@ -223,76 +223,7 @@ makeCeilingArc(1000,  5, 0x4477cc, 0.60);  // inner softer ring
   });
 });
 
-// ════════════════════════════════════════════════════════════
-//  EQUIPMENT RACKS — white chassis, coloured LEDs
-//  Placed on far sides (x > ±1900) — outside the panel x-range
-//  so they never overlap CSS3D panels in screen space.
-// ════════════════════════════════════════════════════════════
-function mkRack(x, z, rotY) {
-  const g    = new THREE.Group();
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(210, 740, 115),
-    new THREE.MeshStandardMaterial({ color:0xe4eaf6, roughness:0.40, metalness:0.10 })
-  );
-  g.add(body);
-
-  for (let i = 0; i < 17; i++) {
-    const div = new THREE.Mesh(
-      new THREE.BoxGeometry(200, 2, 105),
-      new THREE.MeshBasicMaterial({ color:0xc8d4ea })
-    );
-    div.position.set(0, -355 + i * 44, 0);
-    g.add(div);
-  }
-
-  const lc = [0x0055ff, 0x00cc44, 0x00cc44, 0x0055ff, 0x00cc44, 0xff8800];
-  for (let i = 0; i < 12; i++) {
-    const led = new THREE.Mesh(
-      new THREE.BoxGeometry(8, 5, 3),
-      new THREE.MeshBasicMaterial({ color: lc[Math.floor(Math.random() * lc.length)] })
-    );
-    led.position.set(-76 + Math.random() * 152, -310 + i * 54 + Math.random() * 18, 59);
-    g.add(led);
-  }
-
-  [-90, 90].forEach(rx => {
-    const rail = new THREE.Mesh(
-      new THREE.BoxGeometry(6, 720, 9),
-      new THREE.MeshStandardMaterial({ color:0xccd8f0, roughness:0.4 })
-    );
-    rail.position.set(rx, 0, 50);
-    g.add(rail);
-  });
-
-  g.position.set(x, FLOOR_Y + 370, z);
-  g.rotation.y = rotY;
-  scene.add(g);
-}
-
-[-2050, -2210, -2050].forEach((x, i) => mkRack(x, -500 + i * 500, 0.28));
-[ 2050,  2210,  2050].forEach((x, i) => mkRack(x, -500 + i * 500, -0.28));
-
-// Vertical LED accent strips beside racks (anchored to new FLOOR_Y)
-[-2000, 2000].forEach(x => {
-  [0, 26, 52].forEach(dx => {
-    const s = new THREE.Mesh(
-      new THREE.BoxGeometry(8, 720, 5),
-      new THREE.MeshBasicMaterial({ color:0x2255dd, transparent:true, opacity:0.75 })
-    );
-    s.position.set(x + dx * Math.sign(x), FLOOR_Y + 360, -350);
-    scene.add(s);
-  });
-});
-
-// Floor guide lines (very thin, semi-transparent — minimal occlusion)
-[-850, 0, 850].forEach(x => {
-  const ln = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 2, 3600),
-    new THREE.MeshBasicMaterial({ color:0x7898cc, transparent:true, opacity:0.30 })
-  );
-  ln.position.set(x, FLOOR_Y + 2, -100);
-  scene.add(ln);
-});
+// (Equipment racks removed — they appeared as unwanted "pillars" from this camera angle)
 
 // ════════════════════════════════════════════════════════════
 //  VIDEO WALL — flat alignment at WALL_Z
@@ -308,21 +239,35 @@ function mkRack(x, z, rotY) {
 //  row y=200: ████   ████   ████  [  cmd  ]    ████  ████   ████
 //  row y=−390:████   ████   ████               ████  ████   ████
 // ════════════════════════════════════════════════════════════
-const WALL_Z      = -800;   // video wall z-position
-const P_SCALE     = 2.2;    // scene units per CSS pixel  (340×2.2=748 wide)
-const CTR_SCALE   = 0.50;   // big centre: 1920×0.50=960 wide, 920×0.50=460 tall
+const WALL_Z    = -800;   // video wall z-position
+const P_SCALE   = 2.2;    // scene units per CSS pixel  (340×2.2=748 wide, 300×2.2=660 tall)
+const CTR_SCALE = 1.40;   // centre tile: 700×1.40=980 wide (half=490), 620×1.40=868 tall (half=434)
 
-// ── Big centre display ────────────────────────────────────────
+// ── Big centre display — 2×2 grid of actual website panels ───────
+// Container: 700×620px (two 340px cols + 20px gap, two 300px rows + 20px gap)
+// Scale = 1.40 → scene width ≈ 980 (half=490), so C1 = 490+20+374 = 884 ≈ 880
 const cwrap = document.createElement('div');
-cwrap.className     = 'p-wrap';
-cwrap.style.cssText = 'width:1920px;height:920px;';
-const cifr          = document.createElement('iframe');
-cifr.src            = '/command_center.html';
-cifr.style.cssText  = 'display:block;border:none;width:1920px;height:920px;';
-cifr.setAttribute('scrolling', 'no');
-cwrap.appendChild(cifr);
+cwrap.className = 'p-wrap';
+cwrap.style.cssText = [
+  'width:700px', 'height:620px',
+  'display:grid',
+  'grid-template-columns:340px 340px',
+  'grid-template-rows:300px 300px',
+  'gap:20px',
+  'padding:0',
+  'background:#060d1a',
+].join(';');
+
+['system-health', 'traffic-overview', 'panel-comms', 'panel-crowd'].forEach(id => {
+  const ifr = document.createElement('iframe');
+  ifr.src = '/command_center.html?p=' + id;
+  ifr.style.cssText = 'display:block;border:none;width:340px;height:300px;background:#060d1a;';
+  ifr.setAttribute('scrolling', 'no');
+  cwrap.appendChild(ifr);
+});
+
 const centerObj = new CSS3DObject(cwrap);
-centerObj.position.set(0, 0, WALL_Z);   // centre panel at camera lookAt y
+centerObj.position.set(0, 0, WALL_Z);
 centerObj.scale.setScalar(CTR_SCALE);
 cssScene.add(centerObj);
 
@@ -342,16 +287,17 @@ function mkPanel(id, x, y) {
   cssScene.add(obj);
 }
 
-// Column centres (same — verified they fit within hFOV=98.6° at distance 2500):
-// centre half=480, panel half=374, gap=20 → C1=874≈880; C2=880+748+20=1648≈1650; C3≈2420
+// Column centres: centre half=490, panel half=374, gap=20 → C1=490+20+374=884≈880
+// C2 = 880+374+20+374=1648≈1650, C3 = 1650+374+20+374=2418≈2420
+// At camera distance 3000 (z=2200→wall z=-800), C3 outer edge=2794 → angle=arctan(2794/3000)=43° < hFOV/2=49.3° ✓
 const C1 = 880, C2 = 1650, C3 = 2420;
 
-// Row centres — corrected to avoid overlap between adjacent rows.
-// Panel half-height = 330. Row spacing = 330+20+330 = 680 (guaranteed 20-unit gap).
-// Centre panel half-height = 230; centre is at y=0 (= lookAt y).
-// R1 = 0 + 330 + 20 + 330 = 680;  R3 = −680.
-// (Centre top=230 < R1 bottom=680-330=350 ✓, Centre bottom=−230 > R3 top=−680+330=−350 ✓)
-const R1 = 680, R2 = 0, R3 = -680;
+// Row centres: centre half-height = 434 (620×1.40/2). Panel half-height = 330.
+// R1 must be above centre: R1 - 330 > 434 → R1 > 764. Use R1=780.
+// R3 = −780 (symmetric). Row 2 side panels flank the centre.
+// Gap checks: R1_bottom=780-330=450 > centre_top=434 ✓ (16 unit gap)
+//             R2_top=0+330=330 < R1_bottom=450 ✓ (20 unit gap: R1-330=450, R2+330=330, 450-330=120)
+const R1 = 780, R2 = 0, R3 = -780;
 
 // ── ROW 1 — top ───────────────────────────────────────────────
 mkPanel('traffic-overview', -C3, R1);
@@ -410,8 +356,8 @@ class Person {
     this.legR.position.set( 17, -41, 0);
     g.add(this.legR);
 
-    // Place so feet (local y = −82) touch the floor
-    g.position.y = FLOOR_Y + 82;
+    // Walk at y=-200 (operator corridor height, visible from elevated camera)
+    g.position.y = -200;
 
     this.g     = g;
     this.angle = startAngle;
@@ -425,7 +371,7 @@ class Person {
     this.angle += this.speed;
     this.g.position.x = this.cx + Math.cos(this.angle) * this.rx;
     this.g.position.z = this.cz + Math.sin(this.angle) * this.rz;
-    this.g.position.y = FLOOR_Y + 82 + Math.abs(Math.sin(t * 5.0)) * 11;
+    this.g.position.y = -200 + Math.abs(Math.sin(t * 5.0)) * 11;  // slight walk-bob
 
     // Face direction of travel
     const s = Math.sign(this.speed);
@@ -441,9 +387,10 @@ class Person {
 }
 
 const people = [
-  new Person({ startAngle:0,               cx: -60, cz: 800, rx:520, rz:85,  speed:-0.0052 }),
-  new Person({ startAngle:Math.PI * 0.66,  cx:  70, cz: 850, rx:460, rz:78,  speed: 0.0074 }),
-  new Person({ startAngle:Math.PI * 1.33,  cx: -20, cz: 750, rx:490, rz:95,  speed:-0.0060 }),
+  // Orbiting at y=-200, cz around 200-400 — visible in the foreground corridor area at ~65-75% from top
+  new Person({ startAngle:0,               cx: -80, cz: 300, rx:480, rz:70,  speed:-0.0052 }),
+  new Person({ startAngle:Math.PI * 0.66,  cx:  90, cz: 350, rx:420, rz:65,  speed: 0.0074 }),
+  new Person({ startAngle:Math.PI * 1.33,  cx: -20, cz: 250, rx:450, rz:75,  speed:-0.0060 }),
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -478,9 +425,9 @@ const t0 = performance.now();
 
   cx += (mx - cx) * 0.042;
   cy += (my - cy) * 0.042;
-  camera.position.x = CAM_BASE.x + cx * 120;
-  camera.position.y = CAM_BASE.y - cy * 45;
-  camera.lookAt(-cx * 40, 0 + cy * 30, -800);
+  camera.position.x = CAM_BASE.x + cx * 100;
+  camera.position.y = CAM_BASE.y - cy * 40;
+  camera.lookAt(-cx * 30, cy * 25, -800);
 
   screenGlow.intensity = 22 + Math.sin(t * 0.33) * 4.5;
   keyLight.intensity   = 5.2 + Math.sin(t * 0.19) * 0.7;
