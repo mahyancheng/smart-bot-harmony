@@ -277,14 +277,14 @@ mkPanel('panel-network',    -C1, R2);
 mkPanel('panel-comms',      +C1, R2);
 mkPanel('panel-events',     +C2, R2);
 
-// ROW 3 (bottom, 5 panels)
+// ROW 3 (bottom, 5 panels) — air-quality-2 removed: it duplicates air-quality-1's UI
 mkPanel('panel-timeline',   -C2, R3);
 mkPanel('air-quality-1',    -C1, R3);
 mkPanel('panel-crowd',        0, R3);
-mkPanel('air-quality-2',    +C1, R3);
+mkPanel('panel-units',      +C1, R3);
 mkPanel('panel-ss',         +C2, R3);
 
-// (panel-units unused — 14 sides + 2-PNG centre tile = clean symmetric wall)
+// (air-quality-2 dropped — visually identical to air-quality-1; all 14 panels now distinct)
 
 // ════════════════════════════════════════════════════════════
 //  WALKING PEOPLE — cone body + sphere head, white tones
