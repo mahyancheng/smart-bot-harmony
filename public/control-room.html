@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vertifex — Operations Control Centre</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { width:100%; height:100%; overflow:hidden; background:#030508; }
+
+    /* Layering strategy:
+       css3d (z=1) is BELOW webgl (z=2 with alpha:true).
+       WebGL renders transparent background so CSS3D panels show through.
+       Foreground WebGL geometry (desk, floor, ceiling) renders on top naturally. */
+    #css3d-layer { position:absolute; inset:0; z-index:1; }
+    #webgl-layer { position:absolute; inset:0; z-index:2; pointer-events:none; }
+
+    /* Panel iframe container */
+    .p-wrap {
+      border-radius:5px;
+      overflow:hidden;
+      background:#0a0d12;
+      box-shadow:
+        0 0 0 1px rgba(74,168,255,0.22),
+        0 0 40px rgba(74,168,255,0.07),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .p-wrap iframe { display:block; border:none; background:#0a0d12; }
+
+    /* ── HUD ───────────────────────────────────────────────── */
+    #hud {
+      position:absolute; top:0; left:0; right:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:13px 28px;
+      background:linear-gradient(to bottom,rgba(2,4,8,0.92) 0%,transparent 100%);
+      pointer-events:none;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px; color:#4a5464; letter-spacing:1.6px; text-transform:uppercase;
+    }
+    #hud .brand { font-size:13px; color:#4aa8ff; font-weight:500; letter-spacing:2px; }
+    #hud .status-bar { display:flex; align-items:center; gap:22px; }
+    .live-dot {
+      display:inline-block; width:6px; height:6px; border-radius:50%;
+      background:#34d96b; box-shadow:0 0 8px #34d96b;
+      margin-right:7px; animation:blink 1.4s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.12} }
+
+    /* ── NAV PILL ──────────────────────────────────────────── */
+    #nav {
+      position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+      z-index:10; display:flex; gap:10px;
+    }
+    .nav-btn {
+      font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px;
+      text-transform:uppercase; text-decoration:none; color:#5a6473;
+      padding:8px 18px; border:1px solid rgba(255,255,255,0.08); border-radius:2px;
+      background:rgba(3,5,8,0.75); backdrop-filter:blur(6px);
+      cursor:pointer; transition:all 0.2s;
+    }
+    .nav-btn:hover { color:#4aa8ff; border-color:rgba(74,168,255,0.35); }
+  </style>
+</head>
+<body>
+
+<div id="css3d-layer"></div>
+<div id="webgl-layer"></div>
+
+<div id="hud">
+  <div class="brand">◆ Vertifex Technology</div>
+  <div class="status-bar">
+    <span><span class="live-dot"></span>All Systems Nominal</span>
+    <span id="hud-time">00:00:00</span>
+    <span>Operations Control Centre · Secure Facility</span>
+  </div>
+  <div>EST. 2024 · KL, MALAYSIA</div>
+</div>
+
+<div id="nav">
+  <a href="/" class="nav-btn">← Company Profile</a>
+  <span class="nav-btn" id="btn-reset" style="cursor:pointer;">⊙ Reset View</span>
+</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { CSS3DRenderer, CSS3DObject }
+  from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/renderers/CSS3DRenderer.js';
+
+// ════════════════════════════════════════════════════════════
+//  SCENE & CAMERA
+// ════════════════════════════════════════════════════════════
+const W = window.innerWidth, H = window.innerHeight;
+const scene    = new THREE.Scene();
+const cssScene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(0x040709, 0.000095);
+
+const camera = new THREE.PerspectiveCamera(52, W/H, 5, 20000);
+const CAM_BASE = new THREE.Vector3(0, 270, 1920);
+camera.position.copy(CAM_BASE);
+camera.lookAt(0, 55, 0);
+
+// ── WebGL renderer (transparent bg so CSS3D shows through) ────
+const gl = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+gl.setPixelRatio(Math.min(devicePixelRatio, 2));
+gl.setSize(W, H);
+gl.setClearColor(0x000000, 0); // fully transparent
+gl.shadowMap.enabled = true;
+gl.shadowMap.type = THREE.PCFSoftShadowMap;
+document.getElementById('webgl-layer').appendChild(gl.domElement);
+
+// ── CSS3D renderer ────────────────────────────────────────────
+const css = new CSS3DRenderer();
+css.setSize(W, H);
+Object.assign(css.domElement.style, { position:'absolute', top:'0', left:'0' });
+document.getElementById('css3d-layer').appendChild(css.domElement);
+
+// ════════════════════════════════════════════════════════════
+//  LIGHTING
+// ════════════════════════════════════════════════════════════
+scene.add(new THREE.AmbientLight(0x0c1628, 5));
+
+const ceilRing = new THREE.PointLight(0x6699cc, 14, 5000, 1);
+ceilRing.position.set(0, 860, 100);
+scene.add(ceilRing);
+
+const wallGlow = new THREE.PointLight(0x2255cc, 18, 4200, 1.5);
+wallGlow.position.set(0, 180, -550);
+scene.add(wallGlow);
+
+const deskSpot = new THREE.SpotLight(0x4488bb, 10, 2800, 0.5, 0.4, 1.5);
+deskSpot.position.set(0, 720, 1350);
+deskSpot.target.position.set(0, -200, 1060);
+deskSpot.castShadow = true;
+scene.add(deskSpot); scene.add(deskSpot.target);
+
+const sL = new THREE.PointLight(0x1a3070, 5, 3800);
+sL.position.set(-1700, 300, 0); scene.add(sL);
+const sR = new THREE.PointLight(0x1a3070, 5, 3800);
+sR.position.set( 1700, 300, 0); scene.add(sR);
+
+// ════════════════════════════════════════════════════════════
+//  FLOOR
+// ════════════════════════════════════════════════════════════
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(9000, 7000),
+  new THREE.MeshStandardMaterial({ color:0x080c14, roughness:0.84, metalness:0.22 })
+);
+floor.rotation.x = -Math.PI/2;
+floor.position.y = -392;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// Subtle glow circle beneath desk/camera area
+const gDisk = new THREE.Mesh(
+  new THREE.CircleGeometry(720, 64),
+  new THREE.MeshBasicMaterial({ color:0x1a3060, transparent:true, opacity:0.09 })
+);
+gDisk.rotation.x = -Math.PI/2;
+gDisk.position.set(0, -388, 920);
+scene.add(gDisk);
+
+// ════════════════════════════════════════════════════════════
+//  CEILING + GLOW STRIP
+// ════════════════════════════════════════════════════════════
+const ceil = new THREE.Mesh(
+  new THREE.PlaneGeometry(9000, 7000),
+  new THREE.MeshStandardMaterial({ color:0x050810, roughness:1 })
+);
+ceil.rotation.x = Math.PI/2;
+ceil.position.y = 830;
+scene.add(ceil);
+
+// Arc glow tube on ceiling
+const pts = [];
+for (let i = -62; i <= 62; i += 2) {
+  const r = i * Math.PI / 180;
+  pts.push(new THREE.Vector3(1160*Math.sin(r), 0, -1160*Math.cos(r) + 200));
+}
+const tube = new THREE.Mesh(
+  new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, 5.5, 8, false),
+  new THREE.MeshBasicMaterial({ color:0xb0d0f0 })
+);
+tube.position.y = 812;
+scene.add(tube);
+
+// Halo plane under the strip
+const halo = new THREE.Mesh(
+  new THREE.PlaneGeometry(3100, 280),
+  new THREE.MeshBasicMaterial({ color:0x4488cc, transparent:true, opacity:0.045 })
+);
+halo.rotation.x = Math.PI/2;
+halo.position.set(0, 800, -100);
+scene.add(halo);
+
+// ════════════════════════════════════════════════════════════
+//  DESK
+// ════════════════════════════════════════════════════════════
+const deskMat = new THREE.MeshStandardMaterial({ color:0x0e1520, roughness:0.28, metalness:0.78 });
+const legMat  = new THREE.MeshStandardMaterial({ color:0x090f18, roughness:0.38, metalness:0.88 });
+
+const deskTop = new THREE.Mesh(new THREE.BoxGeometry(1520, 28, 640), deskMat);
+deskTop.position.set(0, -163, 1065);
+deskTop.castShadow = deskTop.receiveShadow = true;
+scene.add(deskTop);
+
+// Front edge LED strip
+const deskEdge = new THREE.Mesh(
+  new THREE.BoxGeometry(1520, 5, 4),
+  new THREE.MeshBasicMaterial({ color:0x3a6cd6 })
+);
+deskEdge.position.set(0, -148, 758);
+scene.add(deskEdge);
+
+// Legs + bases
+[-650, 650].forEach(x => {
+  const leg = new THREE.Mesh(new THREE.CylinderGeometry(22, 22, 240, 8), legMat);
+  leg.position.set(x, -283, 1065);
+  scene.add(leg);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(68, 68, 8, 8), legMat);
+  base.position.set(x, -395, 1065);
+  scene.add(base);
+});
+
+// Three monitors
+const monMat = new THREE.MeshStandardMaterial({
+  color:0x0d1824, roughness:0.18, metalness:0.92,
+  emissive:0x1a2f50, emissiveIntensity:0.55
+});
+[-375, 0, 375].forEach(x => {
+  const mon = new THREE.Mesh(new THREE.BoxGeometry(255, 168, 12), monMat);
+  mon.position.set(x, -36, 1008);
+  mon.rotation.x = -0.12;
+  mon.castShadow = true;
+  scene.add(mon);
+  const st = new THREE.Mesh(new THREE.CylinderGeometry(6, 10, 80, 6), legMat);
+  st.position.set(x, -136, 1019);
+  scene.add(st);
+});
+
+const kbd = new THREE.Mesh(new THREE.BoxGeometry(335, 8, 124),
+  new THREE.MeshStandardMaterial({ color:0x111820, roughness:0.82 }));
+kbd.position.set(0, -153, 1134);
+scene.add(kbd);
+
+// ════════════════════════════════════════════════════════════
+//  CHAIRS
+// ════════════════════════════════════════════════════════════
+function mkChair(x, z) {
+  const g  = new THREE.Group();
+  const sm = new THREE.MeshStandardMaterial({ color:0x141d2b, roughness:0.82 });
+  const bm = new THREE.MeshStandardMaterial({ color:0x101824, roughness:0.78 });
+
+  const seat = new THREE.Mesh(new THREE.BoxGeometry(178, 16, 178), sm);
+  seat.position.y = -270;
+  g.add(seat);
+
+  const back = new THREE.Mesh(new THREE.BoxGeometry(178, 215, 14), bm);
+  back.position.set(0, -168, -81);
+  back.rotation.x = 0.07;
+  g.add(back);
+
+  // Armrests
+  [-86, 86].forEach(ax => {
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(12, 8, 105), sm);
+    arm.position.set(ax, -226, -28);
+    g.add(arm);
+  });
+
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 135), sm);
+  pole.position.y = -337;
+  g.add(pole);
+
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const ar = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 108, 5), sm);
+    ar.rotation.z = Math.PI / 2;
+    ar.rotation.y = a;
+    ar.position.set(Math.cos(a)*52, -400, Math.sin(a)*52);
+    g.add(ar);
+    const wh = new THREE.Mesh(new THREE.SphereGeometry(9, 6, 4), sm);
+    wh.position.set(Math.cos(a)*108, -400, Math.sin(a)*108);
+    g.add(wh);
+  }
+  g.position.set(x, 0, z);
+  return g;
+}
+scene.add(mkChair(-428, 1460));
+scene.add(mkChair(    0, 1505));
+scene.add(mkChair( 428, 1460));
+
+// ════════════════════════════════════════════════════════════
+//  CSS3D PANELS
+// ════════════════════════════════════════════════════════════
+const ARC_R = 1460; // panel wall radius
+
+function mkPanel(panelId, deg, y, scale = 1) {
+  const wrap = document.createElement('div');
+  wrap.className = 'p-wrap';
+  wrap.style.width  = '340px';
+  wrap.style.height = '300px';
+
+  const ifr = document.createElement('iframe');
+  ifr.src = '/command_center.html?p=' + panelId;
+  ifr.style.cssText = 'display:block;border:none;width:340px;height:300px;';
+  ifr.setAttribute('scrolling', 'no');
+  wrap.appendChild(ifr);
+
+  const obj = new CSS3DObject(wrap);
+  const rad = deg * Math.PI / 180;
+  obj.position.set(ARC_R * Math.sin(rad), y, -ARC_R * Math.cos(rad));
+  obj.rotation.y = -rad;
+  if (scale !== 1) obj.scale.setScalar(scale);
+  cssScene.add(obj);
+  return obj;
+}
+
+// ── TOP ROW  (y = 445) ────────────────────────────────────────
+// Left wing
+mkPanel('traffic-overview', -68, 445);
+mkPanel('weather',          -51, 445);
+mkPanel('system-health',    -34, 445);
+// Right wing
+mkPanel('alerts',            34, 445);
+mkPanel('plate-reader',      51, 445);
+mkPanel('notifications',     68, 445);
+
+// ── MID ROW  (y = 112) ────────────────────────────────────────
+// Left wing
+mkPanel('panel-ss',         -68, 112);
+mkPanel('transit',          -51, 112);
+mkPanel('panel-network',    -34, 112);
+// Right wing
+mkPanel('panel-units',       34, 112);
+mkPanel('building-alerts',   51, 112);
+mkPanel('panel-comms',       68, 112);
+
+// ── CENTER — full command wall at reduced scale ───────────────
+// Load the entire command_center.html (1920×920) and scale it
+// down so it becomes the massive central display.
+const cwrap = document.createElement('div');
+cwrap.className = 'p-wrap';
+cwrap.style.width  = '1920px';
+cwrap.style.height = '920px';
+const cifr = document.createElement('iframe');
+cifr.src    = '/command_center.html';   // full wall, no ?p=
+cifr.style.cssText = 'display:block;border:none;width:1920px;height:920px;';
+cifr.setAttribute('scrolling', 'no');
+cwrap.appendChild(cifr);
+const centerObj = new CSS3DObject(cwrap);
+centerObj.position.set(0, 278, -1380);  // slightly inside the arc
+centerObj.scale.setScalar(0.455);       // 1920×0.455 ≈ 874 scene-units wide
+cssScene.add(centerObj);
+
+// ── BOTTOM ROW  (y = −225) ────────────────────────────────────
+mkPanel('panel-crowd',    -68, -225);
+mkPanel('panel-timeline', -46, -225);
+mkPanel('air-quality-1',  -23, -225);
+mkPanel('air-quality-2',   23, -225);
+mkPanel('panel-events',    46, -225);
+mkPanel('panel-comms',     68, -225);   // second instance for layout
+
+// ════════════════════════════════════════════════════════════
+//  HUD CLOCK
+// ════════════════════════════════════════════════════════════
+const hudTime = document.getElementById('hud-time');
+setInterval(() => {
+  const n = new Date();
+  hudTime.textContent = [n.getHours(), n.getMinutes(), n.getSeconds()]
+    .map(v => String(v).padStart(2, '0')).join(':');
+}, 1000);
+
+// ════════════════════════════════════════════════════════════
+//  MOUSE PARALLAX + RESET BUTTON
+// ════════════════════════════════════════════════════════════
+let mx = 0, my = 0, cx = 0, cy = 0, parallaxEnabled = true;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX / window.innerWidth  - 0.5;
+  my = e.clientY / window.innerHeight - 0.5;
+});
+document.getElementById('btn-reset').addEventListener('click', () => {
+  mx = my = cx = cy = 0;
+});
+
+// ════════════════════════════════════════════════════════════
+//  ANIMATION LOOP
+// ════════════════════════════════════════════════════════════
+const t0 = performance.now();
+(function animate() {
+  requestAnimationFrame(animate);
+  const t = (performance.now() - t0) / 1000;
+
+  // Smooth parallax
+  cx += (mx - cx) * 0.042;
+  cy += (my - cy) * 0.042;
+  camera.position.x = CAM_BASE.x + cx * 165;
+  camera.position.y = CAM_BASE.y - cy * 65;
+  camera.lookAt(-cx * 55, 55 + cy * 35, 0);
+
+  // Animated lights
+  wallGlow.intensity = 16 + Math.sin(t * 0.38) * 4;
+  ceilRing.intensity = 12 + Math.sin(t * 0.21) * 2.5;
+  deskEdge.material.color.setHSL(0.62, 0.75, 0.34 + Math.sin(t * 0.45) * 0.07);
+
+  gl.render(scene, camera);
+  css.render(cssScene, camera);
+})();
+
+// ════════════════════════════════════════════════════════════
+//  RESIZE
+// ════════════════════════════════════════════════════════════
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  gl.setSize(window.innerWidth, window.innerHeight);
+  css.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

@@ -37,6 +37,12 @@ export function SiteNav() {
             </a>
           ))}
           <a
+            href="/control-room.html"
+            className="hidden whitespace-nowrap border border-border bg-card/60 px-4 py-2 uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary sm:inline-block"
+          >
+            ◆ Ops Centre
+          </a>
+          <a
             href="#contact"
             className="hidden whitespace-nowrap border border-primary bg-primary/5 px-4 py-2 uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:inline-block"
           >
