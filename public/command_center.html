@@ -2226,6 +2226,78 @@ setInterval(function () {
   if (notifBig) _smoothTo(notifBig, _rnd(7, 3), 600);
 }, 3500);
 
+// ── BUILDING ALERTS STREAM ────────────────────────────────────────────────
+var _bldgData = [
+  {icon:'red', name:'101 3rd St',       desc:'Smoke Detected'},
+  {icon:'',    name:'Salesforce Tower', desc:'Elevator Fault'},
+  {icon:'red', name:'City Hall',        desc:'Fire Alarm'},
+  {icon:'',    name:'One Market Plaza', desc:'Access Control'},
+  {icon:'',    name:'Ferry Building',   desc:'Water Leak'},
+  {icon:'red', name:'555 Mission St',   desc:'Intrusion Alert'},
+  {icon:'',    name:'300 Main St',      desc:'Power Outage'},
+  {icon:'',    name:'Park 03 Garage',   desc:'HVAC Fault'},
+  {icon:'red', name:'Civic Center',     desc:'Panic Button'},
+  {icon:'',    name:'Bay Bridge Admin', desc:'Network Loss'},
+];
+var _bldgIdx = 0;
+setInterval(function () {
+  var panel = document.querySelector('.building-alerts');
+  if (!panel) return;
+  var item = _bldgData[_bldgIdx++ % _bldgData.length];
+  var n = new Date();
+  var t = [n.getHours(), n.getMinutes()].map(function(v){ return String(v).padStart(2,'0'); }).join(':');
+  var div = document.createElement('div');
+  div.className = 'bldg-item'; div.style.opacity = '0'; div.style.transition = 'opacity .4s';
+  div.innerHTML = '<span class="bldg-icon ' + item.icon + '">!</span><div><div class="bldg-name">' + item.name + '</div><div class="bldg-desc">' + item.desc + '</div></div><span class="bldg-time">' + t + '</span>';
+  var first = panel.querySelector('.bldg-item');
+  panel.insertBefore(div, first || panel.querySelector('.view-all-link'));
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ div.style.opacity = '1'; }); });
+  var all = panel.querySelectorAll('.bldg-item');
+  if (all.length > 5) all[all.length - 1].remove();
+}, 4200);
+
+// ── UNIT CHIP COUNTS ──────────────────────────────────────────────────────
+setInterval(function () {
+  var police = _rnd(19, 4), fire = _rnd(6, 2), ems = _rnd(12, 3);
+  var chips = document.querySelectorAll('.unit-chips .chip .v');
+  if (chips[0]) chips[0].textContent = police;
+  if (chips[1]) chips[1].textContent = fire;
+  if (chips[2]) chips[2].textContent = ems;
+  _smoothTo(document.querySelector('.unit-big'), police + fire + ems, 800);
+}, 6000);
+
+// ── NOTIFICATIONS STREAM ──────────────────────────────────────────────────
+var _notifData = [
+  {cls:'red',    title:'Priority Dispatch'},
+  {cls:'orange', title:'BOLO Updated'},
+  {cls:'blue',   title:'Camera Online'},
+  {cls:'orange', title:'Watchlist Hit'},
+  {cls:'green',  title:'Backup Complete'},
+  {cls:'red',    title:'ShotSpotter Alert'},
+  {cls:'blue',   title:'System Update'},
+  {cls:'orange', title:'Gate Override'},
+  {cls:'green',  title:'Unit Cleared'},
+];
+var _notifIdx = 0;
+setInterval(function () {
+  var panel = document.querySelector('.notifications');
+  if (!panel) return;
+  var item = _notifData[_notifIdx++ % _notifData.length];
+  var n = new Date();
+  var t = [n.getHours(), n.getMinutes()].map(function(v){ return String(v).padStart(2,'0'); }).join(':');
+  var icons = {red:'!', orange:'▲', blue:'i', green:'✓'};
+  var div = document.createElement('div');
+  div.className = 'notif-row'; div.style.opacity = '0'; div.style.transition = 'opacity .4s';
+  div.innerHTML = '<span class="notif-icon ' + item.cls + '">' + (icons[item.cls]||'i') + '</span><div><div class="notif-title">' + item.title + '</div></div><span class="notif-time">' + t + '</span>';
+  var first = panel.querySelector('.notif-row');
+  panel.insertBefore(div, first || panel.querySelector('.view-all-link'));
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ div.style.opacity = '1'; }); });
+  var all = panel.querySelectorAll('.notif-row');
+  if (all.length > 6) all[all.length - 1].remove();
+  var bigEl = panel.querySelector('.notif-big');
+  if (bigEl) _smoothTo(bigEl, Math.max(1, _rnd(7, 4)), 500);
+}, 5000);
+
 // ── CROWD HEATMAP SCANNING LINE ───────────────────────────────────────────
 (function () {
   const s = document.createElement('style');

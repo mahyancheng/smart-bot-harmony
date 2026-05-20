@@ -7,24 +7,7 @@ import datacenterImage from "@/assets/v2/cap-datacenter.png";
 import commitmentImage from "@/assets/v2/commitment.png";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
-// Command centre video wall panels
-import p01 from "@/assets/v2/panels/01_traffic_overview.png";
-import p02 from "@/assets/v2/panels/02_weather.png";
-import p04 from "@/assets/v2/panels/04_alerts.png";
-import p05 from "@/assets/v2/panels/05_plate_reader_anpr.png";
-import p06 from "@/assets/v2/panels/06_notifications.png";
-import p07 from "@/assets/v2/panels/07_system_health.png";
-import p08 from "@/assets/v2/panels/08_transit_status.png";
-import p09 from "@/assets/v2/panels/09_air_quality_downtown.png";
-import p10 from "@/assets/v2/panels/10_air_quality_harbor.png";
-import p11 from "@/assets/v2/panels/11_building_alerts.png";
-import p12 from "@/assets/v2/panels/12_crowd_density.png";
-import p13 from "@/assets/v2/panels/13_network_traffic.png";
-import p14 from "@/assets/v2/panels/14_shotspotter_alert.png";
-import p15 from "@/assets/v2/panels/15_unit_status.png";
-import p16 from "@/assets/v2/panels/16_incident_timeline.png";
-import p17 from "@/assets/v2/panels/17_recent_events.png";
-import p18 from "@/assets/v2/panels/18_communications.png";
+// Centrepiece images (featured in strips 2 & 3)
 import pSurv from "@/assets/v2/panels/city wide surveillance.png";
 import pLPR from "@/assets/v2/panels/license plate recognition.png";
 
@@ -33,28 +16,18 @@ type StripItem =
   | { type: 'img';    src: string; featured?: boolean }
   | { type: 'iframe'; panelId: string };
 
-// ── IframePanel — measures its container height and scales 340×300 panel ──
+// ── IframePanel — scaled by stripPx measured at the ScrollStrip container ─
+// Root cause of previous "not scaling" bug: `height:100%` on a flex item
+// inside a `width:max-content` marquee div does NOT inherit the strip height
+// reliably (the flex chain height resolves as content-driven, making
+// offsetHeight loop back to ~scale*PANEL_H and stabilise at 0.85×).
+// Fix: measure the outer strip container (explicit height: Xvh) and pass px.
 const PANEL_W = 340, PANEL_H = 300;
-function IframePanel({ panelId }: { panelId: string }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.85);
-
-  useEffect(() => {
-    const update = () => {
-      if (wrapRef.current) setScale(wrapRef.current.offsetHeight / PANEL_H);
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
-  const px = Math.round(PANEL_W * scale);
+function IframePanel({ panelId, stripPx }: { panelId: string; stripPx: number }) {
+  const scale = stripPx > 0 ? stripPx / PANEL_H : 0.9;
+  const px    = Math.round(PANEL_W * scale);
   return (
-    <div
-      ref={wrapRef}
-      className="flex-shrink-0 overflow-hidden"
-      style={{ width: px, height: '100%' }}
-    >
+    <div className="flex-shrink-0 overflow-hidden" style={{ width: px, height: '100%' }}>
       <iframe
         src={`/command_center.html?p=${panelId}`}
         scrolling="no"
@@ -86,16 +59,32 @@ function ScrollStrip({
   flexGrow?: number;
   height?: string;          // explicit CSS height — overrides flex when set
 }) {
+  // Measure the outer container (which has an explicit height in vh) so we
+  // can pass real pixels to every IframePanel.  ResizeObserver is used so
+  // the value stays correct across window resizes.
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [stripPx, setStripPx] = useState(0);
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const update = () => {
+      if (containerRef.current) setStripPx(containerRef.current.offsetHeight);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
   const doubled = [...items, ...items];
   return (
-    <div className="overflow-hidden w-full" style={height ? { height, minHeight: height } : { flex: flexGrow }}>
+    <div ref={containerRef} className="overflow-hidden w-full" style={height ? { height, minHeight: height } : { flex: flexGrow }}>
       <div
         className={direction === 'right' ? 'vx-marquee-rev' : 'vx-marquee'}
         style={{ animationDuration: duration, display: 'flex', height: '100%', gap: 0, width: 'max-content' }}
       >
         {doubled.map((item, i) =>
           item.type === 'iframe' ? (
-            <IframePanel key={i} panelId={item.panelId} />
+            <IframePanel key={i} panelId={item.panelId} stripPx={stripPx} />
           ) : (
             /* natural-width container — image drives the width, no letterbox gaps */
             <div
@@ -409,21 +398,26 @@ function Index() {
         {/* HERO */}
         <section className="border-b border-border">
 
-          {/* ── Row 1: merged panel strip — no gaps, on top ── */}
-          <div style={{ height: '40vh', minHeight: '240px', overflow: 'hidden', background: '#060911' }}>
-            <div
-              className="vx-marquee"
-              style={{ display: 'flex', height: '100%', width: 'max-content', animationDuration: '42s' }}
-            >
-              {[p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06,
-                p12,p13,p04,p07,p17,p11,p16,p05,p08,p10,p15,p06].map((src, i) => (
-                /* natural width — image drives its own width, zero gaps guaranteed */
-                <div key={i} className="flex-shrink-0" style={{ height: '100%' }}>
-                  <img src={src} alt="" style={{ height: '100%', width: 'auto', display: 'block' }} />
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* ── Row 1: animated HTML command-centre panels ── */}
+          <ScrollStrip
+            items={[
+              {type:'iframe', panelId:'traffic-overview'},
+              {type:'iframe', panelId:'panel-units'},
+              {type:'iframe', panelId:'panel-crowd'},
+              {type:'iframe', panelId:'system-health'},
+              {type:'iframe', panelId:'transit'},
+              {type:'iframe', panelId:'panel-events'},
+              {type:'iframe', panelId:'air-quality-1'},
+              {type:'iframe', panelId:'panel-network'},
+              {type:'iframe', panelId:'notifications'},
+              {type:'iframe', panelId:'panel-timeline'},
+              {type:'iframe', panelId:'panel-comms'},
+              {type:'iframe', panelId:'air-quality-2'},
+            ]}
+            direction="left"
+            duration="70s"
+            height="40vh"
+          />
 
           {/* ── Opening text ── */}
           <div className="bg-background px-6 py-12 sm:px-10 md:py-16 lg:px-16">
