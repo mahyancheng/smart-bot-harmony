@@ -3,7 +3,6 @@ import { useRef, useEffect, useState } from "react";
 import heroImage from "@/assets/v2/hero-controlroom.png";
 import transportImage from "@/assets/v2/cap-transport.png";
 import cityImage from "@/assets/v2/cap-city.png";
-import datacenterImage from "@/assets/v2/cap-datacenter.png";
 import commitmentImage from "@/assets/v2/commitment.png";
 import { SiteNav, SiteFooter } from "@/components/site-chrome";
 
@@ -155,235 +154,228 @@ const aboutCards = [
   {
     k: "// ABOUT",
     t: "About Us",
-    d: "Vertifex Technology specializes in infrastructure modernization and industrial digitalization through integrated technologies and engineering expertise — delivering connected, intelligent, and efficient solutions for infrastructure and industrial environments.",
-  },
-  {
-    k: "// FOCUS",
-    t: "Focus",
-    d: "Delivering integrated technology and engineering solutions that enhance connectivity, operational efficiency, infrastructure reliability, and sustainable development across infrastructure and industrial environments.",
+    d: "Vertifex Technology specializes in infrastructure modernization and industrial digitalization through integrated technologies and engineering expertise. We deliver practical, scalable, and future-ready solutions that support smarter infrastructure, connected operations, and sustainable development.",
   },
   {
     k: "// VISION",
     t: "Vision",
-    d: "To become a leading regional partner in smart technologies, intelligent infrastructure, and sustainable green transformation.",
+    d: "To become a leading regional partner in smart technologies, intelligent infrastructure, and sustainable transformation.",
   },
   {
     k: "// MISSION",
     t: "Mission",
     d: [
-      "Empower infrastructure and industrial environments through smart integration and operational technology solutions.",
-      "Accelerate digital transformation through intelligent connectivity, automation, and innovative technologies.",
-      "Optimize operational efficiency, infrastructure reliability, and sustainable green development through integrated solutions.",
-      "Deliver reliable engineering expertise and long-term technical support that create lasting customer value.",
+      "Empower smarter infrastructure and industrial operations.",
+      "Accelerate digitalization and intelligent connectivity.",
+      "Support sustainable and efficient operational environments.",
+      "Deliver reliable expertise and responsive support.",
     ],
   },
 ];
 
+// Five service lines mirror the PDF's "TYPES OF SOLUTIONS" section
 const services = [
   {
     code: "S.01",
-    title: "Integrated Systems Solutions",
-    desc: "Delivering smart system integration solutions for infrastructure and industrial environments.",
+    title: "Integrated Infrastructure Solutions",
+    desc: "Connected platforms, control systems, and intelligent infrastructure technologies that unify operations across infrastructure and industrial environments.",
     capabilities: [
-      "Industrial System Integration",
-      "Information & Communication Technology (ICT) and Internet of Things (IoT) Integration",
-      "Infrastructure Connectivity",
-      "Smart Monitoring Platforms",
-      "Integrated Operational Systems",
+      "Centralized Management Systems",
+      "Digital Twin Technologies",
+      "Information & Communication Technology (ICT) Infrastructure",
+      "Internet of Things (IoT) Systems",
+      "Intelligent Detection & Sensing Technologies",
+      "Extra Low Voltage (ELV) Systems",
+      "CCTV & Surveillance Systems",
+      "Access Control Systems",
+      "Smart Building Solutions",
     ],
   },
   {
     code: "S.02",
-    title: "Engineering Delivery Solutions",
-    desc: "Providing engineering design, deployment, and commissioning solutions for infrastructure and industrial projects.",
+    title: "Automation & SCADA Solutions",
+    desc: "Industrial automation, SCADA, and process control technologies engineered for productive, monitored, and optimized operations.",
     capabilities: [
-      "Engineering Design & Planning",
-      "Infrastructure Deployment",
-      "Testing & Commissioning",
-      "System Configuration",
-      "Technical Implementation",
+      "Automation Systems",
+      "SCADA & Industrial Control Systems",
+      "Robotics Integration",
+      "Intelligent Monitoring Platforms",
+      "Process Optimization Technologies",
     ],
   },
   {
     code: "S.03",
-    title: "Project Delivery Management",
-    desc: "Managing project execution, coordination, and operational readiness across all project phases.",
+    title: "Energy Solutions",
+    desc: "Smart energy, storage, and green technologies that support sustainable development and efficient power environments.",
     capabilities: [
-      "Project Planning & Coordination",
-      "Technical Project Management",
-      "Site Coordination",
-      "Deployment Scheduling",
-      "Documentation & Reporting",
+      "Battery Energy Storage Systems (BESS)",
+      "Smart Energy Technologies",
+      "Energy Monitoring Platforms",
+      "Energy Optimization Solutions",
+      "Sustainable & Green Technologies",
     ],
   },
   {
     code: "S.04",
-    title: "Operational Support & Maintenance",
-    desc: "Providing maintenance, monitoring, and technical support services to ensure operational continuity and infrastructure reliability.",
+    title: "Facility Maintenance Solutions",
+    desc: "Preventive, corrective, and infrastructure support services that protect operational continuity and asset reliability.",
     capabilities: [
       "Preventive & Corrective Maintenance",
-      "System Monitoring",
-      "SLA Support",
-      "Operational Support",
-      "System Enhancement",
+      "Facility Monitoring Systems",
+      "Technical Support Services",
+      "Infrastructure Support Solutions",
     ],
   },
   {
     code: "S.05",
-    title: "Energy Solutions",
-    desc: "Delivering smart energy and green technology solutions that support sustainable development, operational efficiency, and infrastructure reliability.",
+    title: "Engineering Consultancy & Advisory",
+    desc: "Engineering and operational consultation that guides infrastructure decisions from planning to deployment.",
     capabilities: [
-      "Smart Energy Platforms",
-      "Energy Optimization",
-      "Green Technology Integration",
-      "Power Infrastructure Solutions",
-      "Sustainable Energy Systems",
-    ],
-  },
-  {
-    code: "S.06",
-    title: "Asset & Facility Management",
-    desc: "Providing integrated asset and facility management solutions that improve operational visibility and infrastructure performance.",
-    capabilities: [
-      "Asset Monitoring & Tracking",
-      "Facility Management Systems",
-      "Operational Visibility Platforms",
-      "Infrastructure Performance",
-      "Lifecycle Management",
+      "Infrastructure Planning",
+      "Operational Assessments",
+      "Technical Consultation",
+      "Engineering Support Services",
     ],
   },
 ];
 
+// Two deployment domains mirror the PDF's top-level "SOLUTIONS" categories
 const capabilities = [
   {
     index: "01",
-    title: "Smart Transportation",
+    title: "Infrastructure Solutions",
     description:
-      "Rail and highway solutions integrating centralized management systems, Information & Communication Technology (ICT) and Internet of Things (IoT), intelligent detection, sensing & analytics, ELV systems, and engineering support — unified into a single operational layer.",
-    note: "RAIL // HIGHWAY // INTELLIGENT DETECTION",
+      "Smart integration for transportation networks, utilities, public infrastructure, and energy systems — engineered for resilience, connectivity, and sustainability.",
+    items: [
+      "Transportation",
+      "Utilities & Water Infrastructure",
+      "Public Infrastructure",
+      "Energy Infrastructure",
+    ],
+    note: "TRANSPORT // UTILITIES // PUBLIC // ENERGY",
     image: transportImage,
     alt: "Smart city transportation corridor with holographic data overlays, highway, rail, and green energy",
   },
   {
     index: "02",
-    title: "Smart City Solutions",
+    title: "Industrial & Commercial Solutions",
     description:
-      "Centralized management systems, digital twin technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) integration, intelligent analytics, and connected operational technologies for sustainable urban environments.",
-    note: "DIGITAL TWIN // ANALYTICS // URBAN INTERNET OF THINGS (IoT)",
+      "Connected operational technologies for industrial facilities, commercial buildings, smart buildings, and green city developments — built for productivity and long-term efficiency.",
+    items: [
+      "Industrial Facilities",
+      "Commercial Buildings",
+      "Smart Buildings",
+      "Green City Developments",
+    ],
+    note: "INDUSTRY // COMMERCIAL // SMART BUILDINGS // GREEN CITY",
     image: cityImage,
     alt: "Aerial view of smart city at twilight with floating dark data surveillance panels",
   },
-  {
-    index: "03",
-    title: "Information & Communication Technology (ICT) and Internet of Things (IoT) Infrastructure",
-    description:
-      "Networking, edge compute, sensor fabrics, SCADA integration, and cloud-connected Internet of Things (IoT) platforms that turn field data into operational decisions — built for mission-critical environments.",
-    note: "NETWORK // EDGE // CLOUD // SCADA",
-    image: datacenterImage,
-    alt: "White data center corridor with floating cyan network topology and Internet of Things (IoT) sensor feed panels",
-  },
 ];
 
+// Four technology themes draw from the PDF's "TYPES OF SOLUTIONS" inventory
 const techPillars = [
   {
     code: "T.01",
-    title: "Smart Transportation",
+    title: "Integrated Infrastructure",
     items: [
       "Centralized Management Systems",
-      "Intelligent Detection & Sensing",
-      "Information & Communication Technology (ICT) and Internet of Things (IoT) for Transport",
-      "ELV & Operational Systems",
+      "Digital Twin Technologies",
+      "Information & Communication Technology (ICT) Infrastructure",
+      "Internet of Things (IoT) Systems",
     ],
   },
   {
     code: "T.02",
-    title: "Smart City & Digital Twin",
+    title: "Sensing, Security & Buildings",
     items: [
-      "Digital Twin Technologies",
-      "Urban Internet of Things (IoT) Platforms",
-      "Intelligent Analytics",
-      "Connected Infrastructure",
+      "Intelligent Detection & Sensing",
+      "Extra Low Voltage (ELV) Systems",
+      "CCTV & Surveillance Systems",
+      "Access Control & Smart Building Solutions",
     ],
   },
   {
     code: "T.03",
-    title: "Information & Communication Technology (ICT) and Internet of Things (IoT)",
+    title: "Automation & SCADA",
     items: [
-      "Information & Communication Technology (ICT) Infrastructure",
-      "Internet of Things (IoT) Connectivity",
-      "Network Integration",
-      "Smart Devices & Sensors",
+      "Automation Systems",
+      "SCADA & Industrial Control Systems",
+      "Robotics Integration",
+      "Process Optimization & Monitoring",
     ],
   },
   {
     code: "T.04",
-    title: "Energy & Automation",
+    title: "Energy & Sustainability",
     items: [
-      "Smart Energy Solutions",
-      "Green Technology",
-      "Industrial Automation",
-      "Robotics Integration",
+      "Battery Energy Storage Systems (BESS)",
+      "Smart Energy Technologies",
+      "Energy Monitoring & Optimization",
+      "Sustainable & Green Technologies",
     ],
   },
 ];
 
+// Six target sectors, mirroring the PDF's "INDUSTRIES WE SUPPORT" list
 const industries = [
   {
-    t: "Smart Transportation Solutions",
-    d: "Smart Transportation (Rail & Highway) solutions including centralized management systems, mobile application solutions, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, intelligent detection, sensing & analytics technologies, ELV systems, operational technologies, and engineering support services for transportation environments.",
+    t: "Smart Transportation",
+    d: "Rail and highway environments served by centralized management, intelligent detection and sensing, ICT and IoT integration, ELV systems, and engineering support — unified across mobility infrastructure.",
   },
   {
-    t: "Smart City Solutions",
-    d: "Smart city solutions including centralized management systems, digital twin technologies, Information & Communication Technology (ICT) and Internet of Things (IoT) systems, intelligent analytics, and integrated operational technologies for connected and sustainable urban environments.",
+    t: "Smart Cities",
+    d: "Centralized management, digital twin technologies, ICT and IoT integration, intelligent analytics, and connected operational technologies for sustainable urban environments.",
   },
   {
     t: "Government & Public Sector",
-    d: "Digital platforms, command & control systems, operational monitoring technologies, and integrated solutions supporting smarter and more efficient public sector environments.",
+    d: "Digital platforms, command-and-control systems, operational monitoring, and integrated solutions supporting smarter and more efficient public-sector operations.",
   },
   {
-    t: "Commercial Facilities & Corporate Environments",
-    d: "Integrated building technologies, Information & Communication Technology (ICT) infrastructure, intelligent security systems, and operational solutions for modern commercial and corporate environments.",
+    t: "Commercial & Smart Buildings",
+    d: "Integrated building technologies, ICT infrastructure, surveillance and access control, and operational systems for modern commercial and smart-building environments.",
   },
   {
-    t: "Energy & Power Infrastructure",
-    d: "Smart energy technologies, energy optimization platforms, automation systems, Information & Communication Technology (ICT) infrastructure, and engineering solutions supporting sustainable green energy and efficient power environments.",
+    t: "Energy & Utilities",
+    d: "Smart energy technologies, energy optimization platforms, automation, ICT infrastructure, and engineering solutions for sustainable green energy and efficient utility operations.",
   },
   {
     t: "Industrial & Manufacturing",
-    d: "Automation systems, robotics integration, industrial monitoring, Information & Communication Technology (ICT) infrastructure, and Internet of Things (IoT) technologies for manufacturing and production environments.",
+    d: "Automation systems, robotics integration, industrial monitoring, ICT infrastructure, and IoT technologies for manufacturing and production environments.",
   },
 ];
 
+// Six value propositions mirror the PDF's "WE OFFER" list
 const whyChoose = [
   {
     n: "01",
-    t: "Practical & Scalable Solutions",
-    d: "Developing reliable, scalable, and future-ready solutions aligned with operational and infrastructure requirements.",
+    t: "Smart & Integrated Technologies",
+    d: "Connected systems engineered as one operational layer — not as disconnected vendors stitched together at the end.",
   },
   {
     n: "02",
-    t: "Responsive Customer Support",
-    d: "Providing responsive technical support, maintenance services, and operational assistance to ensure system reliability and business continuity.",
+    t: "Innovation-Driven Solutions",
+    d: "Technologies, integration models, and engineering practices kept current with how infrastructure and industry actually operate.",
   },
   {
     n: "03",
-    t: "Customer-Centric Collaboration",
-    d: "Working closely with customers to understand operational challenges, deliver tailored solutions, and build long-term trusted partnerships.",
+    t: "Reliable & Quality Implementations",
+    d: "Designed, deployed, and commissioned to perform in mission-critical environments — supported by long-term technical capability.",
   },
   {
     n: "04",
-    t: "Long-Term Service Commitment",
-    d: "Committed to continuous support, system enhancement, and reliable service delivery that support sustainable operational performance and customer success.",
+    t: "Cost-Effective & Scalable Systems",
+    d: "Future-ready platforms that grow with your operations — built to balance capital efficiency with operational performance.",
   },
   {
     n: "05",
-    t: "Reliable Engineering Expertise",
-    d: "Combining engineering knowledge, operational technologies, and smart integration capabilities to deliver practical and effective solutions.",
+    t: "Sustainable & Green Technologies",
+    d: "Smart energy, green building, and efficient operational technologies supporting your sustainability commitments.",
   },
   {
     n: "06",
-    t: "Trusted Technology Partnership",
-    d: "Building strong customer relationships through transparency, responsiveness, reliable delivery, and long-term collaboration.",
+    t: "Open & Interoperable Platforms",
+    d: "Standards-based integration that avoids vendor lock-in and keeps your data, controls, and decisions in your hands.",
   },
 ];
 
@@ -425,21 +417,16 @@ function Index() {
                   <span>COMPANY_PROFILE / 2026 / REV.02</span>
                 </div>
                 <h1 className="mb-6 font-display text-4xl font-black uppercase leading-[0.92] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem]">
-                  Smart systems
+                  Systems built
                   <br />
                   for <span className="vx-gradient-text">real</span>
                   <br />
-                  infrastructure.
+                  operations.
                 </h1>
                 <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Vertifex Technology specializes in smart integration solutions for
-                  infrastructure and industrial environments. We deliver smart infrastructure
-                  solutions covering Smart Transportation (Rail &amp; Highway), Information &amp;
-                  Communication Technology (ICT) and Internet of Things (IoT) systems,
-                  automation &amp; robotics, industrial operational technologies, and energy
-                  solutions, supported by engineering consultancy services that drive
-                  digitalization, intelligent connectivity, operational optimization,
-                  infrastructure reliability, and sustainable green ecosystems.
+                  Smart integration solutions for infrastructure and industrial environments —
+                  integrated smart technologies, infrastructure systems, automation, and
+                  engineering solutions for connected and sustainable operational environments.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3 text-sm font-bold uppercase">
                   <a href="#contact" className="vx-glow inline-flex items-center gap-2 bg-primary px-5 py-3 tracking-widest text-primary-foreground transition-colors hover:bg-primary/90">
@@ -470,8 +457,8 @@ function Index() {
                   About <span className="vx-gradient-text">Vertifex</span>.
                 </h2>
                 <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Solution developer for infrastructure modernization and industrial digitalization
-                  — built around real connectivity, operational efficiency, and sustainable development.
+                  Infrastructure modernization and industrial digitalization through integrated
+                  technologies and engineering expertise — practical, scalable, and future-ready.
                 </p>
               </div>
               <div className="grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:col-span-8 md:grid-cols-2">
@@ -505,15 +492,15 @@ function Index() {
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
-                <div className="text-sm font-bold text-primary">// 02_CORE_SERVICES</div>
+                <div className="text-sm font-bold text-primary">// 02_TYPES_OF_SOLUTIONS</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
-                  Six service lines.<br />
+                  Five solution lines.<br />
                   <span className="vx-gradient-text">One delivery model.</span>
                 </h2>
               </div>
               <div className="lg:col-span-5">
                 <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-                  Engineering, integration, commissioning, and ongoing technical support — packaged so customers buy an outcome, not a stack of disconnected vendors.
+                  Integrated infrastructure, automation and SCADA, energy, facility maintenance, and engineering consultancy — engineered, integrated, and supported as a single outcome.
                 </p>
               </div>
             </div>
@@ -543,34 +530,35 @@ function Index() {
           </div>
         </section>
 
-        {/* 03 CAPABILITIES */}
+        {/* 03 CAPABILITIES — Where we deploy */}
         <section id="capabilities" className="mx-auto max-w-[1440px] border-b border-border">
           <div className="border-b border-border px-4 py-12 sm:px-6 md:py-20">
             <div className="max-w-3xl">
-              <div className="mb-4 text-sm font-bold text-primary">// 03_CAPABILITIES</div>
+              <div className="mb-4 text-sm font-bold text-primary">// 03_WHERE_WE_DEPLOY</div>
               <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
-                One integrator. <span className="vx-gradient-text">Three connected layers.</span>
+                Two deployment domains. <span className="vx-gradient-text">One integrator.</span>
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                Smart transportation at the edge of infrastructure. Smart city intelligence across
-                the urban layer. Information & Communication Technology (ICT) and Internet of Things (IoT) tying them into a single, observable system.
+                Infrastructure for transportation, utilities, public, and energy environments —
+                and integrated technologies for industrial facilities, commercial buildings, smart
+                buildings, and green city developments.
               </p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3">
+          <div className="grid md:grid-cols-2">
             {capabilities.map((item) => (
               <article
                 key={item.index}
                 className="group border-b border-border bg-card/40 p-6 md:border-r md:p-8 last:md:border-r-0"
               >
                 <div className="mb-4 text-sm font-bold text-primary">[ {item.index} ]</div>
-                <div className="mb-6 aspect-[4/3] overflow-hidden rounded-sm border border-border bg-card">
+                <div className="mb-6 aspect-[16/9] overflow-hidden rounded-sm border border-border bg-card">
                   <img
                     src={item.image}
                     alt={item.alt}
-                    width={1280}
-                    height={960}
+                    width={1920}
+                    height={1080}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
@@ -581,7 +569,15 @@ function Index() {
                 <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
-                <div className="mt-8 border-t border-border pt-4 text-xs font-bold uppercase tracking-widest text-primary/80 md:text-sm">
+                <ul className="mt-6 grid gap-2.5 border-t border-border pt-5 text-sm sm:grid-cols-2">
+                  {item.items.map((sub) => (
+                    <li key={sub} className="flex items-start gap-2.5">
+                      <span className="mt-[7px] inline-block h-1.5 w-1.5 rounded-full bg-primary/70" />
+                      <span className="text-foreground/85">{sub}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 border-t border-border pt-4 text-xs font-bold uppercase tracking-widest text-primary/80 md:text-sm">
                   {item.note}
                 </div>
               </article>
@@ -632,7 +628,7 @@ function Index() {
                 Built for complex, connected, live environments.
               </h3>
               <p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">
-                Seven sectors. The same engineered, integrated approach to every one.
+                Six sectors. The same engineered, integrated approach to every one.
               </p>
             </div>
             <div className="relative min-h-[260px] sm:min-h-[320px] lg:col-span-8">
@@ -665,15 +661,15 @@ function Index() {
           <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-6">
-                <div className="text-sm font-bold text-primary">// 05_WHY_CHOOSE_VERTIFEX</div>
+                <div className="text-sm font-bold text-primary">// 05_WHAT_WE_OFFER</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl">
-                  Why teams pick <span className="vx-gradient-text">Vertifex</span>.
+                  What teams get with <span className="vx-gradient-text">Vertifex</span>.
                 </h2>
               </div>
               <div className="lg:col-span-6">
                 <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-                  An engineered, integrated and operationally-grounded approach — purpose-built for
-                  smart infrastructure, digitalization and sustainable development.
+                  Smart, integrated, innovation-driven technologies delivered as cost-effective,
+                  scalable, sustainable, and open systems — built around your operations, not your vendors.
                 </p>
               </div>
             </div>
@@ -703,12 +699,11 @@ function Index() {
               <div className="lg:col-span-7">
                 <div className="text-sm font-bold text-primary">// 06_OUR_COMMITMENT</div>
                 <h2 className="mt-4 font-display text-3xl font-black uppercase leading-[1.05] tracking-tight sm:text-4xl md:text-[3.2rem]">
-                  Reliable. Future-ready. <span className="vx-gradient-text">Integrated</span>.
+                  Reliable. Practical. <span className="vx-gradient-text">Future-ready</span>.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-                  Vertifex Technology is committed to delivering reliable and future-ready smart
-                  integration solutions that support operational excellence, infrastructure
-                  reliability, sustainable development, and long-term customer partnerships.
+                  Committed to delivering reliable, practical, and future-ready solutions that
+                  support sustainable operations and long-term customer success.
                 </p>
               </div>
               <div className="lg:col-span-5">
@@ -736,12 +731,11 @@ function Index() {
               <h2 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-6xl">
                 Build smarter,
                 <br />
-                <span className="vx-gradient-text">more connected</span> infrastructure.
+                <span className="vx-gradient-text">more sustainable</span> operations.
               </h2>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                Partner with Vertifex Technology to build smarter, more connected, and sustainable
-                infrastructure through integrated technologies, engineering expertise, and reliable
-                operational solutions.
+                Partner with Vertifex Technology to build smarter and more sustainable operational
+                environments through integrated technologies and engineering expertise.
               </p>
               <div className="mt-10 flex flex-wrap gap-3 text-sm font-bold uppercase">
                 <a

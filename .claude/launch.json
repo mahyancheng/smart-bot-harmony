@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "smart-bot-harmony",
+      "runtimeExecutable": "/Users/leadzap/.nvm/versions/node/v24.15.0/bin/node",
+      "runtimeArgs": ["node_modules/.bin/vite", "--port", "5181", "--strictPort", "--host", "127.0.0.1"],
+      "port": 5181,
+      "cwd": "/Users/leadzap/smart-bot-harmony"
+    }
+  ]
+}
